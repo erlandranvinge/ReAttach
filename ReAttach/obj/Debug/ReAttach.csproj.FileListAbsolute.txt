@@ -1,0 +1,78 @@
+C:\Users\ERLAND\Documents\Visual Studio 2012\Projects\TestPackage\TestPackage\bin\Debug\ReAttach.dll
+C:\Users\ERLAND\Documents\Visual Studio 2012\Projects\TestPackage\TestPackage\bin\Debug\ReAttach.pdb
+C:\Users\ERLAND\Documents\Visual Studio 2012\Projects\TestPackage\TestPackage\bin\Debug\ReAttach.pkgdef
+C:\Users\ERLAND\Documents\Visual Studio 2012\Projects\TestPackage\TestPackage\bin\Debug\ReAttach.vsix
+C:\Users\ERLAND\Documents\Visual Studio 2012\Projects\TestPackage\TestPackage\bin\Debug\extension.vsixmanifest
+C:\Users\ERLAND\Documents\Visual Studio 2012\Projects\TestPackage\TestPackage\obj\Debug\ReAttach.csproj.ResolveComReference.cache
+C:\Users\ERLAND\Documents\Visual Studio 2012\Projects\TestPackage\TestPackage\obj\Debug\VSPackage.resources
+C:\Users\ERLAND\Documents\Visual Studio 2012\Projects\TestPackage\TestPackage\obj\Debug\ReAttach.Resources.resources
+C:\Users\ERLAND\Documents\Visual Studio 2012\Projects\TestPackage\TestPackage\obj\Debug\ReAttach.csproj.GenerateResource.Cache
+C:\Users\ERLAND\Documents\Visual Studio 2012\Projects\TestPackage\TestPackage\obj\Debug\TestPackage.cto
+C:\Users\ERLAND\Documents\Visual Studio 2012\Projects\TestPackage\TestPackage\obj\Debug\VSCT.read.1.tlog
+C:\Users\ERLAND\Documents\Visual Studio 2012\Projects\TestPackage\TestPackage\obj\Debug\VSCT.write.1.tlog
+C:\Users\ERLAND\Documents\Visual Studio 2012\Projects\TestPackage\TestPackage\obj\Debug\CtoResourceMerger.cache
+C:\Users\ERLAND\Documents\Visual Studio 2012\Projects\TestPackage\TestPackage\obj\Debug\VSPackage.resources.original
+C:\Users\ERLAND\Documents\Visual Studio 2012\Projects\TestPackage\TestPackage\obj\Debug\ReAttach.dll
+C:\Users\ERLAND\Documents\Visual Studio 2012\Projects\TestPackage\TestPackage\obj\Debug\ReAttach.pdb
+C:\Users\ERLAND\Documents\Visual Studio 2012\Projects\TestPackage\TestPackage\obj\Debug\ReAttach.pkgdef
+C:\Users\ERLAND\Documents\Visual Studio 2012\Projects\TestPackage\TestPackage\obj\Debug\ReAttach.latest.pkgdef
+C:\Users\ERLAND\Documents\Visual Studio 2012\Projects\TestPackage\TestPackage\obj\Debug\extension.vsixmanifest
+C:\Users\ERLAND\Documents\Visual Studio 2012\Projects\TestPackage\TestPackage\obj\Debug\Dialogs\ReAttachDialog.baml
+C:\Users\ERLAND\Documents\Visual Studio 2012\Projects\TestPackage\TestPackage\obj\Debug\Dialogs\ReAttachDialog.g.cs
+C:\Users\ERLAND\Documents\Visual Studio 2012\Projects\TestPackage\TestPackage\obj\Debug\ReAttach_MarkupCompile.cache
+C:\Users\ERLAND\Documents\Visual Studio 2012\Projects\TestPackage\TestPackage\obj\Debug\ReAttach.g.resources
+C:\Users\ERLAND\Documents\Visual Studio 2012\Projects\TestPackage\TestPackage\bin\Debug\Resources\Images.png
+C:\Users\ERLAND\Documents\Visual Studio 2012\Projects\TestPackage\TestPackage\bin\Debug\Resources\Package.ico
+C:\Users\ERLAND\Documents\Visual Studio 2012\Projects\TestPackage\TestPackage\obj\Debug\ReAttach.csprojResolveAssemblyReference.cache
+C:\Users\ERLAND\Documents\Visual Studio 2012\Projects\TestPackage\ReAttach\bin\Debug\Resources\Images.png
+C:\Users\ERLAND\Documents\Visual Studio 2012\Projects\TestPackage\ReAttach\bin\Debug\Resources\Package.ico
+C:\Users\ERLAND\Documents\Visual Studio 2012\Projects\TestPackage\ReAttach\bin\Debug\ReAttach.dll
+C:\Users\ERLAND\Documents\Visual Studio 2012\Projects\TestPackage\ReAttach\bin\Debug\ReAttach.pdb
+C:\Users\ERLAND\Documents\Visual Studio 2012\Projects\TestPackage\ReAttach\bin\Debug\ReAttach.pkgdef
+C:\Users\ERLAND\Documents\Visual Studio 2012\Projects\TestPackage\ReAttach\bin\Debug\ReAttach.vsix
+C:\Users\ERLAND\Documents\Visual Studio 2012\Projects\TestPackage\ReAttach\bin\Debug\extension.vsixmanifest
+C:\Users\ERLAND\Documents\Visual Studio 2012\Projects\TestPackage\ReAttach\obj\Debug\ReAttach.csprojResolveAssemblyReference.cache
+C:\Users\ERLAND\Documents\Visual Studio 2012\Projects\TestPackage\ReAttach\obj\Debug\ReAttach.csproj.ResolveComReference.cache
+C:\Users\ERLAND\Documents\Visual Studio 2012\Projects\TestPackage\ReAttach\obj\Debug\Dialogs\ReAttachDialog.baml
+C:\Users\ERLAND\Documents\Visual Studio 2012\Projects\TestPackage\ReAttach\obj\Debug\Dialogs\ReAttachDialog.g.cs
+C:\Users\ERLAND\Documents\Visual Studio 2012\Projects\TestPackage\ReAttach\obj\Debug\ReAttach_MarkupCompile.cache
+C:\Users\ERLAND\Documents\Visual Studio 2012\Projects\TestPackage\ReAttach\obj\Debug\ReAttach.g.resources
+C:\Users\ERLAND\Documents\Visual Studio 2012\Projects\TestPackage\ReAttach\obj\Debug\VSPackage.resources
+C:\Users\ERLAND\Documents\Visual Studio 2012\Projects\TestPackage\ReAttach\obj\Debug\ReAttach.Resources.resources
+C:\Users\ERLAND\Documents\Visual Studio 2012\Projects\TestPackage\ReAttach\obj\Debug\ReAttach.csproj.GenerateResource.Cache
+C:\Users\ERLAND\Documents\Visual Studio 2012\Projects\TestPackage\ReAttach\obj\Debug\ReAttach.cto
+C:\Users\ERLAND\Documents\Visual Studio 2012\Projects\TestPackage\ReAttach\obj\Debug\VSCT.read.1.tlog
+C:\Users\ERLAND\Documents\Visual Studio 2012\Projects\TestPackage\ReAttach\obj\Debug\VSCT.write.1.tlog
+C:\Users\ERLAND\Documents\Visual Studio 2012\Projects\TestPackage\ReAttach\obj\Debug\CtoResourceMerger.cache
+C:\Users\ERLAND\Documents\Visual Studio 2012\Projects\TestPackage\ReAttach\obj\Debug\VSPackage.resources.original
+C:\Users\ERLAND\Documents\Visual Studio 2012\Projects\TestPackage\ReAttach\obj\Debug\ReAttach.dll
+C:\Users\ERLAND\Documents\Visual Studio 2012\Projects\TestPackage\ReAttach\obj\Debug\ReAttach.pdb
+C:\Users\ERLAND\Documents\Visual Studio 2012\Projects\TestPackage\ReAttach\obj\Debug\ReAttach.pkgdef
+C:\Users\ERLAND\Documents\Visual Studio 2012\Projects\TestPackage\ReAttach\obj\Debug\ReAttach.latest.pkgdef
+C:\Users\ERLAND\Documents\Visual Studio 2012\Projects\TestPackage\ReAttach\obj\Debug\extension.vsixmanifest
+C:\Dropbox\ReAttach\ReAttach\bin\Debug\Resources\Images.png
+C:\Dropbox\ReAttach\ReAttach\bin\Debug\Resources\Package.ico
+C:\Dropbox\ReAttach\ReAttach\bin\Debug\ReAttach.dll
+C:\Dropbox\ReAttach\ReAttach\bin\Debug\ReAttach.pdb
+C:\Dropbox\ReAttach\ReAttach\bin\Debug\ReAttach.pkgdef
+C:\Dropbox\ReAttach\ReAttach\bin\Debug\ReAttach.vsix
+C:\Dropbox\ReAttach\ReAttach\bin\Debug\extension.vsixmanifest
+C:\Dropbox\ReAttach\ReAttach\obj\Debug\ReAttach.csprojResolveAssemblyReference.cache
+C:\Dropbox\ReAttach\ReAttach\obj\Debug\ReAttach.csproj.ResolveComReference.cache
+C:\Dropbox\ReAttach\ReAttach\obj\Debug\Dialogs\ReAttachDialog.baml
+C:\Dropbox\ReAttach\ReAttach\obj\Debug\Dialogs\ReAttachDialog.g.cs
+C:\Dropbox\ReAttach\ReAttach\obj\Debug\ReAttach_MarkupCompile.cache
+C:\Dropbox\ReAttach\ReAttach\obj\Debug\ReAttach.g.resources
+C:\Dropbox\ReAttach\ReAttach\obj\Debug\VSPackage.resources
+C:\Dropbox\ReAttach\ReAttach\obj\Debug\ReAttach.Resources.resources
+C:\Dropbox\ReAttach\ReAttach\obj\Debug\ReAttach.csproj.GenerateResource.Cache
+C:\Dropbox\ReAttach\ReAttach\obj\Debug\ReAttach.cto
+C:\Dropbox\ReAttach\ReAttach\obj\Debug\VSCT.read.1.tlog
+C:\Dropbox\ReAttach\ReAttach\obj\Debug\VSCT.write.1.tlog
+C:\Dropbox\ReAttach\ReAttach\obj\Debug\CtoResourceMerger.cache
+C:\Dropbox\ReAttach\ReAttach\obj\Debug\VSPackage.resources.original
+C:\Dropbox\ReAttach\ReAttach\obj\Debug\ReAttach.dll
+C:\Dropbox\ReAttach\ReAttach\obj\Debug\ReAttach.pdb
+C:\Dropbox\ReAttach\ReAttach\obj\Debug\ReAttach.pkgdef
+C:\Dropbox\ReAttach\ReAttach\obj\Debug\ReAttach.latest.pkgdef
+C:\Dropbox\ReAttach\ReAttach\obj\Debug\extension.vsixmanifest

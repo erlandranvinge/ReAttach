@@ -1,0 +1,8 @@
+C:\Users\ERLAND\AppData\Local\Microsoft\VisualStudio\11.0Exp\Extensions\Erland Ranvinge\ReAttach\1.0\\ReAttach.dll
+C:\Users\ERLAND\AppData\Local\Microsoft\VisualStudio\11.0Exp\Extensions\Erland Ranvinge\ReAttach\1.0\\ReAttach.pkgdef
+C:\Users\ERLAND\AppData\Local\Microsoft\VisualStudio\11.0Exp\Extensions\Erland Ranvinge\ReAttach\1.0\\extension.vsixmanifest
+C:\Users\ERLAND\AppData\Local\Microsoft\VisualStudio\11.0Exp\Extensions\Erland Ranvinge\ReAttach\1.0\Resources\\Images.png
+C:\Users\ERLAND\AppData\Local\Microsoft\VisualStudio\11.0Exp\Extensions\Erland Ranvinge\ReAttach\1.0\Resources\\Package.ico
+C:\Users\ERLAND\AppData\Local\Microsoft\VisualStudio\11.0Exp\Extensions\Erland Ranvinge\ReAttach\1.0\\ReAttach.pdb
+C:\Users\ERLAND\AppData\Local\Microsoft\VisualStudio\11.0Exp\Extensions\Erland Ranvinge\ReAttach\1.0\Resources\\large.png
+C:\Users\ERLAND\AppData\Local\Microsoft\VisualStudio\11.0Exp\Extensions\Erland Ranvinge\ReAttach\1.0\\icon.png

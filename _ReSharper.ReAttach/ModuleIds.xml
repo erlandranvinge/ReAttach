@@ -1,0 +1,7 @@
+<Modules>
+  <Module PersistentId="1F9A70FE-8664-45A1-A3B8-F94585235516" ModuleId="ReAttach" />
+  <Module PersistentId="Microsoft.VisualStudio.Shell.11.0, Version=11.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" ModuleId="Microsoft.VisualStudio.Shell.11.0" />
+  <Module PersistentId="EnvDTE, Version=8.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" ModuleId="EnvDTE" />
+  <Module PersistentId="Microsoft.VisualStudio.Debugger.Interop, Version=8.0.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" ModuleId="Microsoft.VisualStudio.Debugger.Interop" />
+  <Module PersistentId="mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" ModuleId="mscorlib" />
+</Modules>

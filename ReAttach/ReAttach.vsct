@@ -1,0 +1,94 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<CommandTable xmlns="http://schemas.microsoft.com/VisualStudio/2005-10-18/CommandTable" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+	<Extern href="stdidcmd.h"/>
+	<Extern href="vsdbgcmd.h"/>
+	<Extern href="vsshlids.h"/>
+	<Extern href="vsdebugguids.h"/>
+	<Commands package="guidReAttachPackagePkg">
+		<Menus>
+			<Menu guid="guidReAttachPackageCmdSet" id="cmdidReAttachSubMenu" priority="0x0E01" type="Menu">
+				<Parent guid="guidVSDebugGroup" id="IDG_EXECUTION"/>
+				<CommandFlag>DynamicVisibility</CommandFlag>
+				<CommandFlag>AlwaysCreate</CommandFlag>
+				<Strings>
+					<ButtonText>&amp;ReAttach to</ButtonText>
+					<CommandName>&amp;ReAttach to</CommandName>
+				</Strings>
+			</Menu>
+			<Menu guid="guidReAttachPackageCmdSet" id="cmdidReAttachMenuController" priority="0x0100" type="MenuController">
+				<Parent guid="guidSHLMainMenu" id="IDG_VS_TOOLSB_RUNBUILD"/>
+				<Strings>
+					<ButtonText>ReAttach</ButtonText>
+				</Strings>
+			</Menu>
+		</Menus>
+
+		<Groups>
+			<Group guid="guidReAttachPackageCmdSet" id="cmdidReAttachStandardMenuGroup" priority="0x000">
+				<Parent guid="guidReAttachPackageCmdSet" id="cmdidReAttachMenuController"/>
+			</Group>
+			<Group guid="guidReAttachPackageCmdSet" id="cmdidReAttachDebugSubMenuGroup" priority="0x000">
+				<Parent guid="guidReAttachPackageCmdSet" id="cmdidReAttachSubMenu"/>
+			</Group>
+		</Groups>
+
+		<Buttons>
+			<Button guid="guidReAttachPackageCmdSet" id="cmdidReAttach" priority="0x1" type="Button">
+				<Parent guid="guidReAttachPackageCmdSet" id="cmdidReAttachStandardMenuGroup"/>
+				<Icon guid="guidImages" id="reAttachBitmap" />
+				<CommandFlag>IconAndText</CommandFlag>
+				<CommandFlag>TextChanges</CommandFlag>
+				<CommandFlag>DynamicVisibility</CommandFlag>
+				<CommandFlag>DefaultDisabled</CommandFlag>
+				<CommandFlag>DynamicItemStart</CommandFlag>
+				<Strings>
+					<CommandName>cmdidReAttach</CommandName>
+					<ButtonText>ReAttach</ButtonText>
+				</Strings>
+			</Button>
+			<Button guid="guidReAttachPackageCmdSet" id="cmdidReAttach" priority="0x1" type="Button">
+				<Parent guid="guidReAttachPackageCmdSet" id="cmdidReAttachDebugSubMenuGroup"/>
+				<Icon guid="guidImages" id="reAttachBitmap" />
+				<CommandFlag>IconAndText</CommandFlag>
+				<CommandFlag>TextChanges</CommandFlag>
+				<CommandFlag>DynamicVisibility</CommandFlag>
+				<CommandFlag>DefaultDisabled</CommandFlag>
+				<CommandFlag>DynamicItemStart</CommandFlag>
+				<Strings>
+					<MenuText>Hello World</MenuText>
+					<CommandName>cmdidReAttachHistory1</CommandName>
+					<ButtonText>ReAttach</ButtonText>
+				</Strings>
+			</Button>
+
+		</Buttons>
+		<Bitmaps>
+			<Bitmap guid="guidImages" href="Resources\Images.png" usedList="reAttachBitmap"/>
+		</Bitmaps>
+	</Commands>
+
+	<KeyBindings>
+		<KeyBinding guid="guidReAttachPackageCmdSet" id="cmdidReAttach" editor="guidVSStd97" mod1="Control" mod2="Control" key1="R" key2="A" />
+		<KeyBinding guid="guidReAttachPackageCmdSet" id="cmdidReAttach" editor="guidVSStd97" mod1="Control Alt" key1="R" />
+	</KeyBindings>
+
+	<Symbols>
+		<!-- This is the package guid. -->
+		<GuidSymbol name="guidReAttachPackagePkg" value="{0ee94538-22b7-40c8-a253-3fce8ad39b6f}" />
+
+		<!-- This is the guid used to group the menu commands together -->
+		<GuidSymbol name="guidReAttachPackageCmdSet" value="{3a680c5b-f815-414b-aa4a-0be57dadb1af}">
+			<IDSymbol name="cmdidReAttachMenuController" value="0x1"/>
+			<IDSymbol name="cmdidReAttachStandardMenuGroup" value="0x2" />
+			<IDSymbol name="cmdidReAttachDebugSubMenuGroup" value="0x3"/>
+			<IDSymbol name="cmdidReAttachSubMenu" value="0x4"/>
+
+			<IDSymbol name="cmdidReAttach" value="0x200" />
+			<IDSymbol name="cmdidReAttachMenuItem" value="0x300"/>
+
+		</GuidSymbol>
+		<GuidSymbol name="guidImages" value="{5fcef6fd-0d78-4138-9a89-623eb61e0e98}" >
+			<IDSymbol name="reAttachBitmap" value="1" />	
+		</GuidSymbol>
+	</Symbols>
+</CommandTable>

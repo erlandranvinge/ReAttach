@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011" xmlns:d="http://schemas.microsoft.com/developer/vsx-schema-design/2011">
+	<Metadata>
+		<Identity Id="0ee94538-22b7-40c8-a253-3fce8ad39b6f" Version="1.0" Language="en-US" Publisher="Erland Ranvinge" />
+		<DisplayName>ReAttach</DisplayName>
+		<Description xml:space="preserve">ReAttach gives you an easy way to ReAttaching your prior debug targets. ReAttach stores your attach history for you and provides toolbar, menu and keyboard shortcuts for easy access. 
+</Description>
+		<ReleaseNotes />
+		<Icon>icon.png</Icon>
+		<Tags>debugging attach build</Tags>
+	</Metadata>
+	<Installation InstalledByMsi="false">
+		<InstallationTarget Id="Microsoft.VisualStudio.Pro" Version="11.0" />
+	</Installation>
+	<Dependencies>
+		<Dependency Id="Microsoft.Framework.NDP" DisplayName="Microsoft .NET Framework" d:Source="Manual" Version="4.5" />
+		<Dependency Id="Microsoft.VisualStudio.MPF.11.0" DisplayName="Visual Studio MPF 11.0" d:Source="Installed" Version="11.0" />
+	</Dependencies>
+	<Assets>
+		<Asset Type="Microsoft.VisualStudio.VsPackage" d:Source="Project" d:ProjectName="%CurrentProject%" Path="|%CurrentProject%;PkgdefProjectOutputGroup|" />
+	</Assets>
+</PackageManifest>
