@@ -6,3 +6,4 @@ C:\Users\ERLAND\AppData\Local\Microsoft\VisualStudio\11.0Exp\Extensions\Erland R
 C:\Users\ERLAND\AppData\Local\Microsoft\VisualStudio\11.0Exp\Extensions\Erland Ranvinge\ReAttach\1.0\\ReAttach.pdb
 C:\Users\ERLAND\AppData\Local\Microsoft\VisualStudio\11.0Exp\Extensions\Erland Ranvinge\ReAttach\1.0\Resources\\large.png
 C:\Users\ERLAND\AppData\Local\Microsoft\VisualStudio\11.0Exp\Extensions\Erland Ranvinge\ReAttach\1.0\\icon.png
+C:\Users\ERLAND\AppData\Local\Microsoft\VisualStudio\11.0Exp\Extensions\Erland Ranvinge\ReAttach\1.0\\preview.png
