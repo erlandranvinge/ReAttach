@@ -11,10 +11,10 @@ namespace ReAttach
 	[Guid(Constants.ReAttachPackageGuidString)]
 	[PackageRegistration(UseManagedResourcesOnly = true)]
 	[InstalledProductRegistration("#110", "#112", "1.0", IconResourceID = 400)] // Needed to show this package in help /about.
-    [ProvideMenuResource("Menus.ctmenu", 1)] // Required to show menus.
+	[ProvideMenuResource("Menus.ctmenu", 1)] // Required to show menus.
 	[ProvideAutoLoad(VSConstants.UICONTEXT.NoSolution_string)]
 	public sealed class ReAttachPackage : Package
-    {
+	{
 		protected override void Initialize()
 		{
 			base.Initialize();
@@ -34,5 +34,5 @@ namespace ReAttach
 			var ui = ModuleRepository.Resolve<UiModule>();
 			ui.Update();
 		}
-    }
+	}
 }

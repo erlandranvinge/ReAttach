@@ -38,9 +38,9 @@ namespace ReAttach.Dialogs
 				}
 			}
 
-			StatusText.Text += ".";
-			if (StatusText.Text.Length > 12)
-				StatusText.Text = "Waiting";
+			DotsText.Text += ".";
+			if (DotsText.Text.Length > 5)
+				DotsText.Text = "";
 			timer.Start();
 		}
 
