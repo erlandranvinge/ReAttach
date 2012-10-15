@@ -2,6 +2,7 @@
 # Visual Studio
 [Dd]ebug/
 [Rr]elease/
+[Bb]in/
 *.sln.cache
 *.suo
 *.csproj.user
