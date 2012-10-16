@@ -1,9 +1,9 @@
 *resharper.user
 # Visual Studio
-# [Dd]ebug/
-# [Rr]elease/
-# [Bb]in/
-# [Oo]bj/
+[Dd]ebug/
+[Rr]elease/
+[Bb]in/
+[Oo]bj/
 *.sln.cache
 *.suo
 *.csproj.user
