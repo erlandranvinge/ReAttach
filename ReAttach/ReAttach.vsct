@@ -42,7 +42,7 @@
 				<CommandFlag>DefaultDisabled</CommandFlag>
 				<CommandFlag>DynamicItemStart</CommandFlag>
 				<Strings>
-					<CommandName>cmdidReAttach</CommandName>
+					<CommandName>ReAttach</CommandName>
 					<ButtonText>ReAttach</ButtonText>
 				</Strings>
 			</Button>
@@ -55,8 +55,7 @@
 				<CommandFlag>DefaultDisabled</CommandFlag>
 				<CommandFlag>DynamicItemStart</CommandFlag>
 				<Strings>
-					<MenuText>Hello World</MenuText>
-					<CommandName>cmdidReAttachHistory1</CommandName>
+					<CommandName>ReAttach</CommandName>
 					<ButtonText>ReAttach</ButtonText>
 				</Strings>
 			</Button>
@@ -69,7 +68,7 @@
 
 	<KeyBindings>
 		<KeyBinding guid="guidReAttachPackageCmdSet" id="cmdidReAttach" editor="guidVSStd97" mod1="Control" mod2="Control" key1="R" key2="A" />
-		<KeyBinding guid="guidReAttachPackageCmdSet" id="cmdidReAttach" editor="guidVSStd97" mod1="Control Alt" key1="R" />
+		<KeyBinding guid="guidReAttachPackageCmdSet" id="cmdidReAttach" editor="guidVSStd97" mod1="Control Alt" key1="E" />
 	</KeyBindings>
 
 	<Symbols>
