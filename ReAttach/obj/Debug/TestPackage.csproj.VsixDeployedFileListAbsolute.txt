@@ -1,9 +1,0 @@
-C:\Users\ERLAND\AppData\Local\Microsoft\VisualStudio\11.0Exp\Extensions\Company\TestPackage\1.0\\TestPackage.dll
-C:\Users\ERLAND\AppData\Local\Microsoft\VisualStudio\11.0Exp\Extensions\Company\TestPackage\1.0\\TestPackage.pkgdef
-C:\Users\ERLAND\AppData\Local\Microsoft\VisualStudio\11.0Exp\Extensions\Company\TestPackage\1.0\\extension.vsixmanifest
-C:\Users\ERLAND\AppData\Local\Microsoft\VisualStudio\11.0Exp\Extensions\Company\TestPackage\1.0\\TestPackage.pdb
-C:\Users\ERLAND\AppData\Local\Microsoft\VisualStudio\11.0Exp\Extensions\Company\ReAttach\1.0\\TestPackage.dll
-C:\Users\ERLAND\AppData\Local\Microsoft\VisualStudio\11.0Exp\Extensions\Company\ReAttach\1.0\\TestPackage.pkgdef
-C:\Users\ERLAND\AppData\Local\Microsoft\VisualStudio\11.0Exp\Extensions\Company\ReAttach\1.0\\extension.vsixmanifest
-C:\Users\ERLAND\AppData\Local\Microsoft\VisualStudio\11.0Exp\Extensions\Company\ReAttach\1.0\\Play.png
-C:\Users\ERLAND\AppData\Local\Microsoft\VisualStudio\11.0Exp\Extensions\Company\ReAttach\1.0\\TestPackage.pdb
