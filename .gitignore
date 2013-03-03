@@ -7,6 +7,14 @@
 *.sln.cache
 *.suo
 *.csproj.user
+*.user
+*.[Cc]ache
+*.DS_Store
+*.bak
+*.ncb
+*.log 
+[Tt]humbs.db 
+Ankh.NoLoad
 
 # Resharper
 *[Rr]e[Ss]harper.user
