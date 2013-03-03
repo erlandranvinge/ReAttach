@@ -13,6 +13,7 @@
 *.bak
 *.ncb
 *.log 
+TestResults/
 [Tt]humbs.db 
 Ankh.NoLoad
 

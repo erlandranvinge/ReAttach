@@ -3,7 +3,7 @@
 	<Identifier Id="0ee94538-22b7-40c8-a253-3fce8ad39b6f">
 		<Name>ReAttach</Name>
 		<Author>Erland Ranvinge</Author>
-		<Version>1.0</Version>
+		<Version>1.1</Version>
 		<Description xml:space="preserve">ReAttach gives you an easy way to ReAttaching your prior debug targets. ReAttach stores your attach history for you and provides toolbar, menu and keyboard shortcuts for easy access.</Description>
 		<Locale>1033</Locale>
 		<Icon>icon.png</Icon>

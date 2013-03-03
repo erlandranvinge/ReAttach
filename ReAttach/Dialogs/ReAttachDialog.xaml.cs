@@ -1,52 +1,59 @@
 ﻿using System;
 using System.Windows;
 using System.Windows.Threading;
-using ReAttach.Modules;
+using ReAttach.Contracts;
+using ReAttach.Data;
 
 namespace ReAttach.Dialogs
 {
 	/// <summary>
 	/// Interaction logic for ReAttachDialog.xaml
 	/// </summary>
-	public partial class ReAttachDialog
+	public partial class ReAttachDialog 
 	{
-		private DispatcherTimer _timer = new DispatcherTimer();
+		private readonly IReAttachPackage _package;
 		private readonly ReAttachTarget _target;
 
-		public ReAttachDialog(ReAttachTarget target)
+		private DispatcherTimer _timer = new DispatcherTimer();
+		private int _progress = 0;
+
+		public ReAttachDialog(IReAttachPackage package, ReAttachTarget target)
 		{
 			InitializeComponent();
-			ProcessName.Text = string.Format("{0} ({1}).", target.ProcessName, target.ProcessUser);
+			_package = package;
 			_target = target;
+			ProcessName.Text = string.Format("{0} ({1})", target.ProcessName, target.ProcessUser);
+			Dots.Text = "";
 			_timer.Tick += TimerOnTick;
 			_timer.Interval = new TimeSpan(0, 0, 1);
 			_timer.Start();
+		}
+
+		public ReAttachDialog(string helpTopic)
+			: base(helpTopic)
+		{
+			InitializeComponent();
 		}
 
 		private void TimerOnTick(object sender, EventArgs eventArgs)
 		{
 			var timer = (DispatcherTimer)sender;
 			timer.Stop();
-			var debuggerModule = ModuleRepository.Resolve<DebuggerModule>();
 
-			if (_target != null)
+			if (_package.Debugger.ReAttach(_target))
 			{
-				if (debuggerModule.TryReAttach(_target))
-				{
-					Close();
-					return;
-				}
+				Close();
+				return;
 			}
-
-			DotsText.Text += ".";
-			if (DotsText.Text.Length > 5)
-				DotsText.Text = "";
+			_progress++;
+			if (_progress > 5)
+			{
+				Dots.Text = "";
+				_progress = 0;
+			}
+			else
+				Dots.Text += '.';
 			timer.Start();
-		}
-
-		public ReAttachDialog(string helpTopic) : base(helpTopic)
-		{
-			InitializeComponent();
 		}
 
 		private void CloseButtonClick(object sender, RoutedEventArgs e)
@@ -56,11 +63,10 @@ namespace ReAttach.Dialogs
 
 		protected override void OnClosed(EventArgs e)
 		{
-			if (_timer != null)
-			{
-				_timer.Stop();
-				_timer = null;
-			}
+			if (_timer == null) 
+				return;
+			_timer.Stop();
+			_timer = null;
 		}
 	}
 }

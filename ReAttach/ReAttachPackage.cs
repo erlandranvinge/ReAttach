@@ -1,38 +1,55 @@
-﻿using System.Runtime.InteropServices;
-using System.ComponentModel.Design;
+﻿using System;
+using System.Linq;
+using System.Runtime.InteropServices;
+using EnvDTE;
+using EnvDTE80;
 using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
-using Microsoft.Win32;
-using ReAttach.Modules;
+using ReAttach.Contracts;
+using ReAttach.Data;
+using ReAttach.Wrappers;
 
 namespace ReAttach
 {
-	[Guid(Constants.ReAttachPackageGuidString)]
+	[Guid(ReAttachConstants.ReAttachPackageGuidString)]
 	[PackageRegistration(UseManagedResourcesOnly = true)]
-	[InstalledProductRegistration("#110", "#112", "1.0", IconResourceID = 400)] // Needed to show this package in help /about.
+	[InstalledProductRegistration("#110", "#112", "1.1", IconResourceID = 400)] // Needed to show this package in help /about.
 	[ProvideMenuResource("Menus.ctmenu", 1)] // Required to show menus.
 	[ProvideAutoLoad(VSConstants.UICONTEXT.NoSolution_string)]
-	public sealed class ReAttachPackage : Package
+	public sealed class ReAttachPackage : Package, IReAttachPackage
 	{
+		public IReAttachReporter Reporter { get; private set; }
+		public IReAttachHistory History { get; private set; }
+		public IReAttachUi Ui { get; private set; }
+		public IReAttachDebugger Debugger { get; private set; }
+
+		public ReAttachPackage() {}
+		public ReAttachPackage(IReAttachReporter reporter, IReAttachHistory history, IReAttachUi ui, IReAttachDebugger debugger)
+		{
+			Reporter = reporter;
+			History = history;
+			Ui = ui;
+			Debugger = debugger;
+		}
+
 		protected override void Initialize()
 		{
 			base.Initialize();
-			ModuleRepository.Register(this);
-			ModuleRepository.Register<IServiceContainer>(this);
-			ModuleRepository.Register(new UiModule());
-			ModuleRepository.Register(new DebuggerModule());
-			ModuleRepository.Register(new ReAttachTargets());
 
-			LoadSettings();
+			// Wire-up modules. No XML-based unity.config from hell thank you.
+			Reporter = Reporter ?? new ReAttachTraceReporter();
+			History =  History ?? new ReAttachHistory(new ReAttachRegistryRepository(this));
+			Ui = Ui ?? new ReAttachUi(this);
+			Debugger = Debugger ?? new ReAttachDebugger(this);
+
+			History.Load();
+			Ui.Update();
 		}
 
-		private void LoadSettings()
+		public IRegistryKey OpenUserRegistryRoot()
 		{
-			var history = ModuleRepository.Resolve<ReAttachTargets>();
-			history.Load();
-			var ui = ModuleRepository.Resolve<UiModule>();
-			ui.Update();
+			return new RegistryKey(UserRegistryRoot); // TODO: This needs to be handled in a different way to be testable.
 		}
 	}
 }

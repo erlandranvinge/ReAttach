@@ -93,15 +93,28 @@
     </COMReference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Constants.cs" />
+    <Compile Include="Contracts\IReAttachHistory.cs" />
+    <Compile Include="Contracts\IReAttachReporter.cs" />
+    <Compile Include="Contracts\IReAttachRepository.cs" />
+    <Compile Include="Contracts\IReAttachUi.cs" />
+    <Compile Include="Data\ReAttachSolutionRepository.cs" />
+    <Compile Include="Contracts\IReAttachPackage.cs" />
+    <Compile Include="Contracts\IReAttachDebugger.cs" />
+    <Compile Include="Misc\UacHelper.cs" />
+    <Compile Include="ReAttachDebugger.cs" />
+    <Compile Include="ReAttachHistory.cs" />
+    <Compile Include="ReAttachUi.cs" />
+    <Compile Include="Wrappers\IRegistryKey.cs" />
+    <Compile Include="Data\ReAttachRegistryRepository.cs" />
+    <Compile Include="ReAttachConstants.cs" />
+    <Compile Include="Data\ReAttachTargetList.cs" />
     <Compile Include="Dialogs\ReAttachDialog.xaml.cs">
       <DependentUpon>ReAttachDialog.xaml</DependentUpon>
     </Compile>
     <Compile Include="Extensions\DebugProcessExtensions.cs" />
-    <Compile Include="Modules\UiModule.cs" />
-    <Compile Include="Modules\DebuggerModule.cs" />
-    <Compile Include="Modules\ModuleRepository.cs" />
-    <Compile Include="Modules\ReAttachTargets.cs" />
+    <Compile Include="Misc\TypeHelper.cs" />
+    <Compile Include="Data\ReAttachTarget.cs" />
+    <Compile Include="ReAttachTraceReporter.cs" />
     <Compile Include="Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -109,6 +122,7 @@
     </Compile>
     <Compile Include="ReAttachPackage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Wrappers\RegistryKey.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources.resx">
@@ -148,7 +162,6 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>
-    <Resource Include="Readme.txt" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Resources\Package.ico">
@@ -162,6 +175,7 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
+  <ItemGroup />
   <PropertyGroup>
     <UseCodebase>true</UseCodebase>
   </PropertyGroup>

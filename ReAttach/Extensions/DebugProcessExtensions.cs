@@ -1,5 +1,6 @@
 ﻿using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.Debugger.Interop;
+using ReAttach.Data;
 
 namespace ReAttach.Extensions
 {
@@ -17,17 +18,27 @@ namespace ReAttach.Extensions
 			return (enum_DEBUG_REASON) reason;
 		}
 
-		public static string GetFilename(this IDebugProcess3 process)
+		public static string GetFilename(this IDebugProcess2 process)
 		{
 			if (process == null)
 				return string.Empty;
-			string name = "";
+			var name = "";
 			if (process.GetName((uint)enum_GETNAME_TYPE.GN_FILENAME, out name) != VSConstants.S_OK)
 				return string.Empty;
 			return name;
 		}
 
-		public static int GetProcessId(this IDebugProcess3 process)
+		public static string GetName(this IDebugProcess2 process)
+		{
+			if (process == null)
+				return string.Empty;
+			var name = "";
+			if (process.GetName((uint)enum_GETNAME_TYPE.GN_NAME, out name) != VSConstants.S_OK)
+				return string.Empty;
+			return name;
+		}
+
+		public static int GetProcessId(this IDebugProcess2 process)
 		{
 			if (process == null)
 				return 0;
