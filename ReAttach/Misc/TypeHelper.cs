@@ -1,12 +1,15 @@
 ﻿using System.Diagnostics.CodeAnalysis;
+using EnvDTE;
+using EnvDTE80;
+using EnvDTE90;
 using Microsoft.VisualStudio.Debugger.Interop;
 
 namespace ReAttach.Misc
 {
 	[ExcludeFromCodeCoverage]
-	internal class TypeHelper
+	internal static class TypeHelper
 	{
-		public static string GetType(object o)
+		public static string GetDebugEventTypeName(object o)
 		{
 			var result = string.Empty;
 
@@ -116,6 +119,14 @@ namespace ReAttach.Misc
 			if (o is IDebugThreadNameChangedEvent2) result += " IDebugThreadNameChangedEvent2";
 			if (o is IDebugWindowsComputerPort2) result += " IDebugWindowsComputerPort2";
 			return result;
+		}
+
+		public static string GetProcessTypeName(object o)
+		{
+			if (o is Process3) return "Process3";
+			if (o is Process2) return "Process2";
+			if (o is Process) return "Process";
+			return "Unknown process type. :/";
 		}
 	}
 }

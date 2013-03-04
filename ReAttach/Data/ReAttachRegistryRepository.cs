@@ -4,7 +4,6 @@ using Microsoft.VisualStudio.Shell.Interop;
 using Microsoft.Win32;
 using ReAttach.Contracts;
 using ReAttach.Misc;
-using ReAttach.Wrappers;
 
 namespace ReAttach.Data
 {
@@ -17,7 +16,7 @@ namespace ReAttach.Data
 			_package = package;
 		}
 
-		public bool Save(ReAttachTargetList targets)
+		public bool SaveTargets(ReAttachTargetList targets)
 		{
 			try
 			{
@@ -38,10 +37,11 @@ namespace ReAttach.Data
 				var index = 1;
 				foreach (var target in targets)
 				{
-					var data = string.Format("{0}{1}{2}{3}{4}",
+					var data = string.Format("{0}{1}{2}{3}{4}{5}{6}",
 						target.ProcessPath, ReAttachConstants.ReAttachRegistrySplitChar,
 						target.ProcessUser, ReAttachConstants.ReAttachRegistrySplitChar,
-						target.ProcessId);
+						target.ProcessId, ReAttachConstants.ReAttachRegistrySplitChar,
+						target.ServerName);
 					subkey.SetValue(ReAttachConstants.ReAttachRegistryHistoryKeyPrefix + index, data);
 					index++;
 				}
@@ -62,7 +62,7 @@ namespace ReAttach.Data
 			return false;
 		}
 
-		public ReAttachTargetList Load()
+		public ReAttachTargetList LoadTargets()
 		{
 			try
 			{
@@ -91,12 +91,12 @@ namespace ReAttach.Data
 					var tokens = value.Split(new[] { ReAttachConstants.ReAttachRegistrySplitChar },
 						StringSplitOptions.RemoveEmptyEntries);
 
-					if (tokens.Length != 3)
+					if (tokens.Length != 4)
 						break;
 
 					int pid;
 					int.TryParse(tokens[2], out pid);
-					targets.AddLast(new ReAttachTarget(pid, tokens[0], tokens[1]));
+					targets.AddLast(new ReAttachTarget(pid, tokens[0], tokens[1], tokens[2]));
 				}
 				subkey.Close();
 				root.Close();

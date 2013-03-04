@@ -3,7 +3,6 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using ReAttach.Contracts;
 using ReAttach.Data;
-using ReAttach.Wrappers;
 
 namespace ReAttach.Tests.UnitTests
 {
@@ -18,9 +17,9 @@ namespace ReAttach.Tests.UnitTests
 			package.Setup(p => p.Reporter).Returns(new ReAttachTraceReporter());
 
 			var repository = new ReAttachRegistryRepository(package.Object);
-			Assert.IsNull(repository.Load(), 
+			Assert.IsNull(repository.LoadTargets(), 
 				"Null key should have resulted in empty result from load method.");
-			Assert.IsFalse(repository.Save(new ReAttachTargetList(ReAttachConstants.ReAttachHistorySize)),
+			Assert.IsFalse(repository.SaveTargets(new ReAttachTargetList(ReAttachConstants.ReAttachHistorySize)),
 				"Null key should have resulted in false result from save method.");
 
 			var key = new Mock<IRegistryKey>(MockBehavior.Strict);
@@ -29,9 +28,9 @@ namespace ReAttach.Tests.UnitTests
 			key.Setup(k => k.Close());
 			package.Setup(p => p.OpenUserRegistryRoot()).Returns(key.Object);
 
-			Assert.IsNull(repository.Load(),
+			Assert.IsNull(repository.LoadTargets(),
 				"Null subkey should have resulted in empty result from load method.");
-			Assert.IsFalse(repository.Save(new ReAttachTargetList(ReAttachConstants.ReAttachHistorySize)),
+			Assert.IsFalse(repository.SaveTargets(new ReAttachTargetList(ReAttachConstants.ReAttachHistorySize)),
 				"Null subkey should have resulted in false result from save method.");
 		}
 
@@ -47,7 +46,7 @@ namespace ReAttach.Tests.UnitTests
 			var repository = new ReAttachRegistryRepository(package.Object);
 
 			var targets = new ReAttachTargetList(ReAttachConstants.ReAttachHistorySize);
-			Assert.IsTrue(repository.Save(targets));
+			Assert.IsTrue(repository.SaveTargets(targets));
 
 			key.Verify(k => k.CreateSubKey(It.IsAny<string>()), Times.Once());
 			subkey.Verify(k => k.SetValue(It.IsAny<string>(), It.IsAny<string>()), Times.Never());
@@ -69,7 +68,7 @@ namespace ReAttach.Tests.UnitTests
 			for (var i = 1; i <= 3; i++)
 				targets.AddFirst(new ReAttachTarget(i, "path" + i, "user" + i));
 
-			Assert.IsTrue(repository.Save(targets));
+			Assert.IsTrue(repository.SaveTargets(targets));
 
 			key.Verify(k => k.CreateSubKey(It.IsAny<string>()), Times.Once());
 
@@ -98,12 +97,12 @@ namespace ReAttach.Tests.UnitTests
 			var repository = new ReAttachRegistryRepository(package.Object);
 
 			var targets = new ReAttachTargetList(ReAttachConstants.ReAttachHistorySize);
-			Assert.IsFalse(repository.Save(targets));
+			Assert.IsFalse(repository.SaveTargets(targets));
 
 			for (var i = 1; i <= 3; i++)
 				targets.AddFirst(new ReAttachTarget(i, "path" + i, "user" + i));
 
-			Assert.IsFalse(repository.Save(targets));
+			Assert.IsFalse(repository.SaveTargets(targets));
 		}
 
 		[TestMethod]
@@ -115,12 +114,12 @@ namespace ReAttach.Tests.UnitTests
 			package.Setup(p => p.Reporter).Returns(new ReAttachTraceReporter());
 			var repository = new ReAttachRegistryRepository(package.Object);
 
-			Assert.IsNull(repository.Load(), "Non-null result on first load, no key should mean null return value.");
+			Assert.IsNull(repository.LoadTargets(), "Non-null result on first load, no key should mean null return value.");
 
 			key.Setup(k => k.OpenSubKey(It.IsAny<string>())).
 				Throws(new SecurityException("Simulating no access. :)"));
 
-			Assert.IsNull(repository.Load(), "Either SecurityException wasn't thrown, or there's a problem with error handling in load method.");
+			Assert.IsNull(repository.LoadTargets(), "Either SecurityException wasn't thrown, or there's a problem with error handling in load method.");
 			key.Verify(k => k.OpenSubKey(It.IsAny<string>()), Times.Exactly(2));
 		}
 
@@ -135,7 +134,7 @@ namespace ReAttach.Tests.UnitTests
 			package.Setup(p => p.OpenUserRegistryRoot()).Returns(key.Object);
 			var repository = new ReAttachRegistryRepository(package.Object);
 
-			var result = repository.Load();
+			var result = repository.LoadTargets();
 			Assert.IsNotNull(result, "Empty set loaded resulted in null result, should result in empty list.");
 			Assert.AreEqual(0, result.Count, "Empty set loaded resulted in non-empty result, should result in empty list.");
 			key.Verify(k => k.OpenSubKey(It.IsAny<string>()), Times.Once());
@@ -161,7 +160,7 @@ namespace ReAttach.Tests.UnitTests
 			package.Setup(p => p.OpenUserRegistryRoot()).Returns(key.Object);
 			var repository = new ReAttachRegistryRepository(package.Object);
 
-			var result = repository.Load();
+			var result = repository.LoadTargets();
 
 			Assert.IsNotNull(result, "Empty set loaded resulted in null result, should result in empty list.");
 			Assert.AreEqual(1, result.Count, "Invalid number of results loaded.");
@@ -187,7 +186,7 @@ namespace ReAttach.Tests.UnitTests
 			package.Setup(p => p.OpenUserRegistryRoot()).Returns(key.Object);
 			var repository = new ReAttachRegistryRepository(package.Object);
 
-			var result = repository.Load();
+			var result = repository.LoadTargets();
 			Assert.IsNotNull(result, "Empty set loaded resulted in null result, should result in empty list.");
 			Assert.AreEqual(items, result.Count, "Invalid number of results loaded.");
 

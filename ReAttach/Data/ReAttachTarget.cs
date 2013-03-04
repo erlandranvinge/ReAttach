@@ -25,8 +25,8 @@ namespace ReAttach.Data
 			}
 			ProcessId = pid;
 			ProcessPath = path;
-			ProcessUser = user;
-			ServerName = serverName;
+			ProcessUser = user ?? "";
+			ServerName = serverName ?? "";
 		}
 
 		public override bool Equals(object obj)

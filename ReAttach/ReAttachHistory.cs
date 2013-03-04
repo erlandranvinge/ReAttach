@@ -17,7 +17,7 @@ namespace ReAttach
 		// TODO: Locking on save/loads might be relevant. Ref-switching will do for now.
 		public bool Load()
 		{
-			var items = _repository.Load();
+			var items = _repository.LoadTargets();
 			if (items == null)
 				return false;
 
@@ -27,7 +27,7 @@ namespace ReAttach
 
 		public bool Save()
 		{
-			return _repository.Save(Items);
+			return _repository.SaveTargets(Items);
 		}
 	}
 }

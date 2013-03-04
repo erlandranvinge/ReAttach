@@ -87,7 +87,6 @@
     <Compile Include="UnitTests\ReAttachHistoryTests.cs" />
     <Compile Include="UnitTests\ReAttachPackageTests.cs" />
     <Compile Include="UnitTests\ReAttachRegistryRepositoryTests.cs" />
-    <Compile Include="UnitTests\ReAttachSolutionRepositoryTests.cs" />
     <Compile Include="UnitTests\ReAttachTargetListTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UnitTests\ReAttachTargetTests.cs" />

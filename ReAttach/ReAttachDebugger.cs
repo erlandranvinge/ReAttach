@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Runtime.InteropServices;
 using EnvDTE80;
 using EnvDTE90;
 using Microsoft.VisualStudio;
@@ -38,7 +39,7 @@ namespace ReAttach
 			}
 
 			if (_debugger.AdviseDebuggerEvents(this, out _cookie) != VSConstants.S_OK)
-				Trace.TraceError("ReAttach: AdviserDebuggerEvents failed.");
+				_package.Reporter.ReportError("ReAttach: AdviserDebuggerEvents failed.");
 
 			if (_debugger.AdviseDebugEventCallback(this) != VSConstants.S_OK)
 				_package.Reporter.ReportError("AdviceDebugEventsCallback call failed in ReAttachDebugger ctor.");
@@ -50,7 +51,7 @@ namespace ReAttach
 			if (debugEvent is IDebugModuleLoadEvent2)
 				return VSConstants.S_OK;
 
-			Trace.WriteLine(TypeHelper.GetType(debugEvent));
+			Trace.WriteLine(TypeHelper.GetDebugEventTypeName(debugEvent)); // TODO: Remove me.
 
 			if (process == null)
 				return VSConstants.S_OK;
@@ -59,7 +60,7 @@ namespace ReAttach
 			if (target == null)
 			{
 				_package.Reporter.ReportWarning("Can't find target from process {0} ({1}). Event: {2}.",
-					process.GetName(), process.GetProcessId(), TypeHelper.GetType(debugEvent));
+					process.GetName(), process.GetProcessId(), TypeHelper.GetDebugEventTypeName(debugEvent));
 				return VSConstants.S_OK;
 			}
 			if (debugEvent is IDebugProcessCreateEvent2)
@@ -97,14 +98,6 @@ namespace ReAttach
 
 			var user = GetProcessUsername(pid);
 			var path = process.GetFilename();
-
-			// TODO: Support remote debugging.
-			target = _package.History.Items.Find(path, user, "");
-			if (target != null)
-			{
-				target.ProcessId = pid;
-				return target;
-			}
 			return new ReAttachTarget(pid, path, user, "");
 		}
 
@@ -122,10 +115,16 @@ namespace ReAttach
 			else
 			{
 				var processes = _dteDebugger.LocalProcesses.OfType<Process3>();
-
 				candidates = processes.Where(p =>
 					p.Name == target.ProcessPath &&
 					p.UserName == target.ProcessUser).ToList();
+
+				if (!candidates.Any()) // Do matching on processes running in exclusive mode.
+				{
+					candidates = processes.Where(p => 
+						p.Name == target.ProcessName &&
+						string.IsNullOrEmpty(p.UserName)).ToList();
+				}
 			}
 
 			if (!candidates.Any())
@@ -150,6 +149,13 @@ namespace ReAttach
 					return true;
 				}
 			}
+			catch (COMException e)
+			{
+				// It's either this or returning this HRESULT to shell with Shell.ReportError method, shows UAC box btw.
+				const int E_ELEVATION_REQUIRED = unchecked((int)0x800702E4);
+				Marshal.ThrowExceptionForHR(E_ELEVATION_REQUIRED); 
+				return false;
+			}
 			catch (Exception e)
 			{
 				_package.Reporter.ReportError("Unable to ReAttach to process {0} ({1}) based on target {2}. Message: {3}.", 
@@ -161,7 +167,9 @@ namespace ReAttach
 		private string GetProcessUsername(int pid)
 		{
 			var process = _dteDebugger.LocalProcesses.OfType<Process3>().FirstOrDefault(p => p.ProcessID == pid);
-			return process != null ? process.UserName : string.Empty;
+			var result = process != null ? process.UserName : string.Empty;
+
+			return result;
 		}
 	}
 }

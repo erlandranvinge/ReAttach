@@ -1,22 +1,17 @@
 ﻿using System;
 using System.ComponentModel.Design;
-using System.Globalization;
 using System.Linq;
-using System.Runtime.InteropServices;
-using EnvDTE80;
-using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
 using ReAttach.Contracts;
 using ReAttach.Dialogs;
-using ReAttach.Misc;
 
 namespace ReAttach
 {
 	public class ReAttachUi : IReAttachUi
 	{
 		private readonly IReAttachPackage _package;
-		private readonly OleMenuCommand[] _commands = new OleMenuCommand[ReAttachConstants.ReAttachHistorySize];
+		public readonly OleMenuCommand[] Commands = new OleMenuCommand[ReAttachConstants.ReAttachHistorySize];
 
 		public ReAttachUi(IReAttachPackage package)
 		{
@@ -38,56 +33,49 @@ namespace ReAttach
 				if (i > 0) // Hide all items except first one initially.
 					command.Visible = false;
 	
-				_commands[i] = command;
+				Commands[i] = command;
 			}
 		}
 
 		public void Update()
 		{
-			// If no targets are loaded, just show a default button.
-			if (_package.History.Items.IsEmpty) 
+			// Hide all items in menus that doesn't have a corresponding target.
+			var nonAttachedItems = _package.History.Items.Where(t => !t.IsAttached).ToList();
+			if (!nonAttachedItems.Any())
 			{
-				_commands[0].Text = "ReAttach...";
-				_commands[0].Visible = true;
+				Commands[0].Text = ReAttachConstants.Texts.NoTargetsAvailable;
+				Commands[0].Visible = true;
+				Commands[0].Enabled = false;
+
 				for (var i = 1; i < ReAttachConstants.ReAttachHistorySize; i++)
-					_commands[i].Visible = false;
+					Commands[i].Enabled = Commands[i].Visible = false;
+
 				return;
 			}
 
-			// Hide all items in menus that doesn't have a corresponding target.
-			var items = _package.History.Items.Where(t => !t.IsAttached).ToList();
 			for (var i = 0; i < ReAttachConstants.ReAttachHistorySize; i++)
 			{
-				var item = i < items.Count ? items[i] : null;
+				var item = i < nonAttachedItems.Count ? nonAttachedItems[i] : null;
 				if (item != null)
 				{
-					_commands[i].Text = item.ToString();
-					_commands[i].Visible = true;
+					Commands[i].Text = ReAttachConstants.Texts.MenuItemPrefix + item;
+					Commands[i].Visible = true;
+					Commands[i].Enabled = true;
 				}
 				else
 				{
-					_commands[i].Visible = false;
+					Commands[i].Visible = false;
+					Commands[i].Enabled = false;
 				}
 			}
 		}
 
 		public void ReAttachCommandClicked(object sender, EventArgs e)
 		{
-			/*
-			const int E_ELEVATION_REQUIRED = unchecked((int)0x800702E4);
-			Marshal.ThrowExceptionForHR(E_ELEVATION_REQUIRED); // Show UAC box.
-			return;
-			*/
-			if (_package.History.Items.IsEmpty)
-			{
-				ExecuteCommand("Debug.AttachToProcess");
-				return;
-			}
-
 			var command = sender as OleMenuCommand;
 			if (command == null)
 			{
-				_package.Reporter.ReportWarning("ReAttachCommandClick sent from non OleMenuCommand.");
+				_package.Reporter.ReportWarning("ReAttachCommandClick sent from non-OleMenuCommand.");
 				return;
 			}
 			var index = command.CommandID.ID - ReAttachConstants.ReAttachCommandId;
@@ -109,6 +97,7 @@ namespace ReAttach
 			var uiShell = (IVsUIShell)_package.GetService(typeof(SVsUIShell));
 			var clsid = Guid.Empty;
 			int result;
+			
 			uiShell.ShowMessageBox(
 				0,
 				ref clsid,
@@ -121,17 +110,6 @@ namespace ReAttach
 				OLEMSGICON.OLEMSGICON_INFO,
 				0, // false
 				out result);
-		}
-
-		private void ExecuteCommand(string command, string args = "")
-		{
-			var dte = _package.GetService(typeof(SDTE)) as DTE2;
-			if (dte == null)
-			{
-				_package.Reporter.ReportError("Unable to get instance of SDTE/DTE2 from ExecuteCommand method.");
-				return;
-			}
-			dte.ExecuteCommand(command);
 		}
 	}
 }

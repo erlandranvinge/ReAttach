@@ -61,8 +61,10 @@
 				<CommandFlag>TextChanges</CommandFlag>
 				<CommandFlag>DontCache</CommandFlag>
 				<CommandFlag>DynamicVisibility</CommandFlag>
+				<CommandFlag>FixMenuController</CommandFlag>
+				<CommandFlag>DefaultInvisible</CommandFlag>
 				<Strings>
-					<ButtonText>ReAttach...</ButtonText>
+					<ButtonText>ReAttach</ButtonText>
 					<CommandName>ReAttach</CommandName>
 					<CanonicalName>ReAttach</CanonicalName>
 				</Strings>

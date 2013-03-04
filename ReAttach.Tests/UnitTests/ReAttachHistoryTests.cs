@@ -15,13 +15,13 @@ namespace ReAttach.Tests.UnitTests
 			var history = new ReAttachHistory(repository.Object);
 			Assert.IsNotNull(history.Items);
 
-			repository.Setup(r => r.Save(It.IsAny<ReAttachTargetList>())).Returns(true);
+			repository.Setup(r => r.SaveTargets(It.IsAny<ReAttachTargetList>())).Returns(true);
 			Assert.IsTrue(history.Save());
 
-			repository.Setup(r => r.Save(It.IsAny<ReAttachTargetList>())).Returns(false);
+			repository.Setup(r => r.SaveTargets(It.IsAny<ReAttachTargetList>())).Returns(false);
 			Assert.IsFalse(history.Save());
 
-			repository.Verify(r => r.Save(It.IsAny<ReAttachTargetList>()), Times.Exactly(2));
+			repository.Verify(r => r.SaveTargets(It.IsAny<ReAttachTargetList>()), Times.Exactly(2));
 		}
 
 		[TestMethod]
@@ -31,16 +31,16 @@ namespace ReAttach.Tests.UnitTests
 			var history = new ReAttachHistory(repository.Object);
 			Assert.IsNotNull(history.Items);
 
-			repository.Setup(r => r.Load()).Returns<ReAttachTargetList>(null);
+			repository.Setup(r => r.LoadTargets()).Returns<ReAttachTargetList>(null);
 			Assert.IsFalse(history.Load());
 			Assert.IsNotNull(history.Items);
 
-			repository.Setup(r => r.Load()).Returns(new ReAttachTargetList(ReAttachConstants.ReAttachHistorySize));
+			repository.Setup(r => r.LoadTargets()).Returns(new ReAttachTargetList(ReAttachConstants.ReAttachHistorySize));
 			Assert.IsTrue(history.Load());
 			Assert.IsNotNull(history.Items);
 			Assert.AreEqual(0, history.Items.Count);
 
-			repository.Verify(r => r.Load(), Times.Exactly(2));
+			repository.Verify(r => r.LoadTargets(), Times.Exactly(2));
 		}
 	}
 }

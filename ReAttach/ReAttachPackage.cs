@@ -8,7 +8,6 @@ using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
 using ReAttach.Contracts;
 using ReAttach.Data;
-using ReAttach.Wrappers;
 
 namespace ReAttach
 {

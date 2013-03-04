@@ -1,6 +1,5 @@
 ﻿using System.ComponentModel.Design;
 using Microsoft.VisualStudio.OLE.Interop;
-using ReAttach.Wrappers;
 
 namespace ReAttach.Contracts
 {

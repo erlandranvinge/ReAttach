@@ -1,4 +1,5 @@
-﻿using Microsoft.VisualStudio;
+﻿using EnvDTE90;
+using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.Debugger.Interop;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
@@ -65,6 +66,20 @@ namespace ReAttach.Tests.UnitTests
 			Assert.IsTrue(string.IsNullOrEmpty(DebugProcessExtensions.GetFilename(null)));
 			Assert.AreEqual(0, DebugProcessExtensions.GetProcessId(null));
 			Assert.AreEqual(enum_DEBUG_REASON.DEBUG_REASON_ERROR, DebugProcessExtensions.GetReason(null));
+		}
+
+		[TestMethod]
+		public void GetProcessUsernameTests()
+		{
+			var process = new Mock<Process3>();
+			process.Setup(p => p.UserName).Returns("testprocess");
+			Assert.AreEqual("testprocess", process.Object.GetUsername());
+	
+			process.Setup(p => p.UserName).Returns("testprocess [admi");
+			Assert.AreEqual("testprocess", process.Object.GetUsername());
+
+			process.Setup(p => p.UserName).Returns("testprocess [administrator]");
+			Assert.AreEqual("testprocess", process.Object.GetUsername());
 		}
 	}
 }
