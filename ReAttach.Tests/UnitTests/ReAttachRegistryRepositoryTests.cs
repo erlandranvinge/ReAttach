@@ -73,8 +73,16 @@ namespace ReAttach.Tests.UnitTests
 			key.Verify(k => k.CreateSubKey(It.IsAny<string>()), Times.Once());
 
 			for (var i = 1; i <= 3; i++)
+			{
+				var expected = string.Format("{0}{1}{2}{3}{4}{5}{6}",
+						targets[i - 1].ProcessPath, ReAttachConstants.ReAttachRegistrySplitChar,
+						targets[i - 1].ProcessUser, ReAttachConstants.ReAttachRegistrySplitChar,
+						targets[i - 1].ProcessId, ReAttachConstants.ReAttachRegistrySplitChar,
+						targets[i - 1].ServerName);
+
 				subkey.Verify(k => k.SetValue(ReAttachConstants.ReAttachRegistryHistoryKeyPrefix + i,
-					It.IsAny<string>()), Times.Once());
+					expected), Times.Once());
+			}
 
 			subkey.Verify(k => k.Close(), Times.Once());	
 		}
@@ -148,13 +156,13 @@ namespace ReAttach.Tests.UnitTests
 			key.Setup(k => k.OpenSubKey(ReAttachConstants.ReAttachRegistryKeyName)).Returns(subkey.Object);
 
 			subkey.Setup(k => k.GetValue(ReAttachConstants.ReAttachRegistryHistoryKeyPrefix + 1)).
-					Returns(string.Format("path{1}{0}user{1}{0}{1}", ReAttachConstants.ReAttachRegistrySplitChar, 1));
+					Returns(string.Format("path{1}{0}user{1}{0}{1}{0}server{1}", ReAttachConstants.ReAttachRegistrySplitChar, 1));
 
 			subkey.Setup(k => k.GetValue(ReAttachConstants.ReAttachRegistryHistoryKeyPrefix + 2)).
 					Returns(string.Format("invalid-item-1"));
 
 			subkey.Setup(k => k.GetValue(ReAttachConstants.ReAttachRegistryHistoryKeyPrefix + 3)).
-					Returns(string.Format("path{1}{0}user{1}{0}{1}", ReAttachConstants.ReAttachRegistrySplitChar, 3));
+					Returns(string.Format("path{1}{0}user{1}{0}{1}{0}server{1}", ReAttachConstants.ReAttachRegistrySplitChar, 3));
 
 			var package = new Mock<IReAttachPackage>();
 			package.Setup(p => p.OpenUserRegistryRoot()).Returns(key.Object);
@@ -163,7 +171,7 @@ namespace ReAttach.Tests.UnitTests
 			var result = repository.LoadTargets();
 
 			Assert.IsNotNull(result, "Empty set loaded resulted in null result, should result in empty list.");
-			Assert.AreEqual(1, result.Count, "Invalid number of results loaded.");
+			Assert.AreEqual(2, result.Count, "Invalid number of results loaded.");
 
 			for (var i = 1; i <= 2; i++)
 				subkey.Verify(k => k.GetValue(ReAttachConstants.ReAttachRegistryHistoryKeyPrefix + i));
@@ -179,9 +187,10 @@ namespace ReAttach.Tests.UnitTests
 			const int items = 3;
 
 			for (var i = 1; i <= items; i++)
+			{
 				subkey.Setup(k => k.GetValue(ReAttachConstants.ReAttachRegistryHistoryKeyPrefix + i)).
-					Returns(string.Format("path{1}{0}user{1}{0}{1}", ReAttachConstants.ReAttachRegistrySplitChar, i));
-
+					Returns(string.Format("path{1}{0}user{1}{0}{1}{0}server{1}", ReAttachConstants.ReAttachRegistrySplitChar, i));
+			}
 			var package = new Mock<IReAttachPackage>();
 			package.Setup(p => p.OpenUserRegistryRoot()).Returns(key.Object);
 			var repository = new ReAttachRegistryRepository(package.Object);
@@ -192,9 +201,10 @@ namespace ReAttach.Tests.UnitTests
 
 			for (var i = 0; i < items; i++)
 			{
-				Assert.AreEqual("path" + (i + 1), result[i].ProcessPath);
-				Assert.AreEqual("user" + (i + 1), result[i].ProcessUser);
-				Assert.AreEqual(i + 1, result[i].ProcessId);
+				Assert.AreEqual("path" + (i + 1), result[i].ProcessPath, "Mismatching path found for item " + i);
+				Assert.AreEqual("user" + (i + 1), result[i].ProcessUser, "Mismatching user found for item " + i);
+				Assert.AreEqual(i + 1, result[i].ProcessId, "Mismatching PID found for item " + i);
+				Assert.AreEqual("server" + (i + 1), result[i].ServerName, "Mismatching server found for item " + i);
 			}
 
 			key.Verify(k => k.OpenSubKey(It.IsAny<string>()), Times.Once());

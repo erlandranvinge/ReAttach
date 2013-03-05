@@ -27,8 +27,10 @@ namespace ReAttach.Tests.UnitTests
 		public void ReAttachCommandClickedEmptyHistory()
 		{
 			var ui = new ReAttachUi(_mocks.MockReAttachPackage.Object);
-			ui.ReAttachCommandClicked(null, null);
-			_mocks.MockDTE.Verify(d => d.ExecuteCommand("Debug.AttachToProcess", string.Empty));
+			ui.ReAttachCommandClicked(new OleMenuCommand((sender, args) => {}, 
+				new CommandID(ReAttachConstants.ReAttachPackageCmdSet, ReAttachConstants.ReAttachCommandId)), null);
+
+			_mocks.MockReAttachDebugger.Verify(d => d.ReAttach(It.IsAny<ReAttachTarget>()), Times.Never());
 			Assert.AreEqual(0, _mocks.MockReAttachReporter.ErrorCount, "Unexpected number of ReAttach errors.");
 			Assert.AreEqual(0, _mocks.MockReAttachReporter.WarningCount, "Unexpected number of ReAttach warnings.");
 		}

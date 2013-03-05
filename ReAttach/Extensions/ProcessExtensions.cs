@@ -1,5 +1,4 @@
-﻿using System;
-using EnvDTE90;
+﻿using EnvDTE90;
 
 namespace ReAttach.Extensions
 {
@@ -11,7 +10,6 @@ namespace ReAttach.Extensions
 			if (string.IsNullOrEmpty(name))
 				return name;
 			var start = name.LastIndexOf('[');
-			System.Diagnostics.Trace.WriteLine(start != -1 ? name.Substring(0, start).TrimEnd() : name);
 			return start != -1 ? name.Substring(0, start).TrimEnd() : name;
 		}
 	}

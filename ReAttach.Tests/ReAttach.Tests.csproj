@@ -83,7 +83,6 @@
     <Compile Include="Mocks\ReAttachMocks.cs" />
     <Compile Include="MockUtils.cs" />
     <Compile Include="UnitTests\ExtensionsTests.cs" />
-    <Compile Include="UnitTests\ReAttachDialogTests.cs" />
     <Compile Include="UnitTests\ReAttachHistoryTests.cs" />
     <Compile Include="UnitTests\ReAttachPackageTests.cs" />
     <Compile Include="UnitTests\ReAttachRegistryRepositoryTests.cs" />

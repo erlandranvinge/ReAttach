@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Runtime.InteropServices;
 using EnvDTE80;
@@ -45,18 +44,22 @@ namespace ReAttach
 				_package.Reporter.ReportError("AdviceDebugEventsCallback call failed in ReAttachDebugger ctor.");
 		}
 
-		public int Event(IDebugEngine2 pEngine, IDebugProcess2 process, IDebugProgram2 pProgram, 
-			IDebugThread2 pThread, IDebugEvent2 debugEvent, ref Guid riidEvent, uint dwAttrib)
+		public int Event(IDebugEngine2 engine, IDebugProcess2 process, IDebugProgram2 program, 
+			IDebugThread2 thread, IDebugEvent2 debugEvent, ref Guid riidEvent, uint attributes)
 		{
-			if (debugEvent is IDebugModuleLoadEvent2)
+			// Ignore a few events right away.
+			if (debugEvent is IDebugModuleLoadEvent2 ||  
+				debugEvent is IDebugThreadCreateEvent2 ||
+				debugEvent is IDebugThreadDestroyEvent2)
 				return VSConstants.S_OK;
-
-			Trace.WriteLine(TypeHelper.GetDebugEventTypeName(debugEvent)); // TODO: Remove me.
+			
+			// Trace.WriteLine(TypeHelper.GetDebugEventTypeName(debugEvent)); // TODO: Remove me.
 
 			if (process == null)
 				return VSConstants.S_OK;
-
+			
 			var target = GetTargetFromProcess(process);
+
 			if (target == null)
 			{
 				_package.Reporter.ReportWarning("Can't find target from process {0} ({1}). Event: {2}.",
@@ -96,9 +99,22 @@ namespace ReAttach
 			if (target != null)
 				return target;
 
+			var serverName = "";
+			IDebugCoreServer2 server;
+			if (debugProcess.GetServer(out server) == VSConstants.S_OK)
+			{
+				var server3 = server as IDebugCoreServer3;
+				var tmp = "";
+				if (server3 != null && server3.QueryIsLocal() == VSConstants.S_FALSE && 
+					server3.GetServerFriendlyName(out tmp) == VSConstants.S_OK)
+				{
+					serverName = tmp;
+				}
+			}
+
 			var user = GetProcessUsername(pid);
 			var path = process.GetFilename();
-			return new ReAttachTarget(pid, path, user, "");
+			return new ReAttachTarget(pid, path, user, serverName);
 		}
 
 		public bool ReAttach(ReAttachTarget target)

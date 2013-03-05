@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Linq;
+using Microsoft.VisualStudio;
+using Microsoft.VisualStudio.Debugger.Interop;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using ReAttach.Data;
@@ -86,12 +89,65 @@ namespace ReAttach.Tests.UnitTests
 		}
 
 		[TestMethod]
-		public void ReAttachEventsTest()
+		public void RecordAttachTest()
 		{
 			var debugger = new ReAttachDebugger(_mocks.MockReAttachPackage.Object);
+			_mocks.MockReAttachUi.Setup(ui => ui.Update()); 
+
+			var processCreateEvent = new Mock<IDebugProcessCreateEvent2>(MockBehavior.Strict);
+			var process = new Mock<IDebugProcess3>(MockBehavior.Strict);
+			var process2 = process.As<IDebugProcess2>();
+			process2.Setup(p => p.GetPhysicalProcessId(It.IsAny<AD_PROCESS_ID[]>())).Returns(123);
+
+			var serverMock = new Mock<IDebugCoreServer3>(MockBehavior.Strict);
+			var server = serverMock.As<IDebugCoreServer2>().Object;
+			serverMock.Setup(s => s.QueryIsLocal()).Returns(VSConstants.S_OK);
+			process2.Setup(p => p.GetServer(out server)).Returns(VSConstants.S_OK); 
+			
+			string processName;
+			process2.Setup(p => p.GetName(It.IsAny<uint>(), out processName)).Returns(VSConstants.S_OK);
+
 			var eventGuid = Guid.Empty;
 			const uint attributes = 0;
-			debugger.Event(null, null, null, null, null, ref eventGuid, attributes);
+			Assert.AreEqual(VSConstants.S_OK, debugger.Event(null, process.Object, null, null, 
+				processCreateEvent.As<IDebugEvent2>().Object, ref eventGuid, attributes));
+
+			_mocks.MockReAttachHistory.Verify(h => h.Items);
+			_mocks.MockReAttachUi.Verify(ui => ui.Update());
+			Assert.AreEqual(1, _mocks.MockReAttachHistoryItems.Count(i => i.IsAttached), "Invalid number of processes claimed to be attached.");
+		}
+
+		[TestMethod]
+		public void RecordRemoteAttachTest()
+		{
+			var debugger = new ReAttachDebugger(_mocks.MockReAttachPackage.Object);
+			_mocks.MockReAttachUi.Setup(ui => ui.Update());
+
+			var processCreateEvent = new Mock<IDebugProcessCreateEvent2>(MockBehavior.Strict);
+			var process = new Mock<IDebugProcess3>(MockBehavior.Strict);
+			var process2 = process.As<IDebugProcess2>();
+			process2.Setup(p => p.GetPhysicalProcessId(It.IsAny<AD_PROCESS_ID[]>())).Returns(123);
+
+			var serverMock = new Mock<IDebugCoreServer3>(MockBehavior.Strict);
+			var server = serverMock.As<IDebugCoreServer2>().Object;
+			serverMock.Setup(s => s.QueryIsLocal()).Returns(VSConstants.S_FALSE);
+			var serverName = "server:1234";
+			serverMock.Setup(s => s.GetServerFriendlyName(out serverName)).Returns(VSConstants.S_OK);
+			process2.Setup(p => p.GetServer(out server)).Returns(VSConstants.S_OK);
+		
+			string processName;
+			process2.Setup(p => p.GetName(It.IsAny<uint>(), out processName)).Returns(VSConstants.S_OK);
+
+			var eventGuid = Guid.Empty;
+			const uint attributes = 0;
+			Assert.AreEqual(VSConstants.S_OK, debugger.Event(null, process.Object, null, null,
+				processCreateEvent.As<IDebugEvent2>().Object, ref eventGuid, attributes));
+			Assert.AreEqual("server:1234", _mocks.MockReAttachHistoryItems[0].ServerName, 
+				"Invalid server name, server name not set when remote ReAttaching.");
+
+			_mocks.MockReAttachHistory.Verify(h => h.Items);
+			_mocks.MockReAttachUi.Verify(ui => ui.Update());
+			Assert.AreEqual(1, _mocks.MockReAttachHistoryItems.Count(i => i.IsAttached), "Invalid number of processes claimed to be attached.");
 		}
 	}
 }

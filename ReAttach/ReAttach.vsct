@@ -77,7 +77,7 @@
 				<CommandFlag>DefaultInvisible</CommandFlag>
 				<Strings>
 					<CommandName>ReAttach History Item 1</CommandName>
-					<ButtonText>ReAttach</ButtonText>
+					<ButtonText>ReAttach History Item 1</ButtonText>
 				</Strings>
 			</Button>
 			<Button guid="guidReAttachPackageCmdSet" id="cmdidReAttach3" type="Button">
@@ -88,7 +88,7 @@
 				<CommandFlag>DefaultInvisible</CommandFlag>
 				<Strings>
 					<CommandName>ReAttach History Item 2</CommandName>
-					<ButtonText>ReAttach</ButtonText>
+					<ButtonText>ReAttach History Item 2</ButtonText>
 				</Strings>
 			</Button>
 			<Button guid="guidReAttachPackageCmdSet" id="cmdidReAttach4" type="Button">
@@ -99,7 +99,7 @@
 				<CommandFlag>DefaultInvisible</CommandFlag>
 				<Strings>
 					<CommandName>ReAttach History Item 3</CommandName>
-					<ButtonText>ReAttach</ButtonText>
+					<ButtonText>ReAttach History Item 3</ButtonText>
 				</Strings>
 			</Button>
 			<Button guid="guidReAttachPackageCmdSet" id="cmdidReAttach5" type="Button">
@@ -110,7 +110,7 @@
 				<CommandFlag>DefaultInvisible</CommandFlag>
 				<Strings>
 					<CommandName>ReAttach History Item 4</CommandName>
-					<ButtonText>ReAttach</ButtonText>
+					<ButtonText>ReAttach History Item 4</ButtonText>
 				</Strings>
 			</Button>
 		</Buttons>
@@ -172,8 +172,12 @@
 	</CommandPlacements>
 
 	<KeyBindings>
+		<KeyBinding guid="guidReAttachPackageCmdSet" id="cmdidReAttach1" editor="guidVSStd97" mod1="Control" mod2="Control" key1="R" key2="1" />
+		<KeyBinding guid="guidReAttachPackageCmdSet" id="cmdidReAttach2" editor="guidVSStd97" mod1="Control" mod2="Control" key1="R" key2="2" />
+		<KeyBinding guid="guidReAttachPackageCmdSet" id="cmdidReAttach3" editor="guidVSStd97" mod1="Control" mod2="Control" key1="R" key2="3" />
+		<KeyBinding guid="guidReAttachPackageCmdSet" id="cmdidReAttach4" editor="guidVSStd97" mod1="Control" mod2="Control" key1="R" key2="4" />
+		<KeyBinding guid="guidReAttachPackageCmdSet" id="cmdidReAttach5" editor="guidVSStd97" mod1="Control" mod2="Control" key1="R" key2="5" />
 		<KeyBinding guid="guidReAttachPackageCmdSet" id="cmdidReAttach1" editor="guidVSStd97" mod1="Control" mod2="Control" key1="R" key2="A" />
-		<KeyBinding guid="guidReAttachPackageCmdSet" id="cmdidReAttach1" editor="guidVSStd97" mod1="Control Alt" key1="E" />
 	</KeyBindings>
 
 	<Symbols>

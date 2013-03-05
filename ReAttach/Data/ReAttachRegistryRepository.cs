@@ -87,16 +87,13 @@ namespace ReAttach.Data
 				{
 					var value = subkey.GetValue(ReAttachConstants.ReAttachRegistryHistoryKeyPrefix + i) as string;
 					if (value == null)
-						break;
-					var tokens = value.Split(new[] { ReAttachConstants.ReAttachRegistrySplitChar },
-						StringSplitOptions.RemoveEmptyEntries);
-
+						continue;
+					var tokens = value.Split(new[] {ReAttachConstants.ReAttachRegistrySplitChar});
 					if (tokens.Length != 4)
-						break;
-
+						continue;
 					int pid;
 					int.TryParse(tokens[2], out pid);
-					targets.AddLast(new ReAttachTarget(pid, tokens[0], tokens[1], tokens[2]));
+					targets.AddLast(new ReAttachTarget(pid, tokens[0], tokens[1], tokens[3]));
 				}
 				subkey.Close();
 				root.Close();
