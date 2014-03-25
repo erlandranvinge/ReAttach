@@ -58,7 +58,7 @@ namespace ReAttach
 				var item = i < nonAttachedItems.Count ? nonAttachedItems[i] : null;
 				if (item != null)
 				{
-					Commands[i].Text = ReAttachConstants.Texts.MenuItemPrefix + item;
+					Commands[i].Text = ReAttachConstants.Texts.ReAttachMenuItemPrefix + item;
 					Commands[i].Visible = true;
 					Commands[i].Enabled = true;
 				}

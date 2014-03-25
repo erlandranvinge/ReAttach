@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Windows;
 using System.Windows.Threading;
 using ReAttach.Contracts;
@@ -27,6 +28,8 @@ namespace ReAttach.Dialogs
 			_timer.Tick += TimerOnTick;
 			_timer.Interval = new TimeSpan(0, 0, 1);
 			_timer.Start();
+
+			StartButton.Visibility = File.Exists(target.ProcessPath) ? Visibility.Visible : Visibility.Collapsed;
 		}
 
 		public ReAttachDialog(string helpTopic)
@@ -59,6 +62,11 @@ namespace ReAttach.Dialogs
 		private void CloseButtonClick(object sender, RoutedEventArgs e)
 		{
 			Close();
+		}
+
+		private void StartButtonClick(object sender, RoutedEventArgs e)
+		{
+			
 		}
 
 		protected override void OnClosed(EventArgs e)

@@ -1,11 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
+using System.Management;
 using System.Runtime.InteropServices;
 using EnvDTE80;
 using EnvDTE90;
 using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.Debugger.Interop;
+using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
 using ReAttach.Contracts;
 using ReAttach.Data;
@@ -47,17 +51,17 @@ namespace ReAttach
 		public int Event(IDebugEngine2 engine, IDebugProcess2 process, IDebugProgram2 program, 
 			IDebugThread2 thread, IDebugEvent2 debugEvent, ref Guid riidEvent, uint attributes)
 		{
+			//Trace.WriteLine(TypeHelper.GetDebugEventTypeName(debugEvent)); // TODO: Remove me.
+			
 			// Ignore a few events right away.
 			if (debugEvent is IDebugModuleLoadEvent2 ||  
 				debugEvent is IDebugThreadCreateEvent2 ||
 				debugEvent is IDebugThreadDestroyEvent2)
 				return VSConstants.S_OK;
-			
-			// Trace.WriteLine(TypeHelper.GetDebugEventTypeName(debugEvent)); // TODO: Remove me.
 
 			if (process == null)
 				return VSConstants.S_OK;
-			
+
 			var target = GetTargetFromProcess(process);
 
 			if (target == null)
@@ -101,7 +105,7 @@ namespace ReAttach
 
 			var serverName = "";
 			IDebugCoreServer2 server;
-			if (debugProcess.GetServer(out server) == VSConstants.S_OK)
+			if (debugProcess.GetServer(out server) == VSConstants.S_OK) // Remote debugging?
 			{
 				var server3 = server as IDebugCoreServer3;
 				var tmp = "";
@@ -114,7 +118,9 @@ namespace ReAttach
 
 			var user = GetProcessUsername(pid);
 			var path = process.GetFilename();
-			return new ReAttachTarget(pid, path, user, serverName);
+			var comnmandLine = string.IsNullOrEmpty(serverName) ? GetProcessCommandLine(pid) : ""; // No command line support on remote processes.
+
+			return new ReAttachTarget(pid, path, user, serverName, ""); // TODO: Fix me. Proper engine goes here!
 		}
 
 		public bool ReAttach(ReAttachTarget target)
@@ -165,7 +171,7 @@ namespace ReAttach
 					return true;
 				}
 			}
-			catch (COMException e)
+			catch (COMException)
 			{
 				// It's either this or returning this HRESULT to shell with Shell.ReportError method, shows UAC box btw.
 				const int E_ELEVATION_REQUIRED = unchecked((int)0x800702E4);
@@ -186,6 +192,31 @@ namespace ReAttach
 			var result = process != null ? process.UserName : string.Empty;
 
 			return result;
+		}
+
+		private string GetProcessCommandLine(int pid)
+		{
+			try
+			{
+				CrudeTimer.Start();
+				using (var searcher = new ManagementObjectSearcher("SELECT CommandLine FROM Win32_Process WHERE ProcessId = " + pid))
+				{
+					var result = "";
+					foreach (ManagementObject mo in searcher.Get())
+					{
+						result += mo["CommandLine"] + " ";
+					}
+					CrudeTimer.Stop();
+					return result;
+				}
+			}
+			catch (Exception e)
+			{
+				_package.Reporter.ReportWarning("Unable get command lines arguments for process {0}. Message: {1}.",
+					pid, e.Message);
+
+				return "";
+			}
 		}
 	}
 }

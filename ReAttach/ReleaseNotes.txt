@@ -1,0 +1,33 @@
+﻿Version 1.2 
+===============================================================================
+New features:
+* Rebuild and ReAttach.
+* Auto-reattach upon Rebuild? 
+* Auto-attach on process start / restart?
+* Start manually (path saver).
+* Custom targets?
+* Pin targets.
+* Options (i.e. auto settings).
+* Solution specific reattach history.
+
+Bugfixes:
+* Remote (no authentication) support.
+* Explicit debugging engine support.
+
+Version 1.1
+===============================================================================
+New features:
+* Better UI support.
+* Multiple targets.
+* More hotkeys.
+* Remote debugging support.
+* Minor language changes.
+
+Bugfixes:
+* Minor fixes, UAC support etc.
+
+Version 1.0
+===============================================================================
+Initial release. 
+
+

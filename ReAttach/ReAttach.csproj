@@ -59,6 +59,7 @@
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Design" />
+    <Reference Include="System.Management" />
     <Reference Include="System.Xaml" />
     <Reference Include="System.Xml" />
     <Reference Include="WindowsBase" />
@@ -99,7 +100,9 @@
     <Compile Include="Contracts\IReAttachUi.cs" />
     <Compile Include="Contracts\IReAttachPackage.cs" />
     <Compile Include="Contracts\IReAttachDebugger.cs" />
+    <Compile Include="Data\ReAttachSettings.cs" />
     <Compile Include="Extensions\ProcessExtensions.cs" />
+    <Compile Include="Misc\CrudeTimer.cs" />
     <Compile Include="Misc\DebugHelper.cs" />
     <Compile Include="ReAttachDebugger.cs" />
     <Compile Include="ReAttachHistory.cs" />
@@ -158,6 +161,7 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>
+    <Resource Include="ReleaseNotes.txt" />
     <Content Include="Resources\Images.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <IncludeInVSIX>true</IncludeInVSIX>

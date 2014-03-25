@@ -25,7 +25,7 @@ namespace ReAttach
 		// Texts
 		public static class Texts
 		{
-			public const string MenuItemPrefix = "ReAttach to ";
+			public const string ReAttachMenuItemPrefix = "ReAttach to ";
 			public const string NoTargetsAvailable = "No ReAttach targets available";
 		}
 	};

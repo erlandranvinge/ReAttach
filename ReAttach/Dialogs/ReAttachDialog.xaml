@@ -21,7 +21,11 @@
         <!--
         <TextBlock TextWrapping="Wrap" Margin="0,0,0,0">
             If the target process requires elevated permissions, Visual Studio might need to be restarted.</TextBlock> -->
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+        <Button x:Name="StartButton" Width="100" Height="26" Click="StartButtonClick" Content="_Start Manually" 
+                Foreground="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}" Margin="5, 0"/>
         <Button Width="100" Height="26" Click="CloseButtonClick" Content="_Cancel" 
-                HorizontalAlignment="Center" Foreground="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
+        	    Foreground="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}" Margin="5, 0"/>
+        </StackPanel>
     </StackPanel>
 </ui:DialogWindow>

@@ -89,11 +89,15 @@ namespace ReAttach.Data
 					if (value == null)
 						continue;
 					var tokens = value.Split(new[] {ReAttachConstants.ReAttachRegistrySplitChar});
-					if (tokens.Length != 4)
+					if (tokens.Length < 4)
 						continue;
 					int pid;
 					int.TryParse(tokens[2], out pid);
-					targets.AddLast(new ReAttachTarget(pid, tokens[0], tokens[1], tokens[3]));
+					var path = tokens[0];
+					var user = tokens[1];
+					var server = tokens[3];
+					var engine = tokens.Length > 4 ? tokens[4] : "";
+					targets.AddLast(new ReAttachTarget(pid, path, user, server, engine));
 				}
 				subkey.Close();
 				root.Close();
