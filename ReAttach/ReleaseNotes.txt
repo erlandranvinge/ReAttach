@@ -1,0 +1,37 @@
+﻿Version vNext
+===============================================================================
+Concept features/ideas:
+* Auto-reattach upon Rebuild? 
+* Auto-attach on process start / restart?
+* Start manually (path saver). Shelved, crude feature without clear purpose.
+* Custom targets?
+* Pin targets.
+* Options (i.e. auto settings).
+* Solution specific reattach history.
+* Filtering
+
+Known issues:
+* Remote (no authentication) support.
+* Explicit debugging engine support.
+
+Version 1.2
+===============================================================================
+* Rebuild and ReAttach.
+
+Version 1.1
+===============================================================================
+New features:
+* Better UI support.
+* Multiple targets.
+* More hotkeys.
+* Remote debugging support.
+* Minor language changes.
+
+Bugfixes:
+* Minor fixes, UAC support etc.
+
+Version 1.0
+===============================================================================
+Initial release. 
+
+
