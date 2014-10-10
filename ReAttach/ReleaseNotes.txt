@@ -1,22 +1,13 @@
-﻿Version vNext
+﻿
+Version 1.2-draft
 ===============================================================================
-Concept features/ideas:
-* Auto-reattach upon Rebuild? 
-* Auto-attach on process start / restart?
-* Start manually (path saver). Shelved, crude feature without clear purpose.
-* Custom targets?
-* Pin targets.
-* Options (i.e. auto settings).
-* Solution specific reattach history.
-* Filtering
+New features:
+* Stores debug engines used with targets.
+* Targets stored in registry as JSON instead of custom format.
 
 Known issues:
 * Remote (no authentication) support.
-* Explicit debugging engine support.
 
-Version 1.2
-===============================================================================
-* Rebuild and ReAttach.
 
 Version 1.1
 ===============================================================================
@@ -34,4 +25,14 @@ Version 1.0
 ===============================================================================
 Initial release. 
 
+
+Future work
+===============================================================================
+* Native (VsDebugger) instead of slower DTE automation objects.
+* Proper support for remote debugging (Transports, Protocols, Qualifiers etc).
+* Auto-reattach upon Rebuild?
+* Auto-attach on process start / restart
+* Custom pinned targets
+* Solution specific reattach history
+* Blacklist specific processes (e.g. *.vshost etc)
 

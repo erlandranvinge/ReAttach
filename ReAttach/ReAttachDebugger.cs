@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
-using System.Windows;
 using EnvDTE80;
 using EnvDTE90;
 using Microsoft.VisualStudio;
@@ -22,6 +21,7 @@ namespace ReAttach
 		private readonly DTE2 _dte;
 		private readonly Debugger2 _dteDebugger;
 		private readonly uint _cookie;
+		private readonly Dictionary<Guid, string> _engines = new Dictionary<Guid, string>(); 
 
 		public ReAttachDebugger(IReAttachPackage package)
 		{
@@ -43,31 +43,19 @@ namespace ReAttach
 
 			if (_debugger.AdviseDebugEventCallback(this) != VSConstants.S_OK)
 				_package.Reporter.ReportError("AdviceDebugEventsCallback call failed in ReAttachDebugger ctor.");
+
+			foreach (Engine engine in _dteDebugger.Transports.Item("Default").Engines)
+				_engines.Add(Guid.Parse(engine.ID), engine.Name);
 		}
 
 		public int Event(IDebugEngine2 engine, IDebugProcess2 process, IDebugProgram2 program, 
 			IDebugThread2 thread, IDebugEvent2 debugEvent, ref Guid riidEvent, uint attributes)
 		{
-			// Ignore a few events right away.
-			if (debugEvent is IDebugModuleLoadEvent2 ||  
-				debugEvent is IDebugThreadCreateEvent2 ||
-				debugEvent is IDebugThreadDestroyEvent2)
+			if (!(debugEvent is IDebugProcessCreateEvent2) &&
+				!(debugEvent is IDebugProcessDestroyEvent2))
 				return VSConstants.S_OK;
-			
-			// Trace.WriteLine(TypeHelper.GetDebugEventTypeName(debugEvent)); // TODO: Remove me.
 
-			if (process == null)
-				return VSConstants.S_OK;
-			
 			var target = GetTargetFromProcess(process);
-			if (program != null)
-			{
-				string engineName;
-				Guid engineId;
-				if (program.GetEngineInfo(out engineName, out engineId) == VSConstants.S_OK)
-					target.Engine = new ReAttachTargetEngine() {Id = engineId, Name = engineName};
-			}
-
 			if (target == null)
 			{
 				_package.Reporter.ReportWarning("Can't find target from process {0} ({1}). Event: {2}.",
@@ -80,14 +68,11 @@ namespace ReAttach
 				target.IsAttached = true;
 				_package.History.Items.AddFirst(target); 
 				_package.Ui.Update();
-				return VSConstants.S_OK;
 			}
-
-			if (debugEvent is IDebugProcessDestroyEvent2)
+			else
 			{
 				target.IsAttached = false;
 				_package.Ui.Update();
-				return VSConstants.S_OK;
 			}
 
 			return VSConstants.S_OK;
@@ -123,7 +108,21 @@ namespace ReAttach
 
 			var user = GetProcessUsername(pid);
 			var path = process.GetFilename();
-			return new ReAttachTarget(pid, path, user, serverName);
+			target = new ReAttachTarget(pid, path, user, serverName);
+
+			var rawEngines = new GUID_ARRAY[1];
+
+			if (process.GetEngineFilter(rawEngines) == VSConstants.S_OK && rawEngines[0].dwCount > 0)
+			{
+				var pointer = rawEngines[0].Members;
+				var engineCount = rawEngines[0].dwCount;
+				for (var i = 0; i < engineCount; i++)
+				{
+					var engineId = (Guid)Marshal.PtrToStructure(pointer + (i * 16), typeof(Guid));
+					target.Engines.Add(engineId);
+				}
+			}
+			return target;
 		}
 
 		public bool ReAttach(ReAttachTarget target)
@@ -166,13 +165,21 @@ namespace ReAttach
 				process = candidates.FirstOrDefault(p => p.ProcessID == maxPid);
 			}
 
+			if (process == null)
+				return false;
+
 			try
 			{
-				if (process != null)
+				if (target.Engines != null && target.Engines.Any())
+				{
+					var engines = target.Engines.Where(e => _engines.ContainsKey(e)).Select(e => _engines[e]).ToArray();
+					process.Attach2(engines);
+				}
+				else
 				{
 					process.Attach();
-					return true;
 				}
+				return true;
 			}
 			catch (COMException e)
 			{

@@ -1,6 +1,6 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
-using EnvDTE80;
 
 namespace ReAttach.Data
 {
@@ -13,7 +13,7 @@ namespace ReAttach.Data
 		public string ServerName { get; set; }
 		public bool IsAttached { get; set; }
 		public bool IsLocal { get { return string.IsNullOrEmpty(ServerName); } }
-		public ReAttachTargetEngine Engine { get; set; }
+		public List<Guid> Engines { get; set; }
 
 		public ReAttachTarget(int pid, string path, string user, string serverName = "") 
 		{
@@ -29,6 +29,7 @@ namespace ReAttach.Data
 			ProcessPath = path;
 			ProcessUser = user ?? "";
 			ServerName = serverName ?? "";
+			Engines = new List<Guid>();
 		}
 
 		public override bool Equals(object obj)

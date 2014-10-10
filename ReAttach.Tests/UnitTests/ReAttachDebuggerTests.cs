@@ -96,8 +96,11 @@ namespace ReAttach.Tests.UnitTests
 
 			var processCreateEvent = new Mock<IDebugProcessCreateEvent2>(MockBehavior.Strict);
 			var process = new Mock<IDebugProcess3>(MockBehavior.Strict);
+			process.Setup(p => p.GetEngineFilter(It.IsAny<GUID_ARRAY[]>())).Returns(null);
+
 			var process2 = process.As<IDebugProcess2>();
 			process2.Setup(p => p.GetPhysicalProcessId(It.IsAny<AD_PROCESS_ID[]>())).Returns(123);
+			
 
 			var serverMock = new Mock<IDebugCoreServer3>(MockBehavior.Strict);
 			var server = serverMock.As<IDebugCoreServer2>().Object;
@@ -125,6 +128,8 @@ namespace ReAttach.Tests.UnitTests
 
 			var processCreateEvent = new Mock<IDebugProcessCreateEvent2>(MockBehavior.Strict);
 			var process = new Mock<IDebugProcess3>(MockBehavior.Strict);
+			process.Setup(p => p.GetEngineFilter(It.IsAny<GUID_ARRAY[]>())).Returns(null);
+
 			var process2 = process.As<IDebugProcess2>();
 			process2.Setup(p => p.GetPhysicalProcessId(It.IsAny<AD_PROCESS_ID[]>())).Returns(123);
 

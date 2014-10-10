@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel.Design;
@@ -88,7 +89,10 @@ namespace ReAttach.Tests.Mocks
 			MockDTEDebugger = new Mock<Debugger2>(behavior);
 			MockDTE.Setup(d => d.Debugger).Returns(MockDTEDebugger.Object);
 
+			var mockEngines = new Mock<Engines>();
+			mockEngines.Setup(e => e.GetEnumerator()).Returns((new Engine[0]).GetEnumerator());
 			MockDefaultTransport = new Mock<Transport>();
+			MockDefaultTransport.Setup(t => t.Engines).Returns(mockEngines.Object);
 			MockTransports = new Mock<Transports>();
 			MockTransports.Setup(t => t.Item("Default")).Returns(MockDefaultTransport.Object);
 			MockDTEDebugger.Setup(d => d.Transports).Returns(MockTransports.Object);
