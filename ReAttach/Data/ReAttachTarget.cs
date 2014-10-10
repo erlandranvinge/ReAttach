@@ -1,17 +1,19 @@
 using System;
 using System.IO;
+using EnvDTE80;
 
 namespace ReAttach.Data
 {
 	public class ReAttachTarget
 	{
 		public int ProcessId { get; set; }
-		public string ProcessName { get; private set; }
-		public string ProcessPath { get; private set; }
-		public string ProcessUser { get; private set; }
-		public string ServerName { get; private set; }
+		public string ProcessName { get; set; }
+		public string ProcessPath { get; set; }
+		public string ProcessUser { get; set; }
+		public string ServerName { get; set; }
 		public bool IsAttached { get; set; }
 		public bool IsLocal { get { return string.IsNullOrEmpty(ServerName); } }
+		public ReAttachTargetEngine Engine { get; set; }
 
 		public ReAttachTarget(int pid, string path, string user, string serverName = "") 
 		{

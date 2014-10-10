@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
+using System.Windows;
 using EnvDTE80;
 using EnvDTE90;
 using Microsoft.VisualStudio;
@@ -59,6 +60,13 @@ namespace ReAttach
 				return VSConstants.S_OK;
 			
 			var target = GetTargetFromProcess(process);
+			if (program != null)
+			{
+				string engineName;
+				Guid engineId;
+				if (program.GetEngineInfo(out engineName, out engineId) == VSConstants.S_OK)
+					target.Engine = new ReAttachTargetEngine() {Id = engineId, Name = engineName};
+			}
 
 			if (target == null)
 			{
@@ -66,6 +74,7 @@ namespace ReAttach
 					process.GetName(), process.GetProcessId(), TypeHelper.GetDebugEventTypeName(debugEvent));
 				return VSConstants.S_OK;
 			}
+			
 			if (debugEvent is IDebugProcessCreateEvent2)
 			{
 				target.IsAttached = true;

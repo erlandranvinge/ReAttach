@@ -1,6 +1,5 @@
 ﻿using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.Debugger.Interop;
-using ReAttach.Data;
 
 namespace ReAttach.Extensions
 {

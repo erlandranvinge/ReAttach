@@ -1,4 +1,5 @@
-﻿using System.Security;
+﻿using System.IO;
+using System.Security;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using ReAttach.Contracts;
@@ -56,6 +57,7 @@ namespace ReAttach.Tests.UnitTests
 		[TestMethod]
 		public void SaveTest()
 		{
+
 			var key = new Mock<IRegistryKey>();
 			var subkey = new Mock<IRegistryKey>();
 			key.Setup(k => k.CreateSubKey(It.IsAny<string>())).Returns(subkey.Object);
@@ -69,19 +71,13 @@ namespace ReAttach.Tests.UnitTests
 				targets.AddFirst(new ReAttachTarget(i, "path" + i, "user" + i));
 
 			Assert.IsTrue(repository.SaveTargets(targets));
-
 			key.Verify(k => k.CreateSubKey(It.IsAny<string>()), Times.Once());
 
 			for (var i = 1; i <= 3; i++)
 			{
-				var expected = string.Format("{0}{1}{2}{3}{4}{5}{6}",
-						targets[i - 1].ProcessPath, ReAttachConstants.ReAttachRegistrySplitChar,
-						targets[i - 1].ProcessUser, ReAttachConstants.ReAttachRegistrySplitChar,
-						targets[i - 1].ProcessId, ReAttachConstants.ReAttachRegistrySplitChar,
-						targets[i - 1].ServerName);
-
-				subkey.Verify(k => k.SetValue(ReAttachConstants.ReAttachRegistryHistoryKeyPrefix + i,
-					expected), Times.Once());
+				subkey.Verify(k => k.SetValue(
+					ReAttachConstants.ReAttachRegistryHistoryKeyPrefix + i,
+					It.IsAny<string>()), Times.Once());
 			}
 
 			subkey.Verify(k => k.Close(), Times.Once());	
@@ -151,18 +147,16 @@ namespace ReAttach.Tests.UnitTests
 		[TestMethod]
 		public void LoadInvalidDataTest()
 		{
+			const string json1 = "{\"ProcessId\":7024,\"ProcessName\":\"test1.exe\",\"ProcessPath\":\"test1.exe\",\"ProcessUser\":\"TEST1\",\"ServerName\":\"\",\"IsAttached\":false,\"IsLocal\":true,\"Engine\":null}";
+			const string json2 = "{\"ProcessId\":7025,\"ProcessName\":\"test2.exe\",\"ProcessPath\":\"test2.exe\",\"ProcessUser\":\"TEST2\",\"ServerName\":\"\",\"IsAttached\":false,\"IsLocal\":true,\"Engine\":null}";
+
 			var key = new Mock<IRegistryKey>();
 			var subkey = new Mock<IRegistryKey>();
 			key.Setup(k => k.OpenSubKey(ReAttachConstants.ReAttachRegistryKeyName)).Returns(subkey.Object);
 
-			subkey.Setup(k => k.GetValue(ReAttachConstants.ReAttachRegistryHistoryKeyPrefix + 1)).
-					Returns(string.Format("path{1}{0}user{1}{0}{1}{0}server{1}", ReAttachConstants.ReAttachRegistrySplitChar, 1));
-
-			subkey.Setup(k => k.GetValue(ReAttachConstants.ReAttachRegistryHistoryKeyPrefix + 2)).
-					Returns(string.Format("invalid-item-1"));
-
-			subkey.Setup(k => k.GetValue(ReAttachConstants.ReAttachRegistryHistoryKeyPrefix + 3)).
-					Returns(string.Format("path{1}{0}user{1}{0}{1}{0}server{1}", ReAttachConstants.ReAttachRegistrySplitChar, 3));
+			subkey.Setup(k => k.GetValue(ReAttachConstants.ReAttachRegistryHistoryKeyPrefix + 1)).Returns(json1);
+			subkey.Setup(k => k.GetValue(ReAttachConstants.ReAttachRegistryHistoryKeyPrefix + 2)).Returns("invalid-json-item");
+			subkey.Setup(k => k.GetValue(ReAttachConstants.ReAttachRegistryHistoryKeyPrefix + 3)).Returns(json2);
 
 			var package = new Mock<IReAttachPackage>();
 			package.Setup(p => p.OpenUserRegistryRoot()).Returns(key.Object);
@@ -180,6 +174,8 @@ namespace ReAttach.Tests.UnitTests
 		[TestMethod]
 		public void LoadTest()
 		{
+			const string json = "{\"ProcessId\":7024,\"ProcessName\":\"test1.exe\",\"ProcessPath\":\"PROCESS-PATH\",\"ProcessUser\":\"TEST1\",\"ServerName\":\"\",\"IsAttached\":false,\"IsLocal\":true,\"Engine\":null}";
+
 			var key = new Mock<IRegistryKey>();
 			var subkey = new Mock<IRegistryKey>();
 			key.Setup(k => k.OpenSubKey(ReAttachConstants.ReAttachRegistryKeyName)).Returns(subkey.Object);
@@ -188,8 +184,8 @@ namespace ReAttach.Tests.UnitTests
 
 			for (var i = 1; i <= items; i++)
 			{
-				subkey.Setup(k => k.GetValue(ReAttachConstants.ReAttachRegistryHistoryKeyPrefix + i)).
-					Returns(string.Format("path{1}{0}user{1}{0}{1}{0}server{1}", ReAttachConstants.ReAttachRegistrySplitChar, i));
+				subkey.Setup(k => k.GetValue(ReAttachConstants.ReAttachRegistryHistoryKeyPrefix + i))
+					.Returns(json.Replace("PROCESS-PATH", "process" + i));
 			}
 			var package = new Mock<IReAttachPackage>();
 			package.Setup(p => p.OpenUserRegistryRoot()).Returns(key.Object);
@@ -200,41 +196,11 @@ namespace ReAttach.Tests.UnitTests
 			Assert.AreEqual(items, result.Count, "Invalid number of results loaded.");
 
 			for (var i = 0; i < items; i++)
-			{
-				Assert.AreEqual("path" + (i + 1), result[i].ProcessPath, "Mismatching path found for item " + i);
-				Assert.AreEqual("user" + (i + 1), result[i].ProcessUser, "Mismatching user found for item " + i);
-				Assert.AreEqual(i + 1, result[i].ProcessId, "Mismatching PID found for item " + i);
-				Assert.AreEqual("server" + (i + 1), result[i].ServerName, "Mismatching server found for item " + i);
-			}
+				Assert.AreEqual("process" + (i + 1), result[i].ProcessPath, "Mismatching path found for item " + i);
 
 			key.Verify(k => k.OpenSubKey(It.IsAny<string>()), Times.Once());
 			for (var i = 1; i <= items; i++)
 				subkey.Verify(k => k.GetValue(ReAttachConstants.ReAttachRegistryHistoryKeyPrefix + i));
-		}
-
-		[TestMethod]
-		public void FirstLoadTest()
-		{
-			var package = new Mock<IReAttachPackage>();
-			package.Setup(p => p.OpenUserRegistryRoot()).Returns<IRegistryKey>(null);
-			package.Setup(p => p.Reporter).Returns(new ReAttachTraceReporter());
-
-			var repository = new ReAttachRegistryRepository(package.Object);
-			Assert.IsFalse(repository.IsFirstLoad());
-
-			package.Setup(p => p.OpenUserRegistryRoot()).Throws(new SecurityException("No access :)"));
-			Assert.IsFalse(repository.IsFirstLoad());
-
-			var key = new Mock<IRegistryKey>(MockBehavior.Strict);
-			key.Setup(k => k.OpenSubKey(It.IsAny<string>())).Returns<IRegistryKey>(null); // No subkey, means first load.
-			key.Setup(k => k.Close());
-			package.Setup(p => p.OpenUserRegistryRoot()).Returns(key.Object);
-			Assert.IsTrue(repository.IsFirstLoad());
-
-			var subkey = new Mock<IRegistryKey>(MockBehavior.Strict);
-			subkey.Setup(k => k.Close());
-			key.Setup(k => k.OpenSubKey(It.IsAny<string>())).Returns(subkey.Object); // No subkey, means first load.
-			Assert.IsFalse(repository.IsFirstLoad());
 		}
 	}
 }

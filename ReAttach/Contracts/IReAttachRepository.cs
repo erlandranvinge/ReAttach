@@ -6,6 +6,5 @@ namespace ReAttach.Contracts
 	{
 		bool SaveTargets(ReAttachTargetList targets);
 		ReAttachTargetList LoadTargets();
-		bool IsFirstLoad();
 	}
 }
