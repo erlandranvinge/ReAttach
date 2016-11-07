@@ -139,6 +139,10 @@ namespace ReAttach
 			else
 			{
 				var processes = _dteDebugger.LocalProcesses.OfType<Process3>();
+
+                var tmp = processes.Select(p => new { Name = p.Name, UserName = p.UserName }).ToArray();
+                Console.WriteLine(tmp);
+
 				candidates = processes.Where(p =>
 					p.Name == target.ProcessPath &&
 					p.UserName == target.ProcessUser).ToList();
@@ -181,7 +185,7 @@ namespace ReAttach
 				}
 				return true;
 			}
-			catch (COMException e)
+			catch (COMException)
 			{
 				// It's either this or returning this HRESULT to shell with Shell.ReportError method, shows UAC box btw.
 				const int E_ELEVATION_REQUIRED = unchecked((int)0x800702E4);

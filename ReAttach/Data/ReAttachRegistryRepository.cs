@@ -85,7 +85,7 @@ namespace ReAttach.Data
 					{
 						var target = JsonConvert.DeserializeObject<ReAttachTarget>(json);
 						targets.AddLast(target);
-					} catch (Exception e) { /* Ignore broken elements */}
+					} catch (Exception) { /* Ignore broken elements */}
 				}
 				subkey.Close();
 				root.Close();
