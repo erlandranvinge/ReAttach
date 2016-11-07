@@ -7,7 +7,7 @@ New features:
 
 Known issues:
 * Remote (no authentication) support.
-
+* Sometimes, first reattach failes to record.
 
 Version 1.1
 ===============================================================================

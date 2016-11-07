@@ -113,7 +113,15 @@
 					<ButtonText>ReAttach History Item 4</ButtonText>
 				</Strings>
 			</Button>
-		</Buttons>
+      <Button guid="guidReAttachPackageCmdSet" id="cmdidRebuildBeforeReAttach" type="Button">
+        <CommandFlag>TextChanges</CommandFlag>
+        <CommandFlag>DontCache</CommandFlag>
+        <Strings>
+          <CommandName>Rebuild before ReAttach</CommandName>
+          <ButtonText>Rebuild before ReAttach</ButtonText>
+        </Strings>
+      </Button>
+    </Buttons>
 		<Bitmaps>
 			<Bitmap guid="guidImages" href="Resources\Images.png" usedList="reAttachBitmap"/>
 		</Bitmaps>
@@ -135,8 +143,11 @@
 		<CommandPlacement guid="guidReAttachPackageCmdSet" id="cmdidReAttach5" priority="0x5">
 			<Parent guid="guidReAttachPackageCmdSet" id="cmdidReAttachStandardMenuGroup"/>
 		</CommandPlacement>
-		
-		<!-- In debug menu, as submenu -->
+    <CommandPlacement guid="guidReAttachPackageCmdSet" id="cmdidRebuildBeforeReAttach" priority="0x6">
+      <Parent guid="guidReAttachPackageCmdSet" id="cmdidReAttachStandardMenuGroup"/>
+    </CommandPlacement>
+
+    <!-- In debug menu, as submenu -->
 		<CommandPlacement guid="guidReAttachPackageCmdSet" id="cmdidReAttach1" priority="0x1">
 			<Parent guid="guidReAttachPackageCmdSet" id="cmdidReAttachDebugSubMenuGroup"/>
 		</CommandPlacement>
@@ -152,8 +163,11 @@
 		<CommandPlacement guid="guidReAttachPackageCmdSet" id="cmdidReAttach5" priority="0x5">
 			<Parent guid="guidReAttachPackageCmdSet" id="cmdidReAttachDebugSubMenuGroup"/>
 		</CommandPlacement>
-		
-		<!-- On the toolbar -->
+    <CommandPlacement guid="guidReAttachPackageCmdSet" id="cmdidRebuildBeforeReAttach" priority="0x6">
+      <Parent guid="guidReAttachPackageCmdSet" id="cmdidReAttachDebugSubMenuGroup"/>
+    </CommandPlacement>
+
+    <!-- On the toolbar -->
 		<CommandPlacement guid="guidReAttachPackageCmdSet" id="cmdidReAttach1" priority="0x1">
 			<Parent guid="guidReAttachPackageCmdSet" id="cmdidReAttachToolbarMenuControllerGroup"/>
 		</CommandPlacement>
@@ -169,7 +183,11 @@
 		<CommandPlacement guid="guidReAttachPackageCmdSet" id="cmdidReAttach5" priority="0x5">
 			<Parent guid="guidReAttachPackageCmdSet" id="cmdidReAttachToolbarMenuControllerGroup"/>
 		</CommandPlacement>
-	</CommandPlacements>
+    <CommandPlacement guid="guidReAttachPackageCmdSet" id="cmdidRebuildBeforeReAttach" priority="0x6">
+      <Parent guid="guidReAttachPackageCmdSet" id="cmdidReAttachToolbarMenuControllerGroup"/>
+    </CommandPlacement>
+
+  </CommandPlacements>
 
 	<KeyBindings>
 		<KeyBinding guid="guidReAttachPackageCmdSet" id="cmdidReAttach1" editor="guidVSStd97" mod1="Control" mod2="Control" key1="R" key2="1" />
@@ -200,8 +218,10 @@
 			<IDSymbol name="cmdidReAttach3" value="0x202" />
 			<IDSymbol name="cmdidReAttach4" value="0x203" />
 			<IDSymbol name="cmdidReAttach5" value="0x204" />
-			
+
+      <IDSymbol name="cmdidRebuildBeforeReAttach" value="0x240" />
 		</GuidSymbol>
+    
 		<GuidSymbol name="guidImages" value="{5fcef6fd-0d78-4138-9a89-623eb61e0e98}" >
 			<IDSymbol name="reAttachBitmap" value="1" />	
 		</GuidSymbol>

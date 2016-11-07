@@ -12,6 +12,7 @@ namespace ReAttach
 	{
 		private readonly IReAttachPackage _package;
 		public readonly OleMenuCommand[] Commands = new OleMenuCommand[ReAttachConstants.ReAttachHistorySize];
+        public readonly OleMenuCommand ReBuildBeforeReattachCommand;
 
 		public ReAttachUi(IReAttachPackage package)
 		{
@@ -35,6 +36,15 @@ namespace ReAttach
 	
 				Commands[i] = command;
 			}
+
+            var rebuildCommandId = new CommandID(ReAttachConstants.ReAttachPackageCmdSet, 
+                ReAttachConstants.RebuildBeforeReAttachCommandId);
+            var rebuildCommand = new OleMenuCommand(ReAttachToggleReBuildClicked, rebuildCommandId);
+            rebuildCommand.Visible = true;
+            rebuildCommand.Enabled = true;
+            rebuildCommand.Checked = true;
+            menuService.AddCommand(rebuildCommand);
+            ReBuildBeforeReattachCommand = rebuildCommand;
 		}
 
 		public void Update()
@@ -91,6 +101,11 @@ namespace ReAttach
 				dialog.ShowModal();
 			}
 		}
+
+        public void ReAttachToggleReBuildClicked(object sender, EventArgs e)
+        {
+
+        }
 
 		public void MessageBox(string message)
 		{
