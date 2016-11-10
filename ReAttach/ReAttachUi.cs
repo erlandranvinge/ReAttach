@@ -11,8 +11,8 @@ namespace ReAttach
 	public class ReAttachUi : IReAttachUi
 	{
 		private readonly IReAttachPackage _package;
-		public readonly OleMenuCommand[] Commands = new OleMenuCommand[ReAttachConstants.ReAttachHistorySize];
-        public readonly OleMenuCommand ReBuildBeforeReattachCommand;
+        private readonly OleMenuCommand _buildToggleCommand;
+        public readonly OleMenuCommand[] Commands = new OleMenuCommand[ReAttachConstants.ReAttachHistorySize];
 
 		public ReAttachUi(IReAttachPackage package)
 		{
@@ -37,14 +37,13 @@ namespace ReAttach
 				Commands[i] = command;
 			}
 
-            var rebuildCommandId = new CommandID(ReAttachConstants.ReAttachPackageCmdSet, 
-                ReAttachConstants.RebuildBeforeReAttachCommandId);
-            var rebuildCommand = new OleMenuCommand(ReAttachToggleReBuildClicked, rebuildCommandId);
-            rebuildCommand.Visible = true;
-            rebuildCommand.Enabled = true;
-            rebuildCommand.Checked = true;
-            menuService.AddCommand(rebuildCommand);
-            ReBuildBeforeReattachCommand = rebuildCommand;
+            var buildToggleCommandId = new CommandID(ReAttachConstants.ReAttachPackageCmdSet,
+                ReAttachConstants.BuildBeforeReAttachCommandId);
+            var buildCommand = new OleMenuCommand(ReAttachToggleBuildClicked, buildToggleCommandId);
+            buildCommand.Visible = true;
+            buildCommand.Checked = _package.History.Options.BuildBeforeReAttach;
+            menuService.AddCommand(buildCommand);
+            _buildToggleCommand = buildCommand;
 		}
 
 		public void Update()
@@ -102,9 +101,11 @@ namespace ReAttach
 			}
 		}
 
-        public void ReAttachToggleReBuildClicked(object sender, EventArgs e)
+        public void ReAttachToggleBuildClicked(object sender, EventArgs e)
         {
-
+            var toggle = !_package.History.Options.BuildBeforeReAttach;
+            _package.History.Options.BuildBeforeReAttach = toggle;
+            _buildToggleCommand.Checked = toggle;
         }
 
 		public void MessageBox(string message)

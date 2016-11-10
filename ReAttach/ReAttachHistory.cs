@@ -6,12 +6,15 @@ namespace ReAttach
 	public class ReAttachHistory : IReAttachHistory
 	{
 		private readonly IReAttachRepository _repository;
+
 		public ReAttachTargetList Items { get; private set; }
+        public ReAttachOptions Options { get; private set; }
 
 		public ReAttachHistory(IReAttachRepository repository)
 		{
 			_repository = repository;
 			Items = new ReAttachTargetList(ReAttachConstants.ReAttachHistorySize);
+            Options = new ReAttachOptions();
 		}
 
 		// TODO: Locking on save/loads might be relevant. Ref-switching will do for now.

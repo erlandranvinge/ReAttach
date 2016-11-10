@@ -11,14 +11,13 @@ namespace ReAttach
 		// Settings.
 		public const string ReAttachRegistryKeyName = "ReAttach";
 		public const string ReAttachRegistryHistoryKeyPrefix = "History";
-		public const char ReAttachRegistrySplitChar = ';';
+        public const string ReAttachRegistryOptionsKeyName = "Options";
 
 		// Commands.
 		public static readonly Guid ReAttachPackageCmdSet = new Guid("3a680c5b-f815-414b-aa4a-0be57dadb1af");
 		public const int ReAttachCommandId = 0x200;
 		public const int ReAttachHistorySize = 5;
-
-        public const int RebuildBeforeReAttachCommandId = 0x240;
+        public const int BuildBeforeReAttachCommandId = 0x240;
 
 		// Key bindings (used by DTE). Which is not used right now.
 		public const string ReAttachToLastCommandName = "Debug.ReAttach";

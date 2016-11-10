@@ -24,6 +24,7 @@ namespace ReAttach
 		public IReAttachDebugger Debugger { get; private set; }
 
 		public ReAttachPackage() {}
+
 		public ReAttachPackage(IReAttachReporter reporter, IReAttachHistory history, IReAttachUi ui, IReAttachDebugger debugger)
 		{
 			Reporter = reporter;

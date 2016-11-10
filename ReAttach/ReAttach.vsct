@@ -40,19 +40,33 @@
 		</Menus>
 
 		<Groups>
-			<Group guid="guidReAttachPackageCmdSet" id="cmdidReAttachStandardMenuGroup" priority="0x000">
+      <!-- On standard menu, next to Run button -->
+			<Group guid="guidReAttachPackageCmdSet" id="cmdidReAttachStandardMenuGroup" priority="0x001">
 				<Parent guid="guidReAttachPackageCmdSet" id="cmdidReAttachMenuController"/>
 			</Group>
-			<Group guid="guidReAttachPackageCmdSet" id="cmdidReAttachDebugSubMenuGroup" priority="0x000">
+      <Group guid="guidReAttachPackageCmdSet" id="cmdidReAttachStandardMenuOptionsGroup" priority="0x002">
+        <Parent guid="guidReAttachPackageCmdSet" id="cmdidReAttachMenuController"/>
+      </Group>
+
+      <!-- In debug menu, as submenu -->
+			<Group guid="guidReAttachPackageCmdSet" id="cmdidReAttachDebugSubMenuGroup" priority="0x001">
 				<Parent guid="guidReAttachPackageCmdSet" id="cmdidReAttachSubMenu"/>
 			</Group>
+      <Group guid="guidReAttachPackageCmdSet" id="cmdidReAttachDebugMenuOptionsGroup" priority="0x002">
+        <Parent guid="guidReAttachPackageCmdSet" id="cmdidReAttachSubMenu"/>
+      </Group>
+
+      <!-- On the customizable toolbar -->
 			<Group guid="guidReAttachPackageCmdSet" id="cmdidReAttachToolbarGroup" priority="0x000">
 				<Parent guid="guidReAttachPackageCmdSet" id="cmdidReAttachToolbar"/>
 			</Group>
-			<Group guid="guidReAttachPackageCmdSet" id="cmdidReAttachToolbarMenuControllerGroup" priority="0x000">
-				<Parent guid="guidReAttachPackageCmdSet" id="cmdidReAttachToolbarMenuController"/>
-			</Group>
-		</Groups>
+      <Group guid="guidReAttachPackageCmdSet" id="cmdidReAttachToolbarMenuControllerGroup" priority="0x001">
+        <Parent guid="guidReAttachPackageCmdSet" id="cmdidReAttachToolbarMenuController"/>
+      </Group>
+      <Group guid="guidReAttachPackageCmdSet" id="cmdidReAttachToolbarMenuControllerOptionsGroup" priority="0x002">
+        <Parent guid="guidReAttachPackageCmdSet" id="cmdidReAttachToolbarMenuController"/>
+      </Group>
+    </Groups>
 
 		<Buttons>
 			<!-- History items for use in menus, can't use dynamic items here, due to toolbar issues -->
@@ -76,7 +90,7 @@
 				<CommandFlag>DynamicVisibility</CommandFlag>
 				<CommandFlag>DefaultInvisible</CommandFlag>
 				<Strings>
-					<CommandName>ReAttach History Item 1</CommandName>
+					<CommandName>ReAttachHistoryItem1</CommandName>
 					<ButtonText>ReAttach History Item 1</ButtonText>
 				</Strings>
 			</Button>
@@ -87,7 +101,7 @@
 				<CommandFlag>DynamicVisibility</CommandFlag>
 				<CommandFlag>DefaultInvisible</CommandFlag>
 				<Strings>
-					<CommandName>ReAttach History Item 2</CommandName>
+					<CommandName>ReAttachHistoryItem2</CommandName>
 					<ButtonText>ReAttach History Item 2</ButtonText>
 				</Strings>
 			</Button>
@@ -98,7 +112,7 @@
 				<CommandFlag>DynamicVisibility</CommandFlag>
 				<CommandFlag>DefaultInvisible</CommandFlag>
 				<Strings>
-					<CommandName>ReAttach History Item 3</CommandName>
+					<CommandName>ReAttachHistoryItem 3</CommandName>
 					<ButtonText>ReAttach History Item 3</ButtonText>
 				</Strings>
 			</Button>
@@ -109,16 +123,16 @@
 				<CommandFlag>DynamicVisibility</CommandFlag>
 				<CommandFlag>DefaultInvisible</CommandFlag>
 				<Strings>
-					<CommandName>ReAttach History Item 4</CommandName>
+					<CommandName>ReAttachHistoryItem4</CommandName>
 					<ButtonText>ReAttach History Item 4</ButtonText>
 				</Strings>
 			</Button>
-      <Button guid="guidReAttachPackageCmdSet" id="cmdidRebuildBeforeReAttach" type="Button">
+      <Button guid="guidReAttachPackageCmdSet" id="cmdidBuildBeforeReAttach" type="Button">
         <CommandFlag>TextChanges</CommandFlag>
         <CommandFlag>DontCache</CommandFlag>
         <Strings>
-          <CommandName>Rebuild before ReAttach</CommandName>
-          <ButtonText>Rebuild before ReAttach</ButtonText>
+          <CommandName>BuildBeforeReAttaching</CommandName>
+          <ButtonText>Build before ReAttaching</ButtonText>
         </Strings>
       </Button>
     </Buttons>
@@ -143,8 +157,8 @@
 		<CommandPlacement guid="guidReAttachPackageCmdSet" id="cmdidReAttach5" priority="0x5">
 			<Parent guid="guidReAttachPackageCmdSet" id="cmdidReAttachStandardMenuGroup"/>
 		</CommandPlacement>
-    <CommandPlacement guid="guidReAttachPackageCmdSet" id="cmdidRebuildBeforeReAttach" priority="0x6">
-      <Parent guid="guidReAttachPackageCmdSet" id="cmdidReAttachStandardMenuGroup"/>
+    <CommandPlacement guid="guidReAttachPackageCmdSet" id="cmdidBuildBeforeReAttach" priority="0x6">
+      <Parent guid="guidReAttachPackageCmdSet" id="cmdidReAttachStandardMenuOptionsGroup"/>
     </CommandPlacement>
 
     <!-- In debug menu, as submenu -->
@@ -163,11 +177,11 @@
 		<CommandPlacement guid="guidReAttachPackageCmdSet" id="cmdidReAttach5" priority="0x5">
 			<Parent guid="guidReAttachPackageCmdSet" id="cmdidReAttachDebugSubMenuGroup"/>
 		</CommandPlacement>
-    <CommandPlacement guid="guidReAttachPackageCmdSet" id="cmdidRebuildBeforeReAttach" priority="0x6">
-      <Parent guid="guidReAttachPackageCmdSet" id="cmdidReAttachDebugSubMenuGroup"/>
+    <CommandPlacement guid="guidReAttachPackageCmdSet" id="cmdidBuildBeforeReAttach" priority="0x6">
+      <Parent guid="guidReAttachPackageCmdSet" id="cmdidReAttachDebugMenuOptionsGroup"/>
     </CommandPlacement>
 
-    <!-- On the toolbar -->
+    <!-- On the customizable toolbar -->
 		<CommandPlacement guid="guidReAttachPackageCmdSet" id="cmdidReAttach1" priority="0x1">
 			<Parent guid="guidReAttachPackageCmdSet" id="cmdidReAttachToolbarMenuControllerGroup"/>
 		</CommandPlacement>
@@ -183,10 +197,9 @@
 		<CommandPlacement guid="guidReAttachPackageCmdSet" id="cmdidReAttach5" priority="0x5">
 			<Parent guid="guidReAttachPackageCmdSet" id="cmdidReAttachToolbarMenuControllerGroup"/>
 		</CommandPlacement>
-    <CommandPlacement guid="guidReAttachPackageCmdSet" id="cmdidRebuildBeforeReAttach" priority="0x6">
-      <Parent guid="guidReAttachPackageCmdSet" id="cmdidReAttachToolbarMenuControllerGroup"/>
+    <CommandPlacement guid="guidReAttachPackageCmdSet" id="cmdidBuildBeforeReAttach" priority="0x6">
+      <Parent guid="guidReAttachPackageCmdSet" id="cmdidReAttachToolbarMenuControllerOptionsGroup"/>
     </CommandPlacement>
-
   </CommandPlacements>
 
 	<KeyBindings>
@@ -212,14 +225,18 @@
 			<IDSymbol name="cmdidReAttachToolbarMenuController" value="0x6"/>
 			<IDSymbol name="cmdidReAttachToolbarMenuControllerGroup" value="0x7"/>
 			<IDSymbol name="cmdidReAttachToolbarGroup" value="0x8"/>
-			
-			<IDSymbol name="cmdidReAttach1" value="0x200" />
+
+      <IDSymbol name="cmdidReAttachStandardMenuOptionsGroup" value="0x9" />
+      <IDSymbol name="cmdidReAttachDebugMenuOptionsGroup" value="0x10" />
+      <IDSymbol name="cmdidReAttachToolbarMenuControllerOptionsGroup" value="0x11" />
+      
+      <IDSymbol name="cmdidReAttach1" value="0x200" />
 			<IDSymbol name="cmdidReAttach2" value="0x201" />
 			<IDSymbol name="cmdidReAttach3" value="0x202" />
 			<IDSymbol name="cmdidReAttach4" value="0x203" />
 			<IDSymbol name="cmdidReAttach5" value="0x204" />
 
-      <IDSymbol name="cmdidRebuildBeforeReAttach" value="0x240" />
+      <IDSymbol name="cmdidBuildBeforeReAttach" value="0x240" />
 		</GuidSymbol>
     
 		<GuidSymbol name="guidImages" value="{5fcef6fd-0d78-4138-9a89-623eb61e0e98}" >

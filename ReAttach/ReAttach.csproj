@@ -105,6 +105,7 @@
     <Compile Include="Contracts\IReAttachUi.cs" />
     <Compile Include="Contracts\IReAttachPackage.cs" />
     <Compile Include="Contracts\IReAttachDebugger.cs" />
+    <Compile Include="Data\ReAttachOptions.cs" />
     <Compile Include="Extensions\ProcessExtensions.cs" />
     <Compile Include="Misc\DebugHelper.cs" />
     <Compile Include="ReAttachDebugger.cs" />
