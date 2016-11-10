@@ -8,5 +8,6 @@ namespace ReAttach.Contracts
 
 		void ReportError(string message, params object[] args);
 		void ReportWarning(string message, params object[] args);
+        void ReportTrace(string message, params object[] args);
 	}
 }

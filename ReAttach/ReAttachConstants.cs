@@ -19,7 +19,7 @@ namespace ReAttach
 		public const int ReAttachHistorySize = 5;
         public const int BuildBeforeReAttachCommandId = 0x240;
 
-		// Key bindings (used by DTE). Which is not used right now.
+		// Key bindings (used by DTE, not used right now).
 		public const string ReAttachToLastCommandName = "Debug.ReAttach";
 		public const string ReAttachToLastKeyBinding = "Global::Ctrl+R, Ctrl+A";
 

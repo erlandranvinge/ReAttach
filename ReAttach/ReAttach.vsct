@@ -33,8 +33,8 @@
 				<Parent guid="guidReAttachPackageCmdSet" id="cmdidReAttachToolbarGroup"/>
 				<CommandFlag>DontCache</CommandFlag>
 				<Strings>
-					<CommandName>ReAttach Toolbar</CommandName>
-					<ButtonText>ReAttach Toolbar</ButtonText>
+					<CommandName>ReAttach Dropdown</CommandName>
+					<ButtonText>ReAttach Dropdown</ButtonText>
 				</Strings>
 			</Menu>
 		</Menus>
@@ -90,7 +90,7 @@
 				<CommandFlag>DynamicVisibility</CommandFlag>
 				<CommandFlag>DefaultInvisible</CommandFlag>
 				<Strings>
-					<CommandName>ReAttachHistoryItem1</CommandName>
+					<CommandName>ReAttach History Item1</CommandName>
 					<ButtonText>ReAttach History Item 1</ButtonText>
 				</Strings>
 			</Button>
@@ -101,7 +101,7 @@
 				<CommandFlag>DynamicVisibility</CommandFlag>
 				<CommandFlag>DefaultInvisible</CommandFlag>
 				<Strings>
-					<CommandName>ReAttachHistoryItem2</CommandName>
+					<CommandName>ReAttach History Item2</CommandName>
 					<ButtonText>ReAttach History Item 2</ButtonText>
 				</Strings>
 			</Button>
@@ -112,7 +112,7 @@
 				<CommandFlag>DynamicVisibility</CommandFlag>
 				<CommandFlag>DefaultInvisible</CommandFlag>
 				<Strings>
-					<CommandName>ReAttachHistoryItem 3</CommandName>
+					<CommandName>ReAttach History Item 3</CommandName>
 					<ButtonText>ReAttach History Item 3</ButtonText>
 				</Strings>
 			</Button>
@@ -123,7 +123,7 @@
 				<CommandFlag>DynamicVisibility</CommandFlag>
 				<CommandFlag>DefaultInvisible</CommandFlag>
 				<Strings>
-					<CommandName>ReAttachHistoryItem4</CommandName>
+					<CommandName>ReAttach History Item 4</CommandName>
 					<ButtonText>ReAttach History Item 4</ButtonText>
 				</Strings>
 			</Button>
@@ -131,7 +131,7 @@
         <CommandFlag>TextChanges</CommandFlag>
         <CommandFlag>DontCache</CommandFlag>
         <Strings>
-          <CommandName>BuildBeforeReAttaching</CommandName>
+          <CommandName>Build Before ReAttaching</CommandName>
           <ButtonText>Build before ReAttaching</ButtonText>
         </Strings>
       </Button>

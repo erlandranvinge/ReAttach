@@ -38,6 +38,7 @@ namespace ReAttach
 				return;
 			}
 
+            // TODO: Unadvise, or did I find something telling me otherwise?
 			if (_debugger.AdviseDebuggerEvents(this, out _cookie) != VSConstants.S_OK)
 				_package.Reporter.ReportError("ReAttach: AdviserDebuggerEvents failed.");
 
@@ -51,6 +52,8 @@ namespace ReAttach
 		public int Event(IDebugEngine2 engine, IDebugProcess2 process, IDebugProgram2 program, 
 			IDebugThread2 thread, IDebugEvent2 debugEvent, ref Guid riidEvent, uint attributes)
 		{
+            _package.Reporter.ReportTrace(TypeHelper.GetDebugEventTypeName(debugEvent));
+
 			if (!(debugEvent is IDebugProcessCreateEvent2) &&
 				!(debugEvent is IDebugProcessDestroyEvent2))
 				return VSConstants.S_OK;
@@ -62,9 +65,14 @@ namespace ReAttach
 					process.GetName(), process.GetProcessId(), TypeHelper.GetDebugEventTypeName(debugEvent));
 				return VSConstants.S_OK;
 			}
-			
+
 			if (debugEvent is IDebugProcessCreateEvent2)
 			{
+                var mode = new DBGMODE[1];
+                _debugger.GetMode(mode);
+                if (mode[0] == DBGMODE.DBGMODE_Design)
+                    return VSConstants.S_OK;
+                
 				target.IsAttached = true;
 				_package.History.Items.AddFirst(target); 
 				_package.Ui.Update();
@@ -185,8 +193,11 @@ namespace ReAttach
 				}
 				return true;
 			}
-			catch (COMException)
+			catch (COMException e)
 			{
+                _package.Reporter.ReportError("Unable to ReAttach to process {0} ({1}) based on target {2}. Message: {3}.",
+                    process.Name, process.ProcessID, target, e.Message);
+
 				// It's either this or returning this HRESULT to shell with Shell.ReportError method, shows UAC box btw.
 				const int E_ELEVATION_REQUIRED = unchecked((int)0x800702E4);
 				Marshal.ThrowExceptionForHR(E_ELEVATION_REQUIRED); 

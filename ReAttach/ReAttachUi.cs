@@ -5,6 +5,7 @@ using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
 using ReAttach.Contracts;
 using ReAttach.Dialogs;
+using EnvDTE80;
 
 namespace ReAttach
 {
@@ -94,6 +95,9 @@ namespace ReAttach
 			if (target == null)
 				return;
 
+            if (_package.History.Options.BuildBeforeReAttach)
+                TryBuildSolution();
+
 			if (!_package.Debugger.ReAttach(target))
 			{
 				var dialog = new ReAttachDialog(_package, target);
@@ -106,6 +110,16 @@ namespace ReAttach
             var toggle = !_package.History.Options.BuildBeforeReAttach;
             _package.History.Options.BuildBeforeReAttach = toggle;
             _buildToggleCommand.Checked = toggle;
+        }
+
+        public void TryBuildSolution()
+        {
+            try
+            {
+                var dte = _package.GetService(typeof(SDTE)) as DTE2;
+                dte.Solution.SolutionBuild.Build(true);
+            }
+            catch (Exception) { }
         }
 
 		public void MessageBox(string message)
