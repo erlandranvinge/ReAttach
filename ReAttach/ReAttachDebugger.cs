@@ -45,14 +45,20 @@ namespace ReAttach
 			if (_debugger.AdviseDebugEventCallback(this) != VSConstants.S_OK)
 				_package.Reporter.ReportError("AdviceDebugEventsCallback call failed in ReAttachDebugger ctor.");
 
-			foreach (Engine engine in _dteDebugger.Transports.Item("Default").Engines)
-				_engines.Add(Guid.Parse(engine.ID), engine.Name);
+            foreach (Engine engine in _dteDebugger.Transports.Item("Default").Engines)
+            {
+                var engineId = Guid.Parse(engine.ID);
+                if (ReAttachConstants.IgnoredDebuggingEngines.Contains(engineId))
+                    continue;
+
+                _engines.Add(engineId, engine.Name);
+            }
 		}
 
 		public int Event(IDebugEngine2 engine, IDebugProcess2 process, IDebugProgram2 program, 
 			IDebugThread2 thread, IDebugEvent2 debugEvent, ref Guid riidEvent, uint attributes)
 		{
-            _package.Reporter.ReportTrace(TypeHelper.GetDebugEventTypeName(debugEvent));
+            // _package.Reporter.ReportTrace(TypeHelper.GetDebugEventTypeName(debugEvent));
 
 			if (!(debugEvent is IDebugProcessCreateEvent2) &&
 				!(debugEvent is IDebugProcessDestroyEvent2))
@@ -68,6 +74,8 @@ namespace ReAttach
 
 			if (debugEvent is IDebugProcessCreateEvent2)
 			{
+                var engines = target.Engines.Where(e => _engines.ContainsKey(e)).Select(e => _engines[e]).ToArray();
+
                 var mode = new DBGMODE[1];
                 _debugger.GetMode(mode);
                 if (mode[0] == DBGMODE.DBGMODE_Design)

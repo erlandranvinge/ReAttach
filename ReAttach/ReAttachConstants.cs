@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 
 namespace ReAttach
@@ -22,6 +23,10 @@ namespace ReAttach
 		// Key bindings (used by DTE, not used right now).
 		public const string ReAttachToLastCommandName = "Debug.ReAttach";
 		public const string ReAttachToLastKeyBinding = "Global::Ctrl+R, Ctrl+A";
+
+        public static readonly HashSet<Guid> IgnoredDebuggingEngines = new HashSet<Guid> { 
+            new Guid("2c18241e-069a-43b2-bd81-89c186af994b") // IntelliTrace
+        };
 
 		// Texts
 		public static class Texts
