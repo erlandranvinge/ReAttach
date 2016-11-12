@@ -32,5 +32,11 @@ namespace ReAttach
 		{
 			return _repository.SaveTargets(Items);
 		}
+
+        public void Clear()
+        {
+            Items.Clear();
+            Save();
+        }
 	}
 }

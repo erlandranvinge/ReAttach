@@ -8,5 +8,6 @@ namespace ReAttach.Contracts
         ReAttachOptions Options { get; }
 		bool Load();
 		bool Save();
+        void Clear();
 	}
 }

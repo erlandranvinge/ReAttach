@@ -4,10 +4,13 @@ Version 1.2-draft
 New features:
 * Stores debug engines used with targets.
 * Targets stored in registry as JSON instead of custom format.
+* Added option to auto-build before reattaching.
+
+Fixed issues:
+* Sometimes, first reattach failes to record. 
 
 Known issues:
 * Remote (no authentication) support.
-* Sometimes, first reattach failes to record.
 
 Version 1.1
 ===============================================================================

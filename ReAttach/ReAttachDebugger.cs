@@ -58,10 +58,10 @@ namespace ReAttach
 		public int Event(IDebugEngine2 engine, IDebugProcess2 process, IDebugProgram2 program, 
 			IDebugThread2 thread, IDebugEvent2 debugEvent, ref Guid riidEvent, uint attributes)
 		{
-            // _package.Reporter.ReportTrace(TypeHelper.GetDebugEventTypeName(debugEvent));
+             _package.Reporter.ReportTrace(TypeHelper.GetDebugEventTypeName(debugEvent));
 
-			if (!(debugEvent is IDebugProcessCreateEvent2) &&
-				!(debugEvent is IDebugProcessDestroyEvent2))
+             if (!(debugEvent is IDebugLoadCompleteEvent2) &&
+				 !(debugEvent is IDebugProcessDestroyEvent2))
 				return VSConstants.S_OK;
 
 			var target = GetTargetFromProcess(process);
@@ -72,15 +72,22 @@ namespace ReAttach
 				return VSConstants.S_OK;
 			}
 
-			if (debugEvent is IDebugProcessCreateEvent2)
+            if (debugEvent is IDebugLoadCompleteEvent2)
 			{
+                var programName = "";
+                if (program != null)
+                {
+                    program.GetName(out programName);
+                }
+                if (target.Engines.Any(engineId => ReAttachConstants.IgnoredDebuggingEngines.Contains(engineId)))
+                    return VSConstants.S_OK;
+                /*
                 var engines = target.Engines.Where(e => _engines.ContainsKey(e)).Select(e => _engines[e]).ToArray();
-
                 var mode = new DBGMODE[1];
                 _debugger.GetMode(mode);
                 if (mode[0] == DBGMODE.DBGMODE_Design)
                     return VSConstants.S_OK;
-                
+                */
 				target.IsAttached = true;
 				_package.History.Items.AddFirst(target); 
 				_package.Ui.Update();

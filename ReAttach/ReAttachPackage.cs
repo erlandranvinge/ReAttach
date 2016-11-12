@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel.Design;
 using System.Linq;
 using System.Runtime.InteropServices;
 using EnvDTE;
@@ -15,6 +16,7 @@ namespace ReAttach
 	[PackageRegistration(UseManagedResourcesOnly = true)]
 	[InstalledProductRegistration("#110", "#112", "1.1", IconResourceID = 400)] // Needed to show this package in help /about.
 	[ProvideMenuResource("Menus.ctmenu", 1)] // Required to show menus.
+    [ProvideOptionPage(typeof(Dialogs.ReAttachOptionsPage), "ReAttach", "General", 0, 0, true)]  
 	[ProvideAutoLoad(VSConstants.UICONTEXT.NoSolution_string)]
 	public sealed class ReAttachPackage : Package, IReAttachPackage
 	{
@@ -45,7 +47,17 @@ namespace ReAttach
 
 			History.Load();
 			Ui.Update();
+
+            var callback = new ServiceCreatorCallback(CreateBusService);
+            ((IServiceContainer)this).AddService(typeof(IReAttachBusService), callback);
 		}
+
+        private object CreateBusService(IServiceContainer container, Type serviceType)
+        {
+            if (typeof(IReAttachBusService) == serviceType)
+                return new ReAttachBusService(this);
+            return null;
+        }  
 
 		public IRegistryKey OpenUserRegistryRoot()
 		{

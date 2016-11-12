@@ -64,7 +64,10 @@
     <Reference Include="PresentationFramework" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Data" />
     <Reference Include="System.Design" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xaml" />
     <Reference Include="System.Xml" />
     <Reference Include="WindowsBase" />
@@ -99,6 +102,7 @@
     </COMReference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Contracts\IReAttachBusService.cs" />
     <Compile Include="Contracts\IReAttachHistory.cs" />
     <Compile Include="Contracts\IReAttachReporter.cs" />
     <Compile Include="Contracts\IReAttachRepository.cs" />
@@ -106,8 +110,18 @@
     <Compile Include="Contracts\IReAttachPackage.cs" />
     <Compile Include="Contracts\IReAttachDebugger.cs" />
     <Compile Include="Data\ReAttachOptions.cs" />
+    <Compile Include="Dialogs\ReAttachOptionsControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Dialogs\ReAttachOptionsControl.Designer.cs">
+      <DependentUpon>ReAttachOptionsControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Dialogs\ReAttachOptionsPage.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Extensions\ProcessExtensions.cs" />
     <Compile Include="Misc\DebugHelper.cs" />
+    <Compile Include="ReAttachBusService.cs" />
     <Compile Include="ReAttachDebugger.cs" />
     <Compile Include="ReAttachHistory.cs" />
     <Compile Include="ReAttachUi.cs" />
@@ -132,6 +146,9 @@
     <Compile Include="Data\RegistryKey.cs" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Dialogs\ReAttachOptionsControl.resx">
+      <DependentUpon>ReAttachOptionsControl.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
