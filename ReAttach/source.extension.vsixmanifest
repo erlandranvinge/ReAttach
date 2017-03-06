@@ -4,13 +4,13 @@
 		<Identity Id="0ee94538-22b7-40c8-a253-3fce8ad39b6f" Version="2.0" Language="en-US" Publisher="Erland Ranvinge" />
 		<DisplayName>Erland Ranvinge</DisplayName>
 		<Description>ReAttach gives you an easy way to ReAttaching your prior debug targets. ReAttach stores your attach history for you and provides toolbar, menu and keyboard shortcuts for easy access.</Description>
+		<License>LICENSE.txt</License>
 		<Icon>icon.png</Icon>
 		<PreviewImage>preview.png</PreviewImage>
 	</Metadata>
 	<Installation>
 		<InstallationTarget Id="Microsoft.VisualStudio.Community" Version="[10.0,16.0]" />
 		<InstallationTarget Id="Microsoft.VisualStudio.Pro" Version="[10.0,16.0]" />
-
 	</Installation>
 	<Dependencies>
 		<Dependency Id="Microsoft.Framework.NDP" DisplayName="Microsoft .NET Framework" d:Source="Manual" Version="[4.5,)" />

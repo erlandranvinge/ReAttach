@@ -11,7 +11,7 @@ namespace ReAttach
 {
 	[Guid(ReAttachConstants.ReAttachPackageGuidString)]
 	[PackageRegistration(UseManagedResourcesOnly = true)]
-	[InstalledProductRegistration("#110", "#112", "1.1", IconResourceID = 400)] // Needed to show this package in help /about.
+	[InstalledProductRegistration("#110", "#112", "2.0", IconResourceID = 400)] // Needed to show this package in help /about.
 	[ProvideMenuResource("Menus.ctmenu", 1)] // Required to show menus.
     [ProvideOptionPage(typeof(Dialogs.ReAttachOptionsPage), "ReAttach", "General", 0, 0, true)]  
 	[ProvideAutoLoad(VSConstants.UICONTEXT.NoSolution_string)]

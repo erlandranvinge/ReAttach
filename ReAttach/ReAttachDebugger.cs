@@ -14,7 +14,7 @@ using ReAttach.Misc;
 
 namespace ReAttach
 {
-    public class ReAttachDebugger : IReAttachDebugger
+	public class ReAttachDebugger : IReAttachDebugger
 	{
 		private readonly IReAttachPackage _package;
 		private readonly IVsDebugger _debugger;
@@ -22,7 +22,7 @@ namespace ReAttach
 		private readonly Debugger2 _dteDebugger;
 		private readonly uint _debuggerCookie;
 		private readonly Dictionary<Guid, string> _engines = new Dictionary<Guid, string>();
-        private volatile bool _recording = false;
+		private volatile bool _recording = false;
 
 		public ReAttachDebugger(IReAttachPackage package)
 		{
@@ -39,33 +39,33 @@ namespace ReAttach
 				return;
 			}
 
-            // TODO: Unadvise, or did I find something telling me otherwise?
+			// TODO: Unadvise, or did I find something telling me otherwise?
 			if (_debugger.AdviseDebuggerEvents(this, out _debuggerCookie) != VSConstants.S_OK)
 				_package.Reporter.ReportError("ReAttach: AdviserDebuggerEvents failed.");
 
 			if (_debugger.AdviseDebugEventCallback(this) != VSConstants.S_OK)
 				_package.Reporter.ReportError("AdviceDebugEventsCallback call failed in ReAttachDebugger ctor.");
 
-            foreach (Engine engine in _dteDebugger.Transports.Item("Default").Engines)
-            {
-                var engineId = Guid.Parse(engine.ID);
-                if (ReAttachConstants.IgnoredDebuggingEngines.Contains(engineId))
-                    continue;
+			foreach (Engine engine in _dteDebugger.Transports.Item("Default").Engines)
+			{
+				var engineId = Guid.Parse(engine.ID);
+				if (ReAttachConstants.IgnoredDebuggingEngines.Contains(engineId))
+					continue;
 
-                _engines.Add(engineId, engine.Name);
-            }
-            _recording = true;
+				_engines.Add(engineId, engine.Name);
+			}
+			_recording = true;
 		}
 
-		public int Event(IDebugEngine2 engine, IDebugProcess2 process, IDebugProgram2 program, 
+		public int Event(IDebugEngine2 engine, IDebugProcess2 process, IDebugProgram2 program,
 			IDebugThread2 thread, IDebugEvent2 debugEvent, ref Guid riidEvent, uint attributes)
 		{
-            if (!_recording) return VSConstants.S_OK;
+			if (!_recording) return VSConstants.S_OK;
 
-             _package.Reporter.ReportTrace(TypeHelper.GetDebugEventTypeName(debugEvent));
+			_package.Reporter.ReportTrace(TypeHelper.GetDebugEventTypeName(debugEvent));
 
-             if (!(debugEvent is IDebugProcessCreateEvent2) &&
-				 !(debugEvent is IDebugProcessDestroyEvent2))
+			if (!(debugEvent is IDebugProcessCreateEvent2) &&
+				!(debugEvent is IDebugProcessDestroyEvent2))
 				return VSConstants.S_OK;
 
 			var target = GetTargetFromProcess(process);
@@ -76,10 +76,10 @@ namespace ReAttach
 				return VSConstants.S_OK;
 			}
 
-            if (debugEvent is IDebugProcessCreateEvent2)
+			if (debugEvent is IDebugProcessCreateEvent2)
 			{
 				target.IsAttached = true;
-				_package.History.Items.AddFirst(target); 
+				_package.History.Items.AddFirst(target);
 				_package.Ui.Update();
 			}
 			else
@@ -112,7 +112,7 @@ namespace ReAttach
 			{
 				var server3 = server as IDebugCoreServer3;
 				var tmp = "";
-				if (server3 != null && server3.QueryIsLocal() == VSConstants.S_FALSE && 
+				if (server3 != null && server3.QueryIsLocal() == VSConstants.S_FALSE &&
 					server3.GetServerFriendlyName(out tmp) == VSConstants.S_OK)
 				{
 					serverName = tmp;
@@ -153,8 +153,8 @@ namespace ReAttach
 			{
 				var processes = _dteDebugger.LocalProcesses.OfType<Process3>();
 
-                var tmp = processes.Select(p => new { Name = p.Name, UserName = p.UserName }).ToArray();
-                Console.WriteLine(tmp);
+				var tmp = processes.Select(p => new { Name = p.Name, UserName = p.UserName }).ToArray();
+				Console.WriteLine(tmp);
 
 				candidates = processes.Where(p =>
 					p.Name == target.ProcessPath &&
@@ -162,7 +162,7 @@ namespace ReAttach
 
 				if (!candidates.Any()) // Do matching on processes running in exclusive mode.
 				{
-					candidates = processes.Where(p => 
+					candidates = processes.Where(p =>
 						p.Name == target.ProcessName &&
 						string.IsNullOrEmpty(p.UserName)).ToList();
 				}
@@ -200,17 +200,17 @@ namespace ReAttach
 			}
 			catch (COMException e)
 			{
-                _package.Reporter.ReportError("Unable to ReAttach to process {0} ({1}) based on target {2}. Message: {3}.",
-                    process.Name, process.ProcessID, target, e.Message);
+				_package.Reporter.ReportError("Unable to ReAttach to process {0} ({1}) based on target {2}. Message: {3}.",
+					process.Name, process.ProcessID, target, e.Message);
 
 				// It's either this or returning this HRESULT to shell with Shell.ReportError method, shows UAC box btw.
 				const int E_ELEVATION_REQUIRED = unchecked((int)0x800702E4);
-				Marshal.ThrowExceptionForHR(E_ELEVATION_REQUIRED); 
+				Marshal.ThrowExceptionForHR(E_ELEVATION_REQUIRED);
 				return false;
 			}
 			catch (Exception e)
 			{
-				_package.Reporter.ReportError("Unable to ReAttach to process {0} ({1}) based on target {2}. Message: {3}.", 
+				_package.Reporter.ReportError("Unable to ReAttach to process {0} ({1}) based on target {2}. Message: {3}.",
 					process.Name, process.ProcessID, target, e.Message);
 			}
 			return false;

@@ -71,7 +71,6 @@ namespace ReAttach.Tests.UnitTests
 		[TestMethod]
 		public void GetProcessUsernameTests()
 		{
-		/*
 			var process = new Mock<Process3>();
 			process.Setup(p => p.UserName).Returns("testprocess");
 			Assert.AreEqual("testprocess", process.Object.GetUsername());
@@ -80,8 +79,7 @@ namespace ReAttach.Tests.UnitTests
 			Assert.AreEqual("testprocess", process.Object.GetUsername());
 
 			process.Setup(p => p.UserName).Returns("testprocess [administrator]");
-			Assert.AreEqual("testprocess", process.Object.GetUsername());*/
-			
+			Assert.AreEqual("testprocess", process.Object.GetUsername());			
 		}
 	}
 }
