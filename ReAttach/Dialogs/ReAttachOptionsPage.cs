@@ -7,13 +7,21 @@ namespace ReAttach.Dialogs
 {
     public class ReAttachOptionsPage : DialogPage
     {
+        private ReAttachOptionsControl _control;
+
+        protected override void OnActivate(CancelEventArgs e)
+        {
+            base.OnActivate(e);
+            if (_control != null) _control.Reset();
+        }
+
         protected override IWin32Window Window
         {
             get
             {
-                var page = new ReAttachOptionsControl();
-                page.OptionsPage = this;
-                return page;
+                _control = new ReAttachOptionsControl();
+                _control.OptionsPage = this;
+                return _control;
             }
         }  
     }

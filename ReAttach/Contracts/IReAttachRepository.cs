@@ -4,7 +4,8 @@ namespace ReAttach.Contracts
 {
 	public interface IReAttachRepository
 	{
+        ReAttachTargetList LoadTargets();
 		bool SaveTargets(ReAttachTargetList targets);
-		ReAttachTargetList LoadTargets();
+        bool ClearTargets();
 	}
 }

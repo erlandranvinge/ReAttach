@@ -14,14 +14,15 @@ using ReAttach.Misc;
 
 namespace ReAttach
 {
-	public class ReAttachDebugger : IReAttachDebugger
+    public class ReAttachDebugger : IReAttachDebugger
 	{
 		private readonly IReAttachPackage _package;
 		private readonly IVsDebugger _debugger;
 		private readonly DTE2 _dte;
 		private readonly Debugger2 _dteDebugger;
-		private readonly uint _cookie;
-		private readonly Dictionary<Guid, string> _engines = new Dictionary<Guid, string>(); 
+		private readonly uint _debuggerCookie;
+		private readonly Dictionary<Guid, string> _engines = new Dictionary<Guid, string>();
+        private volatile bool _recording = false;
 
 		public ReAttachDebugger(IReAttachPackage package)
 		{
@@ -39,7 +40,7 @@ namespace ReAttach
 			}
 
             // TODO: Unadvise, or did I find something telling me otherwise?
-			if (_debugger.AdviseDebuggerEvents(this, out _cookie) != VSConstants.S_OK)
+			if (_debugger.AdviseDebuggerEvents(this, out _debuggerCookie) != VSConstants.S_OK)
 				_package.Reporter.ReportError("ReAttach: AdviserDebuggerEvents failed.");
 
 			if (_debugger.AdviseDebugEventCallback(this) != VSConstants.S_OK)
@@ -53,14 +54,17 @@ namespace ReAttach
 
                 _engines.Add(engineId, engine.Name);
             }
+            _recording = true;
 		}
 
 		public int Event(IDebugEngine2 engine, IDebugProcess2 process, IDebugProgram2 program, 
 			IDebugThread2 thread, IDebugEvent2 debugEvent, ref Guid riidEvent, uint attributes)
 		{
+            if (!_recording) return VSConstants.S_OK;
+
              _package.Reporter.ReportTrace(TypeHelper.GetDebugEventTypeName(debugEvent));
 
-             if (!(debugEvent is IDebugLoadCompleteEvent2) &&
+             if (!(debugEvent is IDebugProcessCreateEvent2) &&
 				 !(debugEvent is IDebugProcessDestroyEvent2))
 				return VSConstants.S_OK;
 
@@ -72,22 +76,8 @@ namespace ReAttach
 				return VSConstants.S_OK;
 			}
 
-            if (debugEvent is IDebugLoadCompleteEvent2)
+            if (debugEvent is IDebugProcessCreateEvent2)
 			{
-                var programName = "";
-                if (program != null)
-                {
-                    program.GetName(out programName);
-                }
-                if (target.Engines.Any(engineId => ReAttachConstants.IgnoredDebuggingEngines.Contains(engineId)))
-                    return VSConstants.S_OK;
-                /*
-                var engines = target.Engines.Where(e => _engines.ContainsKey(e)).Select(e => _engines[e]).ToArray();
-                var mode = new DBGMODE[1];
-                _debugger.GetMode(mode);
-                if (mode[0] == DBGMODE.DBGMODE_Design)
-                    return VSConstants.S_OK;
-                */
 				target.IsAttached = true;
 				_package.History.Items.AddFirst(target); 
 				_package.Ui.Update();

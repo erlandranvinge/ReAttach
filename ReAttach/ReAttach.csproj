@@ -102,7 +102,6 @@
     </COMReference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Contracts\IReAttachBusService.cs" />
     <Compile Include="Contracts\IReAttachHistory.cs" />
     <Compile Include="Contracts\IReAttachReporter.cs" />
     <Compile Include="Contracts\IReAttachRepository.cs" />
@@ -121,7 +120,7 @@
     </Compile>
     <Compile Include="Extensions\ProcessExtensions.cs" />
     <Compile Include="Misc\DebugHelper.cs" />
-    <Compile Include="ReAttachBusService.cs" />
+    <Compile Include="Services\ReAttachBusService.cs" />
     <Compile Include="ReAttachDebugger.cs" />
     <Compile Include="ReAttachHistory.cs" />
     <Compile Include="ReAttachUi.cs" />

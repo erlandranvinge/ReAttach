@@ -9,6 +9,7 @@ using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
 using ReAttach.Contracts;
 using ReAttach.Data;
+using ReAttach.Services;
 
 namespace ReAttach
 {
@@ -63,5 +64,10 @@ namespace ReAttach
 		{
 			return new RegistryKey(UserRegistryRoot); // TODO: This needs to be handled in a different way to be testable.
 		}
+
+        protected override void Dispose(bool disposing)
+        {
+            base.Dispose(disposing);
+        }
 	}
 }

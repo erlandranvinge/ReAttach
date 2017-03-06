@@ -98,5 +98,39 @@ namespace ReAttach.Data
 			}
 			return null;
 		}
+
+        public bool ClearTargets()
+        {
+            try
+            {
+                var root = _package.OpenUserRegistryRoot();
+                if (root == null)
+                {
+                    _package.Reporter.ReportError("Unable to open user root registry key.");
+                    return false;
+                }
+
+                var subkey = root.CreateSubKey(ReAttachConstants.ReAttachRegistryKeyName);
+                if (subkey == null)
+                {
+                    _package.Reporter.ReportError("Unable to open/create ReAttach subkey.");
+                    root.Close();
+                    return false;
+                }
+                for (var index = 1; index <= ReAttachConstants.ReAttachHistorySize; index++)
+                {
+                    subkey.DeleteValue(ReAttachConstants.ReAttachRegistryHistoryKeyPrefix + index, false);
+                }
+                subkey.Close();
+                root.Close();
+                return true;
+            }
+            catch (Exception e)
+            {
+                _package.Reporter.ReportError(
+                    "Unable to save ReAttachTargetList using ReAttachRegistryRepository. Message: {0}", e.Message);
+                return false;
+            }
+        }
 	}
 }
