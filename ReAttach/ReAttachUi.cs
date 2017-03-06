@@ -12,8 +12,8 @@ namespace ReAttach
 	public class ReAttachUi : IReAttachUi
 	{
 		private readonly IReAttachPackage _package;
-        private readonly OleMenuCommand _buildToggleCommand;
-        public readonly OleMenuCommand[] Commands = new OleMenuCommand[ReAttachConstants.ReAttachHistorySize];
+		private readonly OleMenuCommand _buildToggleCommand;
+		public readonly OleMenuCommand[] Commands = new OleMenuCommand[ReAttachConstants.ReAttachHistorySize];
 
 		public ReAttachUi(IReAttachPackage package)
 		{
@@ -34,17 +34,17 @@ namespace ReAttach
 
 				if (i > 0) // Hide all items except first one initially.
 					command.Visible = false;
-	
+
 				Commands[i] = command;
 			}
 
-            var buildToggleCommandId = new CommandID(ReAttachConstants.ReAttachPackageCmdSet,
-                ReAttachConstants.BuildBeforeReAttachCommandId);
-            var buildCommand = new OleMenuCommand(ReAttachToggleBuildClicked, buildToggleCommandId);
-            buildCommand.Visible = true;
-            buildCommand.Checked = _package.History.Options.BuildBeforeReAttach;
-            menuService.AddCommand(buildCommand);
-            _buildToggleCommand = buildCommand;
+			var buildToggleCommandId = new CommandID(ReAttachConstants.ReAttachPackageCmdSet,
+				ReAttachConstants.BuildBeforeReAttachCommandId);
+			var buildCommand = new OleMenuCommand(ReAttachToggleBuildClicked, buildToggleCommandId);
+			buildCommand.Visible = true;
+			buildCommand.Checked = _package.History.Options.BuildBeforeReAttach;
+			menuService.AddCommand(buildCommand);
+			_buildToggleCommand = buildCommand;
 		}
 
 		public void Update()
@@ -95,8 +95,8 @@ namespace ReAttach
 			if (target == null)
 				return;
 
-            if (_package.History.Options.BuildBeforeReAttach)
-                TryBuildSolution();
+			if (_package.History.Options.BuildBeforeReAttach)
+				TryBuildSolution();
 
 			if (!_package.Debugger.ReAttach(target))
 			{
@@ -105,29 +105,29 @@ namespace ReAttach
 			}
 		}
 
-        public void ReAttachToggleBuildClicked(object sender, EventArgs e)
-        {
-            var toggle = !_package.History.Options.BuildBeforeReAttach;
-            _package.History.Options.BuildBeforeReAttach = toggle;
-            _buildToggleCommand.Checked = toggle;
-        }
+		public void ReAttachToggleBuildClicked(object sender, EventArgs e)
+		{
+			var toggle = !_package.History.Options.BuildBeforeReAttach;
+			_package.History.Options.BuildBeforeReAttach = toggle;
+			_buildToggleCommand.Checked = toggle;
+		}
 
-        public void TryBuildSolution()
-        {
-            try
-            {
-                var dte = _package.GetService(typeof(SDTE)) as DTE2;
-                dte.Solution.SolutionBuild.Build(true);
-            }
-            catch (Exception) { }
-        }
+		public void TryBuildSolution()
+		{
+			try
+			{
+				var dte = _package.GetService(typeof(SDTE)) as DTE2;
+				dte.Solution.SolutionBuild.Build(true);
+			}
+			catch (Exception) { }
+		}
 
 		public void MessageBox(string message)
 		{
 			var uiShell = (IVsUIShell)_package.GetService(typeof(SVsUIShell));
 			var clsid = Guid.Empty;
 			int result;
-			
+
 			uiShell.ShowMessageBox(
 				0,
 				ref clsid,

@@ -6,9 +6,6 @@ using ReAttach.Data;
 
 namespace ReAttach.Dialogs
 {
-	/// <summary>
-	/// Interaction logic for ReAttachDialog.xaml
-	/// </summary>
 	public partial class ReAttachDialog 
 	{
 		private readonly IReAttachPackage _package;

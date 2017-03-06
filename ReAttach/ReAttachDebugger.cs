@@ -22,6 +22,7 @@ namespace ReAttach
 		private readonly Debugger2 _dteDebugger;
 		private readonly uint _debuggerCookie;
 		private readonly Dictionary<Guid, string> _engines = new Dictionary<Guid, string>();
+		private bool _recording = false;
 
 		public ReAttachDebugger(IReAttachPackage package)
 		{
@@ -59,9 +60,11 @@ namespace ReAttach
 			IDebugThread2 thread, IDebugEvent2 debugEvent, ref Guid riidEvent, uint attributes)
 		{
 			// _package.Reporter.ReportTrace(TypeHelper.GetDebugEventTypeName(debugEvent));
+			if (!_recording) return VSConstants.S_OK;
 
 			if (!(debugEvent is IDebugProcessCreateEvent2) &&
-				!(debugEvent is IDebugProcessDestroyEvent2))
+				!(debugEvent is IDebugProcessDestroyEvent2) &&
+				!(debugEvent is IDebugEntryPointEvent2))
 				return VSConstants.S_OK;
 
 			var target = GetTargetFromProcess(process);
@@ -72,7 +75,7 @@ namespace ReAttach
 				return VSConstants.S_OK;
 			}
 
-			if (debugEvent is IDebugProcessCreateEvent2)
+			if (debugEvent is IDebugProcessCreateEvent2 || debugEvent is IDebugEntryPointEvent2)
 			{
 				target.IsAttached = true;
 				_package.History.Items.AddFirst(target);
@@ -89,8 +92,15 @@ namespace ReAttach
 
 		public int OnModeChange(DBGMODE mode)
 		{
-			if (mode == DBGMODE.DBGMODE_Design)
-				_package.History.Save();
+			switch(mode) {
+				case DBGMODE.DBGMODE_Run:
+					_recording = true;
+					break;
+				case DBGMODE.DBGMODE_Design:
+					_recording = false;
+					_package.History.Save();
+					break;
+			}
 			return VSConstants.S_OK;
 		}
 
@@ -149,10 +159,6 @@ namespace ReAttach
 			else
 			{
 				var processes = _dteDebugger.LocalProcesses.OfType<Process3>();
-
-				var tmp = processes.Select(p => new { Name = p.Name, UserName = p.UserName }).ToArray();
-				Console.WriteLine(tmp);
-
 				candidates = processes.Where(p =>
 					p.Name == target.ProcessPath &&
 					p.UserName == target.ProcessUser).ToList();

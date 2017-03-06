@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Text;
 
 namespace ReAttach.Data
 {
@@ -54,6 +55,12 @@ namespace ReAttach.Data
 			return IsLocal ? 
 				string.Format("{0} ({1})", ProcessName, ProcessUser) : 
 				string.Format("{0} ({1}@{2})", ProcessName, ProcessUser, ServerName);
+		}
+
+		private static string Sanitize(string str) 
+		{
+			if (string.IsNullOrEmpty(str)) return "";
+			return str.Replace(".vshost", "");
 		}
 	}
 }
