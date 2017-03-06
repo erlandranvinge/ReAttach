@@ -15,7 +15,7 @@ namespace ReAttach.Misc
 			if (dte == null)
 				return;
 
-			var w = dte.Windows.Item(EnvDTE.Constants.vsWindowKindOutput);
+			var w = dte.Windows.Item("{34E76E81-EE4A-11D0-AE2E-00A0C90FFFC3}");
 
 			w.Visible = true;
 			var ow = (OutputWindow)w.Object;

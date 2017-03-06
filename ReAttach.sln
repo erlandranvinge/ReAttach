@@ -1,6 +1,8 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2012
+# Visual Studio 15
+VisualStudioVersion = 15.0.26206.0
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ReAttach", "ReAttach\ReAttach.csproj", "{1F9A70FE-8664-45A1-A3B8-F94585235516}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ReAttach.Tests", "ReAttach.Tests\ReAttach.Tests.csproj", "{C5248178-19DD-407F-9C03-C0E0A51AA251}"

@@ -1,39 +1,21 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Vsix xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Version="1.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2010">
-	<Identifier Id="0ee94538-22b7-40c8-a253-3fce8ad39b6f">
-		<Name>ReAttach</Name>
-		<Author>Erland Ranvinge</Author>
-		<Version>1.2</Version>
-		<Description xml:space="preserve">ReAttach gives you an easy way to ReAttaching your prior debug targets. ReAttach stores your attach history for you and provides toolbar, menu and keyboard shortcuts for easy access.</Description>
-		<Locale>1033</Locale>
+<PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011" xmlns:d="http://schemas.microsoft.com/developer/vsx-schema-design/2011">
+	<Metadata>
+		<Identity Id="0ee94538-22b7-40c8-a253-3fce8ad39b6f" Version="2.0" Language="en-US" Publisher="Erland Ranvinge" />
+		<DisplayName>Erland Ranvinge</DisplayName>
+		<Description>ReAttach gives you an easy way to ReAttaching your prior debug targets. ReAttach stores your attach history for you and provides toolbar, menu and keyboard shortcuts for easy access.</Description>
 		<Icon>icon.png</Icon>
 		<PreviewImage>preview.png</PreviewImage>
-		<InstalledByMsi>false</InstalledByMsi>
-		<SupportedProducts>
-			<VisualStudio Version="10.0">
-				<Edition>Pro</Edition>
-			</VisualStudio>
-			<VisualStudio Version="11.0">
-				<Edition>Pro</Edition>
-			</VisualStudio>
-			<VisualStudio Version="12.0">
-				<Edition>Pro</Edition>
-			</VisualStudio>
-			<VisualStudio Version="14.0">
-				<Edition>Pro</Edition>
-			</VisualStudio>
-			<VisualStudio Version="15.0">
-				<Edition>Pro</Edition>
-			</VisualStudio>
-		</SupportedProducts>
-		<SupportedFrameworkRuntimeEdition MinVersion="4.0" MaxVersion="4.6" />
-	</Identifier>
-	<References>
-		<Reference Id="Microsoft.VisualStudio.MPF" MinVersion="10.0">
-			<Name>Visual Studio MPF</Name>
-		</Reference>
-	</References>
-	<Content>
-		<VsPackage>|%CurrentProject%;PkgdefProjectOutputGroup|</VsPackage>
-	</Content>
-</Vsix>
+	</Metadata>
+	<Installation>
+		<InstallationTarget Id="Microsoft.VisualStudio.Community" Version="[10.0,16.0]" />
+		<InstallationTarget Id="Microsoft.VisualStudio.Pro" Version="[10.0,16.0]" />
+
+	</Installation>
+	<Dependencies>
+		<Dependency Id="Microsoft.Framework.NDP" DisplayName="Microsoft .NET Framework" d:Source="Manual" Version="[4.5,)" />
+	</Dependencies>
+	<Prerequisites>
+		<Prerequisite Id="Microsoft.VisualStudio.Component.CoreEditor" Version="[15.0,16.0)" DisplayName="Visual Studio core editor" />
+	</Prerequisites>
+</PackageManifest>

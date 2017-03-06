@@ -1,12 +1,8 @@
 ﻿using System;
 using System.ComponentModel.Design;
-using System.Linq;
 using System.Runtime.InteropServices;
-using EnvDTE;
-using EnvDTE80;
 using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.Shell;
-using Microsoft.VisualStudio.Shell.Interop;
 using ReAttach.Contracts;
 using ReAttach.Data;
 using ReAttach.Services;
