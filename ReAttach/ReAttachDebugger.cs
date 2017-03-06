@@ -22,7 +22,6 @@ namespace ReAttach
 		private readonly Debugger2 _dteDebugger;
 		private readonly uint _debuggerCookie;
 		private readonly Dictionary<Guid, string> _engines = new Dictionary<Guid, string>();
-		private volatile bool _recording = false;
 
 		public ReAttachDebugger(IReAttachPackage package)
 		{
@@ -54,15 +53,12 @@ namespace ReAttach
 
 				_engines.Add(engineId, engine.Name);
 			}
-			_recording = true;
 		}
 
 		public int Event(IDebugEngine2 engine, IDebugProcess2 process, IDebugProgram2 program,
 			IDebugThread2 thread, IDebugEvent2 debugEvent, ref Guid riidEvent, uint attributes)
 		{
-			if (!_recording) return VSConstants.S_OK;
-
-			_package.Reporter.ReportTrace(TypeHelper.GetDebugEventTypeName(debugEvent));
+			// _package.Reporter.ReportTrace(TypeHelper.GetDebugEventTypeName(debugEvent));
 
 			if (!(debugEvent is IDebugProcessCreateEvent2) &&
 				!(debugEvent is IDebugProcessDestroyEvent2))
@@ -105,6 +101,7 @@ namespace ReAttach
 			var target = _package.History.Items.Find(pid);
 			if (target != null)
 				return target;
+
 
 			var serverName = "";
 			IDebugCoreServer2 server;

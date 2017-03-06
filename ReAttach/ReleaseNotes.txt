@@ -1,5 +1,5 @@
 ﻿
-Version 1.2-draft
+Version 2.0-draft
 ===============================================================================
 New features:
 * Stores debug engines used with targets.

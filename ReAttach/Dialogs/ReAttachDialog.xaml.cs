@@ -22,7 +22,11 @@ namespace ReAttach.Dialogs
 			InitializeComponent();
 			_package = package;
 			_target = target;
-			ProcessName.Text = string.Format("{0} ({1})", target.ProcessName, target.ProcessUser);
+
+			var name = target.ProcessName;
+			if (name.Length > 50) name = name.Substring(0, 50);
+
+			ProcessName.Text = name;
 			Dots.Text = "";
 			_timer.Tick += TimerOnTick;
 			_timer.Interval = new TimeSpan(0, 0, 1);
