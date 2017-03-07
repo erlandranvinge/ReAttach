@@ -121,7 +121,7 @@
     <value>ReAttach</value>
   </data>
   <data name="112" xml:space="preserve">
-    <value>Gives you an easy way to ReAttach to prior debugging targets. For more information, see http://visualstudiogallery.msdn.microsoft.com/8cccc206-b9de-42ef-8f5a-160ad0f017ae.</value>
+    <value>Gives you an easy way to ReAttach to prior debugging targets. For more information, see https://marketplace.visualstudio.com/items?itemName=ErlandR.ReAttach.</value>
   </data>
   <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
   <data name="400" type="System.Resources.ResXFileRef, System.Windows.Forms">

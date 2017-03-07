@@ -46,13 +46,24 @@ namespace ReAttach
 			if (_debugger.AdviseDebugEventCallback(this) != VSConstants.S_OK)
 				_package.Reporter.ReportError("AdviceDebugEventsCallback call failed in ReAttachDebugger ctor.");
 
-			foreach (Engine engine in _dteDebugger.Transports.Item("Default").Engines)
+			try
 			{
-				var engineId = Guid.Parse(engine.ID);
-				if (ReAttachConstants.IgnoredDebuggingEngines.Contains(engineId))
-					continue;
+				foreach (Transport transport in _dteDebugger.Transports)
+				{
+					//foreach (Engine engine in _dteDebugger.Transports.Item("Default").Engines)
+					foreach (Engine engine in transport.Engines)
+					{
+						var engineId = Guid.Parse(engine.ID);
+						if (ReAttachConstants.IgnoredDebuggingEngines.Contains(engineId) || _engines.ContainsKey(engineId))
+							continue;
 
-				_engines.Add(engineId, engine.Name);
+						_engines.Add(engineId, engine.Name);
+						_package.Reporter.ReportTrace("ReAttach found debugging engine {0}.", engine.Name);
+					}
+				}
+			} catch (Exception e)
+			{
+				_package.Reporter.ReportError("ReAttach was unable to detect debugging engines: {0}.", e.Message);
 			}
 		}
 

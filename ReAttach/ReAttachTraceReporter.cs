@@ -20,11 +20,11 @@ namespace ReAttach
 			WarningCount++;
 		}
 
-        public void ReportTrace(string message, params object[] args)
-        {
-            Trace.WriteLine(string.Format(message, args));
-            WarningCount++;
-        }
+		public void ReportTrace(string message, params object[] args)
+		{
+			Trace.WriteLine(string.Format(message, args));
+			WarningCount++;
+		}
 
 	}
 }
