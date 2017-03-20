@@ -10,11 +10,11 @@ namespace ReAttach.Extensions
 			if (process == null)
 				return enum_DEBUG_REASON.DEBUG_REASON_ERROR;
 
-			uint reason;
-			if (process.GetDebugReason(out reason) != VSConstants.S_OK)
+			var reason = new enum_DEBUG_REASON[1];
+			if (process.GetDebugReason(reason) != VSConstants.S_OK)
 				return enum_DEBUG_REASON.DEBUG_REASON_ERROR;
 
-			return (enum_DEBUG_REASON) reason;
+			return reason[0];
 		}
 
 		public static string GetFilename(this IDebugProcess2 process)
@@ -22,7 +22,7 @@ namespace ReAttach.Extensions
 			if (process == null)
 				return string.Empty;
 			var name = "";
-			if (process.GetName((uint)enum_GETNAME_TYPE.GN_FILENAME, out name) != VSConstants.S_OK)
+			if (process.GetName(enum_GETNAME_TYPE.GN_FILENAME, out name) != VSConstants.S_OK)
 				return string.Empty;
 			return name;
 		}

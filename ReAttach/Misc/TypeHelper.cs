@@ -84,7 +84,7 @@ namespace ReAttach.Misc
 			if (o is IDebugProcessCreateEvent2) result += " IDebugProcessCreateEvent2";
 			if (o is IDebugProcessDestroyEvent2) result += " IDebugProcessDestroyEvent2";
 			if (o is IDebugProcessEx2) result += " IDebugProcessEx2";
-			if (o is IDebugProcessQueryProperties) result += " IDebugProcessQueryProperties";
+			// if (o is IDebugProcessQueryProperties) result += " IDebugProcessQueryProperties";
 			if (o is IDebugProgram2) result += " IDebugProgram2";
 			if (o is IDebugProgram3) result += " IDebugProgram3";
 			if (o is IDebugProgramCreateEvent2) result += " IDebugProgramCreateEvent2";
@@ -92,7 +92,7 @@ namespace ReAttach.Misc
 			if (o is IDebugProgramDestroyEventFlags2) result += " IDebugProgramDestroyEventFlags2";
 			if (o is IDebugProgramEngines2) result += " IDebugProgramEngines2";
 			if (o is IDebugProgramEx2) result += " IDebugProgramEx2";
-			if (o is IDebugProgramHost2) result += " IDebugProgramHost2";
+			// if (o is IDebugProgramHost2) result += " IDebugProgramHost2";
 			if (o is IDebugProgramNameChangedEvent2) result += " IDebugProgramNameChangedEvent2";
 			if (o is IDebugProgramNode2) result += " IDebugProgramNode2";
 			if (o is IDebugProgramNodeAttach2) result += " IDebugProgramNodeAttach2";
@@ -103,7 +103,7 @@ namespace ReAttach.Misc
 			if (o is IDebugPropertyCreateEvent2) result += " IDebugPropertyCreateEvent2";
 			if (o is IDebugPropertyDestroyEvent2) result += " IDebugPropertyDestroyEvent2";
 			if (o is IDebugProviderProgramNode2) result += " IDebugProviderProgramNode2";
-			if (o is IDebugQueryEngine2) result += " IDebugQueryEngine2";
+			// if (o is IDebugQueryEngine2) result += " IDebugQueryEngine2";
 			if (o is IDebugReference2) result += " IDebugReference2";
 			if (o is IDebugReturnValueEvent2) result += " IDebugReturnValueEvent2";
 			if (o is IDebugSettingsCallback2) result += " IDebugSettingsCallback2";

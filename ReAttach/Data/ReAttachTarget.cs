@@ -20,14 +20,14 @@ namespace ReAttach.Data
 		{
 			try
 			{
-				ProcessName = Path.GetFileName(path);
+				ProcessName = Sanitize(Path.GetFileName(path));
 			}
 			catch
 			{
-				ProcessName = path;
+				ProcessName = Sanitize(path);
 			}
 			ProcessId = pid;
-			ProcessPath = path;
+			ProcessPath = Sanitize(path);
 			ProcessUser = user ?? "";
 			ServerName = serverName ?? "";
 			Engines = new List<Guid>();
@@ -57,7 +57,7 @@ namespace ReAttach.Data
 				string.Format("{0} ({1}@{2})", ProcessName, ProcessUser, ServerName);
 		}
 
-		private static string Sanitize(string str) 
+		public static string Sanitize(string str) 
 		{
 			if (string.IsNullOrEmpty(str)) return "";
 			return str.Replace(".vshost", "");

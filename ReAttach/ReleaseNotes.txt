@@ -1,10 +1,13 @@
 ﻿
 Version 2.1
-===============================================================================
+=============================================
 * Bugfixes
 
+Known issues:
+* Remote (no authentication) support.
+
 Version 2.0
-===============================================================================
+=============================================
 New features:
 * Stores debug engines used with targets.
 * Targets stored in registry as JSON instead of custom format.
@@ -13,11 +16,8 @@ New features:
 Fixed issues:
 * Sometimes, first reattach failes to record. 
 
-Known issues:
-* Remote (no authentication) support.
-
 Version 1.1
-===============================================================================
+=============================================
 New features:
 * Better UI support.
 * Multiple targets.
@@ -29,13 +29,11 @@ Bugfixes:
 * Minor fixes, UAC support etc.
 
 Version 1.0
-===============================================================================
+=============================================
 Initial release. 
 
-
 Future work
-===============================================================================
-* Native (VsDebugger) instead of slower DTE automation objects.
+=============================================
 * Proper support for remote debugging (Transports, Protocols, Qualifiers etc).
 * Auto-reattach upon Rebuild?
 * Auto-attach on process start / restart

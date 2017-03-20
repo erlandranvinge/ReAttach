@@ -165,20 +165,15 @@ namespace ReAttach
 			{
 				var transport = _dteDebugger.Transports.Item("Default");
 				var processes = _dteDebugger.GetProcesses(transport, target.ServerName).OfType<Process3>();
-				candidates = processes.Where(p => p.Name == target.ProcessPath).ToList();
+				candidates = processes.Where(p => ReAttachProcessComparer.CompareRemoteProcess(p, target)).ToList();
 			}
 			else
 			{
 				var processes = _dteDebugger.LocalProcesses.OfType<Process3>();
-				candidates = processes.Where(p =>
-					p.Name == target.ProcessPath &&
-					p.UserName == target.ProcessUser).ToList();
-
+				candidates = processes.Where(p => ReAttachProcessComparer.CompareProcess(p, target)).ToList();
 				if (!candidates.Any()) // Do matching on processes running in exclusive mode.
 				{
-					candidates = processes.Where(p =>
-						p.Name == target.ProcessName &&
-						string.IsNullOrEmpty(p.UserName)).ToList();
+					candidates = processes.Where(p => ReAttachProcessComparer.CompareExclusiveProcess(p, target)).ToList();
 				}
 			}
 
