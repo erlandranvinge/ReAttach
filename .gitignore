@@ -4,6 +4,7 @@
 [Rr]elease/
 [Bb]in/
 [Oo]bj/
+[Pp]ackages/
 *.sln.cache
 *.suo
 *.csproj.user
