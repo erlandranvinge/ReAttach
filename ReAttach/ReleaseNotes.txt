@@ -1,4 +1,12 @@
 ﻿
+Version 2.3
+=============================================
+* Visual Studio 2019 support.
+
+Known issues:
+* Remote (no authentication) support.
+
+
 Version 2.1
 =============================================
 * Bugfixes
