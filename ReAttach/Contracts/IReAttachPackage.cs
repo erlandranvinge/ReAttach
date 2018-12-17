@@ -1,9 +1,8 @@
-﻿using System.ComponentModel.Design;
-using Microsoft.VisualStudio.OLE.Interop;
+﻿using Microsoft.VisualStudio.Shell;
 
 namespace ReAttach.Contracts
 {
-	public interface IReAttachPackage : IServiceContainer, IServiceProvider
+	public interface IReAttachPackage : IAsyncServiceContainer, IAsyncServiceProvider
 	{
 		IReAttachReporter Reporter { get; }
 		IReAttachHistory History { get;  }

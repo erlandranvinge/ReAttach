@@ -36,8 +36,8 @@ namespace ReAttach
 
 			Reporter = Reporter ?? new ReAttachTraceReporter();
 			History = History ?? new ReAttachHistory(new ReAttachRegistryRepository(this));
-			Ui = Ui ?? new ReAttachUi(this);
-			Debugger = Debugger ?? new ReAttachDebugger(this);
+			Ui = Ui ?? await ReAttachUi.InitAsync(this);
+			Debugger = Debugger ?? await ReAttachDebugger.InitAsync(this);
 
 			History.Load();
 			Ui.Update();

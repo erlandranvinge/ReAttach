@@ -6,6 +6,9 @@ using Microsoft.VisualStudio.Shell.Interop;
 using ReAttach.Contracts;
 using ReAttach.Dialogs;
 using EnvDTE80;
+using System.Threading.Tasks;
+using Microsoft.VisualStudio.Threading;
+using Task = System.Threading.Tasks.Task;
 
 namespace ReAttach
 {
@@ -15,20 +18,13 @@ namespace ReAttach
 		private readonly OleMenuCommand _buildToggleCommand;
 		public readonly OleMenuCommand[] Commands = new OleMenuCommand[ReAttachConstants.ReAttachHistorySize];
 
-		public ReAttachUi(IReAttachPackage package)
+		private ReAttachUi(IReAttachPackage package, IMenuCommandService menuService)
 		{
 			_package = package;
-			var menuService = _package.GetService(typeof(IMenuCommandService)) as IMenuCommandService;
-			if (menuService == null)
-			{
-				_package.Reporter.ReportError("Can\'t obtain a reference to IMenuCommandService from ReAttachUI ctor.");
-				return;
-			}
-
 			for (var i = 0; i < ReAttachConstants.ReAttachHistorySize; i++)
 			{
 				var commandId = new CommandID(ReAttachConstants.ReAttachPackageCmdSet, ReAttachConstants.ReAttachCommandId + i);
-				var command = new OleMenuCommand(ReAttachCommandClicked, commandId);
+				var command = new OleMenuCommand(async (s, e) => await ReAttachCommandClickedAsync(s, e), commandId);
 				//command.BeforeQueryStatus += ReAttachCommandOnBeforeQueryStatus;
 				menuService.AddCommand(command);
 
@@ -45,6 +41,17 @@ namespace ReAttach
 			buildCommand.Checked = _package.History.Options.BuildBeforeReAttach;
 			menuService.AddCommand(buildCommand);
 			_buildToggleCommand = buildCommand;
+		}
+
+		public static async Task<ReAttachUi> InitAsync(IReAttachPackage package)
+		{
+			var menuService = await package.GetServiceAsync(typeof(IMenuCommandService)) as IMenuCommandService;
+			if (menuService == null)
+			{
+				package.Reporter.ReportError("Can\'t obtain a reference to IMenuCommandService from ReAttachUI ctor.");
+				return null;
+			}
+			return new ReAttachUi(package, menuService);
 		}
 
 		public void Update()
@@ -80,7 +87,7 @@ namespace ReAttach
 			}
 		}
 
-		public void ReAttachCommandClicked(object sender, EventArgs e)
+		public async Task ReAttachCommandClickedAsync(object sender, EventArgs e)
 		{
 			var command = sender as OleMenuCommand;
 			if (command == null)
@@ -96,7 +103,7 @@ namespace ReAttach
 				return;
 
 			if (_package.History.Options.BuildBeforeReAttach)
-				TryBuildSolution();
+				await TryBuildSolutionAsync();
 
 			if (!_package.Debugger.ReAttach(target))
 			{
@@ -112,19 +119,20 @@ namespace ReAttach
 			_buildToggleCommand.Checked = toggle;
 		}
 
-		public void TryBuildSolution()
+		public async Task TryBuildSolutionAsync()
 		{
+			await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
 			try
 			{
-				var dte = _package.GetService(typeof(SDTE)) as DTE2;
+				var dte = await _package.GetServiceAsync(typeof(SDTE)) as DTE2;
 				dte.Solution.SolutionBuild.Build(true);
 			}
 			catch (Exception) { }
 		}
 
-		public void MessageBox(string message)
+		public async System.Threading.Tasks.Task MessageBoxAsync(string message)
 		{
-			var uiShell = (IVsUIShell)_package.GetService(typeof(SVsUIShell));
+			var uiShell = await _package.GetServiceAsync(typeof(SVsUIShell)) as IVsUIShell;
 			var clsid = Guid.Empty;
 			int result;
 

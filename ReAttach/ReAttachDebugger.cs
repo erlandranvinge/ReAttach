@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
+using System.Threading.Tasks;
 using EnvDTE80;
 using EnvDTE90;
 using Microsoft.VisualStudio;
@@ -24,11 +25,11 @@ namespace ReAttach
 		private readonly Dictionary<Guid, string> _engines = new Dictionary<Guid, string>();
 		private bool _recording = false;
 
-		public ReAttachDebugger(IReAttachPackage package)
+		private ReAttachDebugger(IReAttachPackage package, IVsDebugger debugger, DTE2 dte)
 		{
 			_package = package;
-			_debugger = package.GetService(typeof(SVsShellDebugger)) as IVsDebugger;
-			_dte = _package.GetService(typeof(SDTE)) as DTE2;
+			_debugger = debugger;
+			_dte = dte;
 			if (_dte != null)
 				_dteDebugger = _dte.Debugger as Debugger2;
 
@@ -65,6 +66,13 @@ namespace ReAttach
 			{
 				_package.Reporter.ReportError("ReAttach was unable to detect debugging engines: {0}.", e.Message);
 			}
+		}
+
+		public static async Task<ReAttachDebugger> InitAsync(IReAttachPackage package)
+		{
+			var debugger = await package.GetServiceAsync(typeof(SVsShellDebugger)) as IVsDebugger;
+			var dte = await package.GetServiceAsync(typeof(SDTE)) as DTE2;
+			return new ReAttachDebugger(package, debugger, dte);
 		}
 
 		public int Event(IDebugEngine2 engine, IDebugProcess2 process, IDebugProgram2 program,

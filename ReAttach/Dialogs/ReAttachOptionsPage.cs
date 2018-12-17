@@ -12,16 +12,15 @@ namespace ReAttach.Dialogs
         protected override void OnActivate(CancelEventArgs e)
         {
             base.OnActivate(e);
-            if (_control != null) _control.Reset();
+	        _control?.Reset();
         }
 
         protected override IWin32Window Window
         {
             get
             {
-                _control = new ReAttachOptionsControl();
-                _control.OptionsPage = this;
-                return _control;
+	            _control = new ReAttachOptionsControl {OptionsPage = this};
+	            return _control;
             }
         }  
     }

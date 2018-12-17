@@ -11,6 +11,7 @@ namespace ReAttach.Misc
 	{
 		public static void PrintToOutputPane(string paneName, string message)
 		{
+			
 			var dte = Package.GetGlobalService(typeof(SDTE)) as DTE2;
 			if (dte == null)
 				return;

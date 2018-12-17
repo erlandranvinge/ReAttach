@@ -1,11 +1,12 @@
 ﻿using System;
+using System.Threading.Tasks;
 
 namespace ReAttach.Contracts
 {
 	public interface IReAttachUi
 	{
 		void Update();
-		void ReAttachCommandClicked(object sender, EventArgs e);
-		void MessageBox(string message);
+		Task ReAttachCommandClickedAsync(object sender, EventArgs e);
+		Task MessageBoxAsync(string message);
 	}
 }
