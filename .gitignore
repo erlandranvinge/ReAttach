@@ -5,6 +5,7 @@
 [Bb]in/
 [Oo]bj/
 [Pp]ackages/
+.vs/
 *.sln.cache
 *.suo
 *.csproj.user
@@ -21,3 +22,4 @@ Ankh.NoLoad
 # Resharper
 *[Rr]e[Ss]harper.user
 _ReSharper.*/
+

@@ -5,19 +5,20 @@ using System;
 using System.ComponentModel.Design;
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.InteropServices;
+using System.Threading.Tasks;
 using Microsoft.VisualStudio;
-using Microsoft.VisualStudio.Shell;
+using VS = Microsoft.VisualStudio.Shell;
 
 namespace ReAttach
 {
 	[Guid(ReAttachConstants.ReAttachPackageGuidString)]
-	[PackageRegistration(UseManagedResourcesOnly = true)]
-	[InstalledProductRegistration("#110", "#112", "2.2", IconResourceID = 400)] // Info on this package for Help/About
+	[VS.PackageRegistration(UseManagedResourcesOnly = true, AllowsBackgroundLoading = true)]
+	[VS.InstalledProductRegistration("#110", "#112", "2.3", IconResourceID = 400)] // Info on this package for Help/About
 	[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "pkgdef, VS and vsixmanifest are valid VS terms")]
-	[ProvideMenuResource("Menus.ctmenu", 1)]
-	[ProvideOptionPage(typeof(Dialogs.ReAttachOptionsPage), "ReAttach", "General", 0, 0, true)]
-	[ProvideAutoLoad(VSConstants.UICONTEXT.NoSolution_string)]
-	public sealed class ReAttachPackage : Package, IReAttachPackage
+	[VS.ProvideMenuResource("Menus.ctmenu", 1)]
+	[VS.ProvideOptionPage(typeof(Dialogs.ReAttachOptionsPage), "ReAttach", "General", 0, 0, true)]
+	[VS.ProvideAutoLoad(VSConstants.UICONTEXT.NoSolution_string, VS.PackageAutoLoadFlags.BackgroundLoad)]
+	public sealed class ReAttachPackage : VS.AsyncPackage, IReAttachPackage
 	{
 		public IReAttachReporter Reporter { get; private set; }
 		public IReAttachHistory History { get; private set; }
@@ -29,9 +30,10 @@ namespace ReAttach
 			Reporter = Reporter ?? new ReAttachTraceReporter();
 		}
 
-		protected override void Initialize()
+		protected override async Task InitializeAsync(System.Threading.CancellationToken cancellationToken, IProgress<VS.ServiceProgressData> progress)
 		{
-			base.Initialize();
+			await base.InitializeAsync(cancellationToken, progress);
+
 			Reporter = Reporter ?? new ReAttachTraceReporter();
 			History = History ?? new ReAttachHistory(new ReAttachRegistryRepository(this));
 			Ui = Ui ?? new ReAttachUi(this);
@@ -46,9 +48,7 @@ namespace ReAttach
 
 		private object CreateBusService(IServiceContainer container, Type serviceType)
 		{
-			if (typeof(IReAttachBusService) == serviceType)
-				return new ReAttachBusService(this);
-			return null;
+			return typeof(IReAttachBusService) == serviceType ? new ReAttachBusService(this) : null;
 		}
 
 		public IRegistryKey OpenUserRegistryRoot()
