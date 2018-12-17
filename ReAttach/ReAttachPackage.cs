@@ -32,6 +32,7 @@ namespace ReAttach
 
 		protected override async Task InitializeAsync(System.Threading.CancellationToken cancellationToken, IProgress<VS.ServiceProgressData> progress)
 		{
+			await JoinableTaskFactory.SwitchToMainThreadAsync(cancellationToken);
 			await base.InitializeAsync(cancellationToken, progress);
 
 			Reporter = Reporter ?? new ReAttachTraceReporter();

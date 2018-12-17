@@ -7,6 +7,7 @@ using EnvDTE80;
 using EnvDTE90;
 using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.Debugger.Interop;
+using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
 using ReAttach.Contracts;
 using ReAttach.Data;
@@ -33,10 +34,9 @@ namespace ReAttach
 			if (_dte != null)
 				_dteDebugger = _dte.Debugger as Debugger2;
 
-			if (_package == null || _debugger == null || _dte == null || _dteDebugger == null)
+			if (_debugger == null || _dte == null || _dteDebugger == null)
 			{
-				_package.Reporter.ReportError(
-					"Unable to get required services for ReAttachDebugger in ctor.");
+				_package.Reporter.ReportError("Unable to get required services for ReAttachDebugger in ctor.");
 				return;
 			}
 
@@ -70,6 +70,7 @@ namespace ReAttach
 
 		public static async Task<ReAttachDebugger> InitAsync(IReAttachPackage package)
 		{
+			await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
 			var debugger = await package.GetServiceAsync(typeof(SVsShellDebugger)) as IVsDebugger;
 			var dte = await package.GetServiceAsync(typeof(SDTE)) as DTE2;
 			return new ReAttachDebugger(package, debugger, dte);

@@ -9,9 +9,9 @@ namespace ReAttach.Misc
 	[ExcludeFromCodeCoverage]
 	internal static class DebugHelper
 	{
-		public static void PrintToOutputPane(string paneName, string message)
+		public static async System.Threading.Tasks.Task PrintToOutputPaneAsync(string paneName, string message)
 		{
-			
+			await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
 			var dte = Package.GetGlobalService(typeof(SDTE)) as DTE2;
 			if (dte == null)
 				return;

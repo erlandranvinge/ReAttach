@@ -45,6 +45,7 @@ namespace ReAttach
 
 		public static async Task<ReAttachUi> InitAsync(IReAttachPackage package)
 		{
+		
 			var menuService = await package.GetServiceAsync(typeof(IMenuCommandService)) as IMenuCommandService;
 			if (menuService == null)
 			{
@@ -125,17 +126,21 @@ namespace ReAttach
 			try
 			{
 				var dte = await _package.GetServiceAsync(typeof(SDTE)) as DTE2;
+				if (dte == null) throw new ArgumentNullException(nameof(dte));
+
 				dte.Solution.SolutionBuild.Build(true);
 			}
 			catch (Exception) { }
 		}
 
-		public async System.Threading.Tasks.Task MessageBoxAsync(string message)
+		public async Task MessageBoxAsync(string message)
 		{
+			await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
 			var uiShell = await _package.GetServiceAsync(typeof(SVsUIShell)) as IVsUIShell;
-			var clsid = Guid.Empty;
-			int result;
+			if (uiShell == null)
+				return;
 
+			var clsid = Guid.Empty;
 			uiShell.ShowMessageBox(
 				0,
 				ref clsid,
@@ -147,7 +152,7 @@ namespace ReAttach
 				OLEMSGDEFBUTTON.OLEMSGDEFBUTTON_FIRST,
 				OLEMSGICON.OLEMSGICON_INFO,
 				0, // false
-				out result);
+				out int result);
 		}
 	}
 }

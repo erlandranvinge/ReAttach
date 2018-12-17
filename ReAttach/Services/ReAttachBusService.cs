@@ -14,7 +14,7 @@ namespace ReAttach.Services
     [Guid("37A00D3E-073E-4F5C-801F-92F763729099")]
     public class ReAttachBusService : IReAttachBusService
     {
-        IReAttachPackage _package;
+	    readonly IReAttachPackage _package;
 
         public ReAttachBusService(IReAttachPackage package)
         {
