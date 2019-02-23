@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.Design;
 using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
@@ -14,9 +15,9 @@ namespace ReAttach.Tests.UnitTests
 		private readonly ReAttachMocks _mocks = new ReAttachMocks();
 
 		[TestMethod]
-		public void UiInitializationTest()
+		public async System.Threading.Tasks.Task UiInitializationTest()
 		{
-			var ui = new ReAttachUi(_mocks.MockReAttachPackage.Object);
+			var ui = await ReAttachUi.InitAsync(_mocks.MockReAttachPackage.Object);
 			_mocks.MockMenuService.Verify(m => m.AddCommand(It.IsAny<MenuCommand>()), 
 				Times.Exactly(ReAttachConstants.ReAttachHistorySize));
 			Assert.AreEqual(0, _mocks.MockReAttachReporter.ErrorCount, "Unexpected number of ReAttach errors.");
@@ -24,10 +25,10 @@ namespace ReAttach.Tests.UnitTests
 		}
 		
 		[TestMethod]
-		public void ReAttachCommandClickedEmptyHistory()
+		public async System.Threading.Tasks.Task ReAttachCommandClickedEmptyHistory()
 		{
-			var ui = new ReAttachUi(_mocks.MockReAttachPackage.Object);
-			ui.ReAttachCommandClicked(new OleMenuCommand((sender, args) => {}, 
+			var ui = await ReAttachUi.InitAsync(_mocks.MockReAttachPackage.Object);
+			await ui.ReAttachCommandClickedAsync(new OleMenuCommand((sender, args) => {}, 
 				new CommandID(ReAttachConstants.ReAttachPackageCmdSet, ReAttachConstants.ReAttachCommandId)), null);
 
 			_mocks.MockReAttachDebugger.Verify(d => d.ReAttach(It.IsAny<ReAttachTarget>()), Times.Never());
@@ -36,9 +37,9 @@ namespace ReAttach.Tests.UnitTests
 		}
 
 		[TestMethod]
-		public void WillDoReAttachIfHistoryItemsArePresent()
+		public async System.Threading.Tasks.Task WillDoReAttachIfHistoryItemsArePresent()
 		{
-			var ui = new ReAttachUi(_mocks.MockReAttachPackage.Object);
+			var ui = await ReAttachUi.InitAsync(_mocks.MockReAttachPackage.Object);
 			_mocks.MockReAttachDebugger.Setup(d => d.ReAttach(It.IsAny<ReAttachTarget>())).Returns(true);
 
 			for (var i = 1; i < 5; i++)
@@ -47,7 +48,7 @@ namespace ReAttach.Tests.UnitTests
 
 			var id = new CommandID(ReAttachConstants.ReAttachPackageCmdSet, ReAttachConstants.ReAttachCommandId + 3);
 			var command = new OleMenuCommand((sender, args) => { }, id);
-			ui.ReAttachCommandClicked(command, null);
+			await ui.ReAttachCommandClickedAsync(command, null);
 
 			_mocks.MockReAttachDebugger.Verify(d => d.ReAttach(_mocks.MockReAttachHistoryItems[3]), Times.Once());
 
@@ -56,15 +57,15 @@ namespace ReAttach.Tests.UnitTests
 		}
 
 		[TestMethod]
-		public void NoDialogShownWhenTargetIsAlreadyRunning()
+		public async System.Threading.Tasks.Task NoDialogShownWhenTargetIsAlreadyRunning()
 		{
-			var ui = new ReAttachUi(_mocks.MockReAttachPackage.Object);
+			var ui = await ReAttachUi.InitAsync(_mocks.MockReAttachPackage.Object);
 			_mocks.MockReAttachDebugger.Setup(d => d.ReAttach(It.IsAny<ReAttachTarget>())).Returns(true);
 			_mocks.MockReAttachHistoryItems.AddFirst(new ReAttachTarget(123, "path", "user"));
 
 			var id = new CommandID(ReAttachConstants.ReAttachPackageCmdSet, ReAttachConstants.ReAttachCommandId);
 			var command = new OleMenuCommand((sender, args) => { }, id);
-			ui.ReAttachCommandClicked(command, null);
+			await ui.ReAttachCommandClickedAsync(command, null);
 
 			_mocks.MockReAttachDebugger.Verify(d => d.ReAttach(It.IsAny<ReAttachTarget>()), Times.Once());
 			Assert.AreEqual(0, _mocks.MockReAttachReporter.ErrorCount, "Unexpected number of ReAttach errors.");
@@ -72,9 +73,9 @@ namespace ReAttach.Tests.UnitTests
 		}
 
 		[TestMethod]
-		public void CommandsShouldBeVisibleIfTheirInHistoryAndNotAttached()
+		public async System.Threading.Tasks.Task CommandsShouldBeVisibleIfTheirInHistoryAndNotAttached()
 		{
-			var ui = new ReAttachUi(_mocks.MockReAttachPackage.Object);
+			var ui = await ReAttachUi.InitAsync(_mocks.MockReAttachPackage.Object);
 			_mocks.MockReAttachDebugger.Setup(d => d.ReAttach(It.IsAny<ReAttachTarget>())).Returns(true);
 			for (var i = 1; i <= 3; i++)
 				_mocks.MockReAttachHistoryItems.AddFirst(new ReAttachTarget(123, "name" + i, "user" + i));

@@ -52,9 +52,9 @@ namespace ReAttach.Tests.Mocks
 
 			// Wire up all services and modules.
 			MockReAttachPackage = new Mock<IReAttachPackage>(behavior);
-			MockReAttachPackage.Setup(p => p.GetService(typeof(IMenuCommandService))).Returns(MockMenuService.Object);
-			MockReAttachPackage.Setup(p => p.GetService(typeof(SVsShellDebugger))).Returns(MockDebugger.Object);
-			MockReAttachPackage.Setup(p => p.GetService(typeof(SDTE))).Returns(MockDTE.Object);
+			MockReAttachPackage.Setup(p => p.GetServiceAsync(typeof(IMenuCommandService))).ReturnsAsync(MockMenuService.Object);
+			MockReAttachPackage.Setup(p => p.GetServiceAsync(typeof(SVsShellDebugger))).ReturnsAsync(MockDebugger.Object);
+			MockReAttachPackage.Setup(p => p.GetServiceAsync(typeof(SDTE))).ReturnsAsync(MockDTE.Object);
 			MockReAttachPackage.Setup(p => p.Reporter).Returns(MockReAttachReporter);
 			MockReAttachPackage.Setup(p => p.Ui).Returns(MockReAttachUi.Object);
 			MockReAttachPackage.Setup(p => p.History).Returns(MockReAttachHistory.Object);

@@ -14,13 +14,13 @@ namespace ReAttach.Tests.UnitTests
 		public void GetReasonTest()
 		{
 			var process = new Mock<IDebugProcess3>();
-			var expectedReason = (uint)enum_DEBUG_REASON.DEBUG_REASON_USER_ATTACHED;
+			var expectedReasons = new[] { enum_DEBUG_REASON.DEBUG_REASON_USER_ATTACHED };
 
-			process.Setup(p => p.GetDebugReason(out expectedReason)).Returns(VSConstants.S_OK);
+			process.Setup(p => p.GetDebugReason(expectedReasons)).Returns(VSConstants.S_OK);
 			var reason1 = process.Object.GetReason();
-			Assert.AreEqual((enum_DEBUG_REASON)expectedReason, reason1, "Wrong reason returned.");
+			Assert.AreEqual(expectedReasons[0], reason1, "Wrong reason returned.");
 
-			process.Setup(p => p.GetDebugReason(out expectedReason)).Returns(VSConstants.S_FALSE);
+			process.Setup(p => p.GetDebugReason(expectedReasons)).Returns(VSConstants.S_FALSE);
 			var reason2 = process.Object.GetReason();
 
 			Assert.AreEqual(enum_DEBUG_REASON.DEBUG_REASON_ERROR, reason2, "Wrong reason returned, should be an error.");
@@ -32,12 +32,12 @@ namespace ReAttach.Tests.UnitTests
 			var process = new Mock<IDebugProcess2>();
 			var expectedName = "cmd.exe";
 
-			process.Setup(p => p.GetName((uint)enum_GETNAME_TYPE.GN_FILENAME, out expectedName)).Returns(VSConstants.S_OK);
+			process.Setup(p => p.GetName(enum_GETNAME_TYPE.GN_FILENAME, out expectedName)).Returns(VSConstants.S_OK);
 
 			var result1 = process.Object.GetFilename();
 			Assert.AreEqual(expectedName, result1, "Invalid filename returned.");
 
-			process.Setup(p => p.GetName(It.IsAny<uint>(), out expectedName)).Returns(VSConstants.S_FALSE);
+			process.Setup(p => p.GetName(It.IsAny<enum_GETNAME_TYPE>(), out expectedName)).Returns(VSConstants.S_FALSE);
 			var result2 = process.Object.GetFilename();
 			Assert.AreEqual(string.Empty, result2, "Non empty filename returned even though internal function failed.");
 		}
