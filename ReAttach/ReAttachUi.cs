@@ -24,7 +24,7 @@ namespace ReAttach
 			for (var i = 0; i < ReAttachConstants.ReAttachHistorySize; i++)
 			{
 				var commandId = new CommandID(ReAttachConstants.ReAttachPackageCmdSet, ReAttachConstants.ReAttachCommandId + i);
-				var command = new OleMenuCommand(async (s, e) => await ReAttachCommandClickedAsync(s, e), commandId);
+				var command = new OleMenuCommand(async (s, e) => await ReAttachCommandClickedAsync(s, e).ConfigureAwait(true), commandId);
 				//command.BeforeQueryStatus += ReAttachCommandOnBeforeQueryStatus;
 				menuService.AddCommand(command);
 
