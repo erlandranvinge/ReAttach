@@ -16,11 +16,11 @@ namespace ReAttach.Tests.UnitTests
 			var process = new Mock<IDebugProcess3>();
 			var expectedReasons = new[] { enum_DEBUG_REASON.DEBUG_REASON_USER_ATTACHED };
 
-			process.Setup(p => p.GetDebugReason(expectedReasons)).Returns(VSConstants.S_OK);
+			process.Setup(p => p.GetDebugReason(It.IsAny<enum_DEBUG_REASON[]>())).Returns(VSConstants.S_OK);
 			var reason1 = process.Object.GetReason();
 			Assert.AreEqual(expectedReasons[0], reason1, "Wrong reason returned.");
 
-			process.Setup(p => p.GetDebugReason(expectedReasons)).Returns(VSConstants.S_FALSE);
+			process.Setup(p => p.GetDebugReason(It.IsAny<enum_DEBUG_REASON[]>())).Returns(VSConstants.S_FALSE);
 			var reason2 = process.Object.GetReason();
 
 			Assert.AreEqual(enum_DEBUG_REASON.DEBUG_REASON_ERROR, reason2, "Wrong reason returned, should be an error.");
