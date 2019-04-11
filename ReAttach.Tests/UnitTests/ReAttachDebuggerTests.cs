@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.Debugger.Interop;
+using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using ReAttach.Data;
@@ -16,7 +17,7 @@ namespace ReAttach.Tests.UnitTests
 		private readonly ReAttachMocks _mocks = new ReAttachMocks();
 		
 		[TestMethod]
-		public async Task InvalidTargetTest()
+		public async System.Threading.Tasks.Task InvalidTargetTest()
 		{
 			var debugger = await ReAttachDebugger.InitAsync(_mocks.MockReAttachPackage.Object);
 			Assert.IsFalse(debugger.ReAttach(null));
@@ -26,7 +27,7 @@ namespace ReAttach.Tests.UnitTests
 		}
 
 		[TestMethod]
-		public async Task ReAttachNoCandidatesTest()
+		public async System.Threading.Tasks.Task ReAttachNoCandidatesTest()
 		{
 			var debugger = await ReAttachDebugger.InitAsync(_mocks.MockReAttachPackage.Object);
 			Assert.IsFalse(debugger.ReAttach(new ReAttachTarget(123, "not-name1", "user1")));
@@ -37,7 +38,7 @@ namespace ReAttach.Tests.UnitTests
 		}
 
 		[TestMethod]
-		public async Task ReAttachHighestPidTest()
+		public async System.Threading.Tasks.Task ReAttachHighestPidTest()
 		{
 			var debugger = await ReAttachDebugger.InitAsync(_mocks.MockReAttachPackage.Object);
 			Assert.IsTrue(debugger.ReAttach(new ReAttachTarget(5, "name1", "user1")));
@@ -47,7 +48,7 @@ namespace ReAttach.Tests.UnitTests
 		}
 
 		[TestMethod]
-		public async Task ReAttachExactPidTest()
+		public async System.Threading.Tasks.Task ReAttachExactPidTest()
 		{
 			var debugger = await ReAttachDebugger.InitAsync(_mocks.MockReAttachPackage.Object);
 			Assert.IsTrue(debugger.ReAttach(new ReAttachTarget(1, "name1", "user1")));
@@ -57,7 +58,7 @@ namespace ReAttach.Tests.UnitTests
 		}
 
 		[TestMethod]
-		public async Task ReAttachAttachFailsTest()
+		public async System.Threading.Tasks.Task ReAttachAttachFailsTest()
 		{
 			var debugger = await ReAttachDebugger.InitAsync(_mocks.MockReAttachPackage.Object);
 			_mocks.MockProcessList[0].Setup(p => p.Attach()).Throws(new Exception("I'm failing. For testing purposes. :)"));
@@ -67,7 +68,7 @@ namespace ReAttach.Tests.UnitTests
 		}
 
 		[TestMethod]
-		public async Task ReAttachRemoteTest()
+		public async System.Threading.Tasks.Task ReAttachRemoteTest()
 		{
 			var debugger = await ReAttachDebugger.InitAsync(_mocks.MockReAttachPackage.Object);
 			Assert.IsTrue(debugger.ReAttach(new ReAttachTarget(1, "name1", "user1", "server1")));
@@ -77,7 +78,7 @@ namespace ReAttach.Tests.UnitTests
 		}
 
 		[TestMethod]
-		public async Task ReAttachRemoteNotFoundTest()
+		public async System.Threading.Tasks.Task ReAttachRemoteNotFoundTest()
 		{
 			// TODO: Find out what happens with GetProcesses when machine is down.
 			var debugger = await ReAttachDebugger.InitAsync(_mocks.MockReAttachPackage.Object);
@@ -90,7 +91,7 @@ namespace ReAttach.Tests.UnitTests
 		}
 
 		[TestMethod]
-		public async Task RecordAttachTest()
+		public async System.Threading.Tasks.Task RecordAttachTest()
 		{
 			var debugger = await ReAttachDebugger.InitAsync(_mocks.MockReAttachPackage.Object);
 			_mocks.MockReAttachUi.Setup(ui => ui.Update()); 
@@ -122,7 +123,7 @@ namespace ReAttach.Tests.UnitTests
 		}
 
 		[TestMethod]
-		public async Task RecordRemoteAttachTest()
+		public async System.Threading.Tasks.Task RecordRemoteAttachTest()
 		{
 			var debugger = await ReAttachDebugger.InitAsync(_mocks.MockReAttachPackage.Object);
 			_mocks.MockReAttachUi.Setup(ui => ui.Update());
