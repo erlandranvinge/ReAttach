@@ -1,11 +1,11 @@
 ﻿using System.ComponentModel.Design;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using ReAttach.Data;
 using ReAttach.Tests.Mocks;
+using VsShell = Microsoft.VisualStudio.Shell;
 
 namespace ReAttach.Tests.UnitTests
 {
@@ -15,7 +15,7 @@ namespace ReAttach.Tests.UnitTests
 		private readonly ReAttachMocks _mocks = new ReAttachMocks();
 
 		[TestMethod]
-		public async System.Threading.Tasks.Task UiInitializationTest()
+		public async Task UiInitializationTest()
 		{
 			var ui = await ReAttachUi.InitAsync(_mocks.MockReAttachPackage.Object);
 			_mocks.MockMenuService.Verify(m => m.AddCommand(It.IsAny<MenuCommand>()), 
@@ -25,10 +25,10 @@ namespace ReAttach.Tests.UnitTests
 		}
 		
 		[TestMethod]
-		public async System.Threading.Tasks.Task ReAttachCommandClickedEmptyHistory()
+		public async Task ReAttachCommandClickedEmptyHistory()
 		{
 			var ui = await ReAttachUi.InitAsync(_mocks.MockReAttachPackage.Object);
-			await ui.ReAttachCommandClickedAsync(new OleMenuCommand((sender, args) => {}, 
+			await ui.ReAttachCommandClickedAsync(new VsShell.OleMenuCommand((sender, args) => {}, 
 				new CommandID(ReAttachConstants.ReAttachPackageCmdSet, ReAttachConstants.ReAttachCommandId)), null);
 
 			_mocks.MockReAttachDebugger.Verify(d => d.ReAttach(It.IsAny<ReAttachTarget>()), Times.Never());
@@ -37,7 +37,7 @@ namespace ReAttach.Tests.UnitTests
 		}
 
 		[TestMethod]
-		public async System.Threading.Tasks.Task WillDoReAttachIfHistoryItemsArePresent()
+		public async Task WillDoReAttachIfHistoryItemsArePresent()
 		{
 			var ui = await ReAttachUi.InitAsync(_mocks.MockReAttachPackage.Object);
 			_mocks.MockReAttachDebugger.Setup(d => d.ReAttach(It.IsAny<ReAttachTarget>())).Returns(true);
@@ -47,7 +47,7 @@ namespace ReAttach.Tests.UnitTests
 			Assert.AreEqual(1, _mocks.MockReAttachHistoryItems[0].ProcessId, "Wrong target on top of ReAttach list.");
 
 			var id = new CommandID(ReAttachConstants.ReAttachPackageCmdSet, ReAttachConstants.ReAttachCommandId + 3);
-			var command = new OleMenuCommand((sender, args) => { }, id);
+			var command = new VsShell.OleMenuCommand((sender, args) => { }, id);
 			await ui.ReAttachCommandClickedAsync(command, null);
 
 			_mocks.MockReAttachDebugger.Verify(d => d.ReAttach(_mocks.MockReAttachHistoryItems[3]), Times.Once());
@@ -57,14 +57,14 @@ namespace ReAttach.Tests.UnitTests
 		}
 
 		[TestMethod]
-		public async System.Threading.Tasks.Task NoDialogShownWhenTargetIsAlreadyRunning()
+		public async Task NoDialogShownWhenTargetIsAlreadyRunning()
 		{
 			var ui = await ReAttachUi.InitAsync(_mocks.MockReAttachPackage.Object);
 			_mocks.MockReAttachDebugger.Setup(d => d.ReAttach(It.IsAny<ReAttachTarget>())).Returns(true);
 			_mocks.MockReAttachHistoryItems.AddFirst(new ReAttachTarget(123, "path", "user"));
 
 			var id = new CommandID(ReAttachConstants.ReAttachPackageCmdSet, ReAttachConstants.ReAttachCommandId);
-			var command = new OleMenuCommand((sender, args) => { }, id);
+			var command = new VsShell.OleMenuCommand((sender, args) => { }, id);
 			await ui.ReAttachCommandClickedAsync(command, null);
 
 			_mocks.MockReAttachDebugger.Verify(d => d.ReAttach(It.IsAny<ReAttachTarget>()), Times.Once());
@@ -73,7 +73,7 @@ namespace ReAttach.Tests.UnitTests
 		}
 
 		[TestMethod]
-		public async System.Threading.Tasks.Task CommandsShouldBeVisibleIfTheirInHistoryAndNotAttached()
+		public async Task CommandsShouldBeVisibleIfTheirInHistoryAndNotAttached()
 		{
 			var ui = await ReAttachUi.InitAsync(_mocks.MockReAttachPackage.Object);
 			_mocks.MockReAttachDebugger.Setup(d => d.ReAttach(It.IsAny<ReAttachTarget>())).Returns(true);
