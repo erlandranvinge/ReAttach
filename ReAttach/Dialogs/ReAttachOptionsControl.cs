@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ReAttach.Services;
+using System;
 using System.Windows.Forms;
 
 namespace ReAttach.Dialogs
@@ -14,20 +15,17 @@ namespace ReAttach.Dialogs
 
         public void Reset()
         {
-		/*
             var bus = OptionsPage.Site.GetService(typeof(IReAttachBusService)) as IReAttachBusService;
             if (bus == null) return;
             clearButton.Enabled = bus.GetReAttachHistorySize() > 0;
-			*/
         }
 
         private void clearButton_Click(object sender, EventArgs e)
         {
-		/*
             var bus = OptionsPage.Site.GetService(typeof(IReAttachBusService)) as IReAttachBusService;
             if (bus == null) return;
             bus.ClearReAttachHistory();
-            clearButton.Enabled = false;*/
+            clearButton.Enabled = false;
         }
     }
 }
