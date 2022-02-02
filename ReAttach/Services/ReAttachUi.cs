@@ -22,6 +22,8 @@ namespace ReAttach
         private OleMenuCommand[] _commands = new OleMenuCommand[ReAttachConstants.ReAttachHistorySize];
         private OleMenuCommand _buildToggleCommand;
 
+        private ReAttachDebugger _debugger;
+
         public async Task InitializeAsync(ReAttachPackage package, ReAttachHistory history, CancellationToken cancellationToken)
         {
             _package = package;
@@ -93,37 +95,50 @@ namespace ReAttach
 
         private void ReAttachCommandClicked(object sender, EventArgs e)
         {
-            ThreadHelper.JoinableTaskFactory.RunAsync(async () =>
+            var command = sender as OleMenuCommand;
+            if (command == null)
             {
-                var command = sender as OleMenuCommand;
-                if (command == null)
-                {
-                    ReAttachUtils.ShowError("ReAttach failed.", "Click was sent from non-ole command.");
-                    return;
-                }
+                ReAttachUtils.ShowError("ReAttach failed.", "Click was sent from non-ole command.");
+                return;
+            }
 
-                var index = command.CommandID.ID - ReAttachConstants.ReAttachCommandId;
-                var unAttachedTargets = _history.GetUnAttached();
-                var target = index < unAttachedTargets.Length ? unAttachedTargets[index] : null;
-                if (target == null)
-                    return;
+            var index = command.CommandID.ID - ReAttachConstants.ReAttachCommandId;
+            var unAttachedTargets = _history.GetUnAttached();
+            var target = index < unAttachedTargets.Length ? unAttachedTargets[index] : null;
+            if (target == null)
+                return;
 
-                if (_options.BuildBeforeReAttach)
-                    await TryBuildSolutionAsync();
+            if (_options.BuildBeforeReAttach)
+                TryBuildSolution();
 
-                var debugger = (await _package.GetServiceAsync(typeof(ReAttachDebugger))) as ReAttachDebugger;
-                if (debugger == null)
-                {
-                    ReAttachUtils.ShowError("ReAttach failed.", "Unable to obtain ref to debugger");
-                    return;
-                }
+            if (!EnsureDebuggerService())
+            {
+                ReAttachUtils.ShowError("ReAttach failed.", "Unable to obtain ref to debugger service.");
+                return;
+            }
 
-                if (!debugger.ReAttach(target))
-                {
-                    var dialog = new WaitingDialog(debugger, target);
-                    dialog.ShowModal();
-                }
-            }).FileAndForget("vs/reattach/reattach");
+            var result = _debugger.ReAttach(target);
+            if (result == ReAttachResult.NotStarted)
+            {
+                var dialog = new WaitingDialog(_debugger, target);
+                dialog.ShowModal();
+                result = dialog.Result;
+            }
+
+            switch (result)
+            {
+                case ReAttachResult.Success:
+                    break;
+                case ReAttachResult.ElevationRequired:
+                    ReAttachUtils.ShowElevationDialog();
+                    break;
+                case ReAttachResult.NotStarted:
+                    ReAttachUtils.ShowError("ReAttach failed.", "Process not started.");
+                    break;
+                case ReAttachResult.Failed:
+                    ReAttachUtils.ShowError("ReAttach failed.", "Failed reattaching to process.");
+                    break;
+            }
         }
 
         public void ReAttachToggleBuildClicked(object sender, EventArgs e)
@@ -137,20 +152,37 @@ namespace ReAttach
             _history.Clear();
             Update();
         }
-        private async Task TryBuildSolutionAsync()
+
+        private void TryBuildSolution()
         {
-            await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
-            try
+            ThreadHelper.JoinableTaskFactory.Run(async () =>
             {
+                await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
                 var dte = await _package.GetServiceAsync(typeof(SDTE)) as DTE2;
                 if (dte == null)
                 {
                     ReAttachUtils.ShowError("ReAttach failed", "Unable to rebuild solution before build.");
                     return;
                 }
-                dte.Solution.SolutionBuild.Build(true);
-            }
-            catch (Exception) { }
+                try
+                {
+                    dte.Solution.SolutionBuild.Build(true);
+                }
+                catch (Exception) { }
+            });
+        }
+
+        private bool EnsureDebuggerService()
+        {
+            if (_debugger != null)
+                return true;
+
+            ThreadHelper.JoinableTaskFactory.Run(async () =>
+            {
+                await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
+                _debugger = (await _package.GetServiceAsync(typeof(ReAttachDebugger))) as ReAttachDebugger;
+            });
+            return _debugger != null;
         }
     }
 }

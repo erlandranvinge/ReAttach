@@ -1,6 +1,5 @@
 ﻿using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.Shell;
-using Microsoft.VisualStudio.Shell.Interop;
 using ReAttach.Services;
 using ReAttach.Stores;
 using System;
@@ -14,7 +13,7 @@ namespace ReAttach
     [Guid(ReAttachConstants.ReAttachGuidString)]
     [ProvideAutoLoad(VSConstants.UICONTEXT.NoSolution_string, PackageAutoLoadFlags.BackgroundLoad)]
     [ProvideMenuResource("Menus.ctmenu", 1)]
-    [InstalledProductRegistration("#110", "#112", "2.4", IconResourceID = 400)] // Info on this package for Help/About
+    [InstalledProductRegistration("#110", "#112", "2.5", IconResourceID = 400)] // Info on this package for Help/About
     [ProvideOptionPage(typeof(Dialogs.ReAttachOptionsPage), "ReAttach", "General", 0, 0, true)]
     [ProvideService(typeof(ReAttachDebugger), IsAsyncQueryable = true)]
     [ProvideService(typeof(ReAttachUi), IsAsyncQueryable = true)]

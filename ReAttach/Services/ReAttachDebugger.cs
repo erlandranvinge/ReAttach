@@ -16,6 +16,14 @@ using ReAttach.Stores;
 
 namespace ReAttach.Services
 {
+    public enum ReAttachResult
+    {
+        Success,
+        NotStarted,
+        ElevationRequired,
+        Failed,
+    }
+
     public class ReAttachDebugger: IVsDebuggerEvents, IDebugEventCallback2
     {
         private ReAttachHistory _history;
@@ -126,10 +134,11 @@ namespace ReAttach.Services
             return VSConstants.S_OK;
         }
 
-        public bool ReAttach(ReAttachTarget target)
+        public ReAttachResult ReAttach(ReAttachTarget target)
         {
             if (target == null)
-                return false;
+                return ReAttachResult.Failed;
+
             List<Process3> candidates;
             if (!target.IsLocal)
             {
@@ -148,7 +157,7 @@ namespace ReAttach.Services
             }
 
             if (!candidates.Any())
-                return false;
+                return ReAttachResult.NotStarted;
 
             Process3 process = null; // First try to use the pid.
             if (target.ProcessId > 0)
@@ -162,7 +171,7 @@ namespace ReAttach.Services
             }
 
             if (process == null)
-                return false;
+                return ReAttachResult.NotStarted;
 
             try
             {
@@ -175,22 +184,17 @@ namespace ReAttach.Services
                 {
                     process.Attach();
                 }
-                return true;
+                return ReAttachResult.Success;
             }
-            catch (COMException e)
+            catch (COMException)
             {
-                ReAttachUtils.ShowError($"Unable to ReAttach to process {process.Name} ({process.ProcessID}) based on target {target}", e.Message);
-
-                // It's either this or returning this HRESULT to shell with Shell.ReportError method, shows UAC box btw.
-                const int E_ELEVATION_REQUIRED = unchecked((int)0x800702E4);
-                Marshal.ThrowExceptionForHR(E_ELEVATION_REQUIRED);
-                return false;
+                return ReAttachResult.ElevationRequired;
             }
             catch (Exception e)
             {
                 ReAttachUtils.ShowError($"Unable to ReAttach to process {process.Name} ({process.ProcessID}) based on target {target}", e.Message);
             }
-            return false;
+            return ReAttachResult.Failed;
         }
 
 

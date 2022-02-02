@@ -1,6 +1,6 @@
 ﻿using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
-using System;
+using System.Runtime.InteropServices;
 
 namespace ReAttach
 {
@@ -14,6 +14,12 @@ namespace ReAttach
 
         public static void ShowError(string caption, string message) =>
             MessageBox(caption, message, true);
+
+        public static void ShowElevationDialog()
+        {
+            const int E_ELEVATION_REQUIRED = unchecked((int)0x800702E4);
+            Marshal.ThrowExceptionForHR(E_ELEVATION_REQUIRED);
+        }
 
         private static void MessageBox(string caption, string message, bool error)
         {

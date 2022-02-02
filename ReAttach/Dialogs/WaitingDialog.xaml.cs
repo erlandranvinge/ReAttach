@@ -13,6 +13,8 @@ namespace ReAttach.Dialogs
 		private DispatcherTimer _timer = new DispatcherTimer();
 		private int _progress = 0;
 
+		public ReAttachResult Result { get; private set; }
+
 		public WaitingDialog(ReAttachDebugger debugger, ReAttachTarget target)
 		{
 			_debugger = debugger;
@@ -41,7 +43,9 @@ namespace ReAttach.Dialogs
 			var timer = (DispatcherTimer)sender;
 			timer.Stop();
 
-			if (_debugger.ReAttach(_target))
+			Result = _debugger.ReAttach(_target);
+			
+			if (Result != ReAttachResult.NotStarted)
 			{
 				Close();
 				return;
@@ -61,6 +65,7 @@ namespace ReAttach.Dialogs
 
 		private void CloseButtonClick(object sender, RoutedEventArgs e)
 		{
+			Result = ReAttachResult.Failed;
 			Close();
 		}
 
@@ -68,6 +73,7 @@ namespace ReAttach.Dialogs
 		{
 			if (_timer == null)
 				return;
+
 			_timer.Stop();
 			_timer = null;
 		}

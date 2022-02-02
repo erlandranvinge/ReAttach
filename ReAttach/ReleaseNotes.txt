@@ -1,5 +1,5 @@
 ﻿
-Version 2.4
+Version 2.5
 =============================================
 * Visual Studio 2022 support.
 * Ported to x64, use old binaries for older versions.
