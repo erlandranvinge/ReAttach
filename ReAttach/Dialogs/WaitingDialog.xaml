@@ -21,7 +21,7 @@
         <!--
         <TextBlock TextWrapping="Wrap" Margin="0,0,0,0">
             If the target process requires elevated permissions, Visual Studio might need to be restarted.</TextBlock> -->
-        <Button Width="100" Height="26" Click="CloseButtonClick" Content="_Cancel" 
+        <Button Width="100" Height="26" Click="CloseButtonClick" Content="_Cancel" IsCancel="true"
                 HorizontalAlignment="Center" Foreground="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
     </StackPanel>
 </ui:DialogWindow>
