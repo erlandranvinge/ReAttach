@@ -1,60 +1,54 @@
-﻿using ReAttach.Contracts;
-using ReAttach.Data;
+﻿using Microsoft.VisualStudio;
+using Microsoft.VisualStudio.Shell;
+using Microsoft.VisualStudio.Shell.Interop;
 using ReAttach.Services;
+using ReAttach.Stores;
 using System;
-using System.ComponentModel.Design;
-using System.Diagnostics.CodeAnalysis;
 using System.Runtime.InteropServices;
+using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.VisualStudio;
-using VS = Microsoft.VisualStudio.Shell;
 
 namespace ReAttach
 {
-	[Guid(ReAttachConstants.ReAttachPackageGuidString)]
-	[VS.PackageRegistration(UseManagedResourcesOnly = true, AllowsBackgroundLoading = true)]
-	[VS.InstalledProductRegistration("#110", "#112", "2.3", IconResourceID = 400)] // Info on this package for Help/About
-	[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "pkgdef, VS and vsixmanifest are valid VS terms")]
-	[VS.ProvideMenuResource("Menus.ctmenu", 1)]
-	[VS.ProvideOptionPage(typeof(Dialogs.ReAttachOptionsPage), "ReAttach", "General", 0, 0, true)]
-	[VS.ProvideAutoLoad(VSConstants.UICONTEXT.NoSolution_string, VS.PackageAutoLoadFlags.BackgroundLoad)]
-	public sealed class ReAttachPackage : VS.AsyncPackage, IReAttachPackage
-	{
-		public IReAttachReporter Reporter { get; private set; }
-		public IReAttachHistory History { get; private set; }
-		public IReAttachUi Ui { get; private set; }
-		public IReAttachDebugger Debugger { get; private set; }
+    [PackageRegistration(UseManagedResourcesOnly = true, AllowsBackgroundLoading = true)]
+    [Guid(ReAttachConstants.ReAttachGuidString)]
+    [ProvideAutoLoad(VSConstants.UICONTEXT.NoSolution_string, PackageAutoLoadFlags.BackgroundLoad)]
+    [ProvideMenuResource("Menus.ctmenu", 1)]
+    [InstalledProductRegistration("#110", "#112", "2.4", IconResourceID = 400)] // Info on this package for Help/About
+    [ProvideOptionPage(typeof(Dialogs.ReAttachOptionsPage), "ReAttach", "General", 0, 0, true)]
+    [ProvideService(typeof(ReAttachDebugger), IsAsyncQueryable = true)]
+    [ProvideService(typeof(ReAttachUi), IsAsyncQueryable = true)]
+    public sealed class ReAttachPackage : AsyncPackage
+    {
+        private ReAttachHistory _history;
 
-		public ReAttachPackage()
-		{
-			Reporter = Reporter ?? new ReAttachTraceReporter();
-		}
+        protected override async Task InitializeAsync(CancellationToken cancellationToken, IProgress<ServiceProgressData> progress)
+        {
+            ReAttachUtils.SetUp(this);
+            _history = new ReAttachHistory(this);
 
-		protected override async Task InitializeAsync(System.Threading.CancellationToken cancellationToken, IProgress<VS.ServiceProgressData> progress)
-		{
-			await JoinableTaskFactory.SwitchToMainThreadAsync(cancellationToken);
-			await base.InitializeAsync(cancellationToken, progress);
+            AddService(typeof(ReAttachDebugger), CreateReAttachDebuggerAsync);
+            AddService(typeof(ReAttachUi), CreateReAttachUiAsync);
 
-			Reporter = Reporter ?? new ReAttachTraceReporter();
-			History = History ?? new ReAttachHistory(new ReAttachRegistryRepository(this));
-			Ui = Ui ?? await ReAttachUi.InitAsync(this);
-			Debugger = Debugger ?? await ReAttachDebugger.InitAsync(this);
+            // This might be questionable, but time is short and initialization needed.
+            await JoinableTaskFactory.SwitchToMainThreadAsync(cancellationToken);
+            _ = await GetServiceAsync(typeof(ReAttachDebugger));
+            var ui = (await GetServiceAsync(typeof(ReAttachUi))) as ReAttachUi;
+            ui.Update();
+        }
 
-			History.Load();
-			Ui.Update();
+        private async Task<object> CreateReAttachDebuggerAsync(IAsyncServiceContainer container, CancellationToken cancellationToken, Type serviceType)
+        {
+            var service = new ReAttachDebugger();
+            await service.InitializeAsync(this, _history, cancellationToken);
+            return service;
+        }
 
-			var callback = new ServiceCreatorCallback(CreateBusService);
-			((IServiceContainer)this).AddService(typeof(IReAttachBusService), callback);
-		}
-
-		private object CreateBusService(IServiceContainer container, Type serviceType)
-		{
-			return typeof(IReAttachBusService) == serviceType ? new ReAttachBusService(this) : null;
-		}
-
-		public IRegistryKey OpenUserRegistryRoot()
-		{
-			return new RegistryKey(UserRegistryRoot); // TODO: This needs to be handled in a different way to be testable.
-		}
-	}
+        private async Task<object> CreateReAttachUiAsync(IAsyncServiceContainer container, CancellationToken cancellationToken, Type serviceType)
+        {
+            var service = new ReAttachUi();
+            await service.InitializeAsync(this, _history, cancellationToken);
+            return service;
+        }
+    }
 }

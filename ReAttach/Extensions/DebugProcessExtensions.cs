@@ -21,8 +21,7 @@ namespace ReAttach.Extensions
 		{
 			if (process == null)
 				return string.Empty;
-			var name = "";
-			if (process.GetName(enum_GETNAME_TYPE.GN_FILENAME, out name) != VSConstants.S_OK)
+			if (process.GetName(enum_GETNAME_TYPE.GN_FILENAME, out var name) != VSConstants.S_OK)
 				return string.Empty;
 			return name;
 		}
@@ -31,8 +30,7 @@ namespace ReAttach.Extensions
 		{
 			if (process == null)
 				return string.Empty;
-			var name = "";
-			if (process.GetName((uint)enum_GETNAME_TYPE.GN_NAME, out name) != VSConstants.S_OK)
+			if (process.GetName((uint)enum_GETNAME_TYPE.GN_NAME, out var name) != VSConstants.S_OK)
 				return string.Empty;
 			return name;
 		}

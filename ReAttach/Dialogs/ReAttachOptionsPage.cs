@@ -1,27 +1,20 @@
-﻿using System.Windows.Forms;
-using System.Runtime;
-using System.ComponentModel;
-using Microsoft.VisualStudio.Shell;
+﻿using Microsoft.VisualStudio.Shell;
+using System.Runtime.InteropServices;
+using System.Windows.Forms;
 
 namespace ReAttach.Dialogs
 {
-    public class ReAttachOptionsPage : DialogPage
+    [Guid("E011B807-0F1F-4820-A739-9D05407FCABB")]
+    public class ReAttachOptionsPage: DialogPage
     {
-        private ReAttachOptionsControl _control;
-
-        protected override void OnActivate(CancelEventArgs e)
-        {
-            base.OnActivate(e);
-	        _control?.Reset();
-        }
-
         protected override IWin32Window Window
         {
             get
             {
-	            _control = new ReAttachOptionsControl {OptionsPage = this};
-	            return _control;
+                var page = new ReAttachOptionsControl();
+                page.Initialize(this);
+                return page;
             }
-        }  
+        }
     }
 }
