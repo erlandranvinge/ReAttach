@@ -21,6 +21,7 @@ namespace ReAttach.Services
         Success,
         NotStarted,
         ElevationRequired,
+        Cancelled,
         Failed,
     }
 

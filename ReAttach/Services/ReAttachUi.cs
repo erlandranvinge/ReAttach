@@ -135,6 +135,8 @@ namespace ReAttach
                 case ReAttachResult.NotStarted:
                     ReAttachUtils.ShowError("ReAttach failed.", "Process not started.");
                     break;
+                case ReAttachResult.Cancelled:
+                    break;
                 case ReAttachResult.Failed:
                     ReAttachUtils.ShowError("ReAttach failed.", "Failed reattaching to process.");
                     break;

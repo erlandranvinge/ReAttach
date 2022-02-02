@@ -65,7 +65,7 @@ namespace ReAttach.Dialogs
 
 		private void CloseButtonClick(object sender, RoutedEventArgs e)
 		{
-			Result = ReAttachResult.Failed;
+			Result = ReAttachResult.Cancelled;
 			Close();
 		}
 
