@@ -108,14 +108,16 @@ namespace ReAttach
             if (target == null)
                 return;
 
-            bool? buildSuccessful = null;
+            var buildSuccessful = false;
             if (_options.BuildBeforeReAttach)
             {
                 buildSuccessful = TryBuildSolution();
             }
 
-            //only ReAttach if the build has run before and was successful
-            if ((buildSuccessful ?? false) == true)
+            //Only ReAttach if
+            //a) option BuildBeforeReAttach is disabled or
+            //b) option BuildBeforeReAttach is enabled and the build has completed successfully with zero projects failing to build.
+            if (!_options.BuildBeforeReAttach || (_options.BuildBeforeReAttach && buildSuccessful))
             {
                 if (!EnsureDebuggerService())
                 {
