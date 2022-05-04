@@ -108,38 +108,47 @@ namespace ReAttach
             if (target == null)
                 return;
 
+            var buildSuccessful = false;
             if (_options.BuildBeforeReAttach)
-                TryBuildSolution();
-
-            if (!EnsureDebuggerService())
             {
-                ReAttachUtils.ShowError("ReAttach failed.", "Unable to obtain ref to debugger service.");
-                return;
+                buildSuccessful = TryBuildSolution();
             }
 
-            var result = _debugger.ReAttach(target);
-            if (result == ReAttachResult.NotStarted)
+            //Only ReAttach if
+            //a) option BuildBeforeReAttach is disabled or
+            //b) option BuildBeforeReAttach is enabled and the build has completed successfully with zero projects failing to build.
+            if (!_options.BuildBeforeReAttach || (_options.BuildBeforeReAttach && buildSuccessful))
             {
-                var dialog = new WaitingDialog(_debugger, target);
-                dialog.ShowModal();
-                result = dialog.Result;
-            }
+                if (!EnsureDebuggerService())
+                {
+                    ReAttachUtils.ShowError("ReAttach failed.", "Unable to obtain ref to debugger service.");
+                    return;
+                }
 
-            switch (result)
-            {
-                case ReAttachResult.Success:
-                    break;
-                case ReAttachResult.ElevationRequired:
-                    ReAttachUtils.ShowElevationDialog();
-                    break;
-                case ReAttachResult.NotStarted:
-                    ReAttachUtils.ShowError("ReAttach failed.", "Process not started.");
-                    break;
-                case ReAttachResult.Cancelled:
-                    break;
-                case ReAttachResult.Failed:
-                    ReAttachUtils.ShowError("ReAttach failed.", "Failed reattaching to process.");
-                    break;
+                var result = _debugger.ReAttach(target);
+                if (result == ReAttachResult.NotStarted)
+                {
+                    var dialog = new WaitingDialog(_debugger, target);
+                    dialog.ShowModal();
+                    result = dialog.Result;
+                }
+
+                switch (result)
+                {
+                    case ReAttachResult.Success:
+                        break;
+                    case ReAttachResult.ElevationRequired:
+                        ReAttachUtils.ShowElevationDialog();
+                        break;
+                    case ReAttachResult.NotStarted:
+                        ReAttachUtils.ShowError("ReAttach failed.", "Process not started.");
+                        break;
+                    case ReAttachResult.Cancelled:
+                        break;
+                    case ReAttachResult.Failed:
+                        ReAttachUtils.ShowError("ReAttach failed.", "Failed reattaching to process.");
+                        break;
+                }
             }
         }
 
@@ -155,23 +164,36 @@ namespace ReAttach
             Update();
         }
 
-        private void TryBuildSolution()
+        private bool TryBuildSolution()
         {
-            ThreadHelper.JoinableTaskFactory.Run(async () =>
+            bool result = ThreadHelper.JoinableTaskFactory.Run(async () =>
             {
                 await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
                 var dte = await _package.GetServiceAsync(typeof(SDTE)) as DTE2;
                 if (dte == null)
                 {
                     ReAttachUtils.ShowError("ReAttach failed", "Unable to rebuild solution before build.");
-                    return;
+                    return false;
                 }
                 try
                 {
-                    dte.Solution.SolutionBuild.Build(true);
+                    dte.Solution.SolutionBuild.Build(WaitForBuildToFinish: true);
+                    var numberOfProjectsThatFailedToBuild = dte.Solution.SolutionBuild.LastBuildInfo;
+
+                    if (numberOfProjectsThatFailedToBuild > 0)
+                    {
+                        ReAttachUtils.ShowError("ReAttach failed", $"{numberOfProjectsThatFailedToBuild} project{(numberOfProjectsThatFailedToBuild > 1 ? "s" : string.Empty)} failed to build before ReAttaching.{Environment.NewLine}{Environment.NewLine}See Build output window for more details.");
+                    }
+
+                    return numberOfProjectsThatFailedToBuild == 0;
                 }
-                catch (Exception) { }
+                catch (Exception) 
+                {
+                    return false;
+                }
             });
+
+            return result;
         }
 
         private bool EnsureDebuggerService()
